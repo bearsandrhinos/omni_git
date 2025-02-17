@@ -1,0 +1,22 @@
+# Reference this view as distribution_centers
+schema: PUBLIC
+table_name: DISTRIBUTION_CENTERS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  name:
+    sql: '"NAME"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+measures:
+  count:
+    aggregate_type: count

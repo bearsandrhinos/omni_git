@@ -1,0 +1,30 @@
+# Reference this view as templated_filter
+schema: PUBLIC
+sql: |
+  SELECT 
+    user_id,
+    COUNT(*) AS total_items
+  FROM order_items
+  WHERE 
+    {{# schema__user_fact_example.order_date.filter }} order_items.created_at {{/ schema__user_fact_example.order_date.filter}}
+    AND {{# schema__user_fact_example.status.filter }} order_items.status {{/ schema__user_fact_example.status.filter}}
+  GROUP BY 1
+
+dimensions:
+  user_id:
+    sql: '"USER_ID"'
+
+  total_items:
+    sql: '"TOTAL_ITEMS"'
+
+measures:
+  count:
+    aggregate_type: count
+
+filters:
+  order_date:
+    type: timestamp
+
+  status:
+    type: string
+    suggest_from_field: order_items.status

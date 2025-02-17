@@ -1,0 +1,170 @@
+# Reference this view as pages
+schema: PUBLIC
+table_name: PAGES
+
+dimensions:
+  context_page_path:
+    sql: '"CONTEXT_PAGE_PATH"'
+
+  context_screen_inner_height:
+    sql: '"CONTEXT_SCREEN_INNER_HEIGHT"'
+
+  uuid_ts:
+    sql: '"UUID_TS"'
+
+  context_locale:
+    sql: '"CONTEXT_LOCALE"'
+
+  context_library_name:
+    sql: '"CONTEXT_LIBRARY_NAME"'
+
+  context_screen_width:
+    sql: '"CONTEXT_SCREEN_WIDTH"'
+
+  context_page_referring_domain:
+    sql: '"CONTEXT_PAGE_REFERRING_DOMAIN"'
+
+  context_ip:
+    sql: '"CONTEXT_IP"'
+
+  context_page_tab_url:
+    sql: '"CONTEXT_PAGE_TAB_URL"'
+
+  context_screen_height:
+    sql: '"CONTEXT_SCREEN_HEIGHT"'
+
+  context_page_title:
+    sql: '"CONTEXT_PAGE_TITLE"'
+
+  context_user_agent:
+    sql: '"CONTEXT_USER_AGENT"'
+
+  context_page_initial_referring_domain:
+    sql: '"CONTEXT_PAGE_INITIAL_REFERRING_DOMAIN"'
+
+  original_timestamp:
+    sql: '"ORIGINAL_TIMESTAMP"'
+
+  referrer:
+    sql: '"REFERRER"'
+
+  context_page_url:
+    sql: '"CONTEXT_PAGE_URL"'
+
+  context_destination_type:
+    sql: '"CONTEXT_DESTINATION_TYPE"'
+
+  sent_at:
+    sql: '"SENT_AT"'
+
+  context_source_id:
+    sql: '"CONTEXT_SOURCE_ID"'
+    format: ID
+
+  initial_referrer:
+    sql: '"INITIAL_REFERRER"'
+
+  url:
+    sql: '"URL"'
+
+  tab_url:
+    sql: '"TAB_URL"'
+
+  context_destination_id:
+    sql: '"CONTEXT_DESTINATION_ID"'
+    format: ID
+
+  context_app_version:
+    sql: '"CONTEXT_APP_VERSION"'
+
+  context_request_ip:
+    sql: '"CONTEXT_REQUEST_IP"'
+
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  anonymous_id:
+    sql: '"ANONYMOUS_ID"'
+    format: ID
+
+  context_session_id:
+    sql: '"CONTEXT_SESSION_ID"'
+    format: ID
+
+  timestamp:
+    sql: '"TIMESTAMP"'
+
+  initial_referring_domain:
+    sql: '"INITIAL_REFERRING_DOMAIN"'
+
+  path:
+    sql: '"PATH"'
+
+  context_library_version:
+    sql: '"CONTEXT_LIBRARY_VERSION"'
+
+  context_screen_inner_width:
+    sql: '"CONTEXT_SCREEN_INNER_WIDTH"'
+
+  channel:
+    sql: '"CHANNEL"'
+
+  context_screen_density:
+    sql: '"CONTEXT_SCREEN_DENSITY"'
+
+  title:
+    sql: '"TITLE"'
+
+  context_page_referrer:
+    sql: '"CONTEXT_PAGE_REFERRER"'
+
+  context_app_name:
+    sql: '"CONTEXT_APP_NAME"'
+
+  referring_domain:
+    sql: '"REFERRING_DOMAIN"'
+
+  context_page_initial_referrer:
+    sql: '"CONTEXT_PAGE_INITIAL_REFERRER"'
+
+  received_at:
+    sql: '"RECEIVED_AT"'
+
+  context_app_namespace:
+    sql: '"CONTEXT_APP_NAMESPACE"'
+
+  context_source_type:
+    sql: '"CONTEXT_SOURCE_TYPE"'
+
+  context_session_start:
+    sql: '"CONTEXT_SESSION_START"'
+
+  search:
+    sql: '"SEARCH"'
+
+  context_page_search:
+    sql: '"CONTEXT_PAGE_SEARCH"'
+
+  context_campaign_source:
+    sql: '"CONTEXT_CAMPAIGN_SOURCE"'
+
+  context_campaign_content:
+    sql: '"CONTEXT_CAMPAIGN_CONTENT"'
+
+  context_campaign_name:
+    sql: '"CONTEXT_CAMPAIGN_NAME"'
+
+  context_campaign_medium:
+    sql: '"CONTEXT_CAMPAIGN_MEDIUM"'
+
+  context_campaign_keyword:
+    sql: '"CONTEXT_CAMPAIGN_KEYWORD"'
+
+  context_timezone:
+    sql: '"CONTEXT_TIMEZONE"'
+
+measures:
+  count:
+    aggregate_type: count
