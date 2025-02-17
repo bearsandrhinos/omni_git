@@ -47,3 +47,7 @@ measures:
     label: Total Revenue
     format: USDCURRENCY_2
     aggregate_type: sum
+
+  avg_sale_price:
+    sql: ${order_items.sale_price}
+    aggregate_type: average
