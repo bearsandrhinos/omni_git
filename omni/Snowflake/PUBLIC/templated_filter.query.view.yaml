@@ -6,8 +6,8 @@ sql: |
     COUNT(*) AS total_items
   FROM order_items
   WHERE 
-    {{# schema__user_fact_example.order_date.filter }} order_items.created_at {{/ schema__user_fact_example.order_date.filter}}
-    AND {{# schema__user_fact_example.status.filter }} order_items.status {{/ schema__user_fact_example.status.filter}}
+    {{# templated_filter.order_date.filter }} order_items.created_at {{/ templated_filter.order_date.filter }}
+    AND {{# templated_filter.order_date.filter }} order_items.status {{/ templated_filter.order_date.filter }}
   GROUP BY 1
 
 dimensions:
