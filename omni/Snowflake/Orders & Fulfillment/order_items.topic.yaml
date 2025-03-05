@@ -1,0 +1,15 @@
+base_view: order_items
+label: Order Transactions
+group_label: Orders & Fulfillment
+display_order: 0
+description: Detail on historical customer purchases
+
+default_filters:
+  order_items.status:
+    not: [ Returned, Cancelled ]
+
+joins:
+  users: {}
+  inventory_items:
+    products:
+      distribution_centers: {}
