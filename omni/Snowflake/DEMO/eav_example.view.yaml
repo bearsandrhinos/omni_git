@@ -1,0 +1,34 @@
+# Reference this view as demo__eav_example
+schema: DEMO
+table_name: EAV_EXAMPLE
+
+dimensions:
+  attribute_id:
+    sql: '"ATTRIBUTE_ID"'
+    format: ID
+
+  entity_id:
+    sql: '"ENTITY_ID"'
+    format: ID
+
+  attribute_name:
+    sql: '"ATTRIBUTE_NAME"'
+
+  attribute_value_key:
+    sql: '"ATTRIBUTE_VALUE_KEY"'
+
+  string_value:
+    sql: '"STRING_VALUE"'
+
+  boolean_value:
+    sql: '"BOOLEAN_VALUE"'
+
+  date_value:
+    sql: '"DATE_VALUE"'
+
+  float_value:
+    sql: '"FLOAT_VALUE"'
+
+measures:
+  count:
+    aggregate_type: count
