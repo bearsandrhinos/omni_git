@@ -1,7 +1,0 @@
-base_view: order_items
-
-joins:
-  users: {}
-  inventory_items:
-    products:
-      distribution_centers: {}
