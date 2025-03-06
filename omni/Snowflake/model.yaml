@@ -1,1 +1,6 @@
 included_schemas: [ PUBLIC, DEMO ]
+
+access_grants:
+  finance_team:
+    user_attribute: department
+    allowed_values: [ Finance ]
