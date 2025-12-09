@@ -1109,9 +1109,11 @@ class SemanticViewGenerator:
                     continue
                 
                 # Check if this fact references another dimension that was skipped (has {{...}} in its SQL)
+                # Also check if it references fields from other tables (cross-table references not allowed in facts)
                 import re
                 template_refs = re.findall(r'\$\{([^}]+)\}', str(sql_expr))
                 references_skipped = False
+                references_other_table = False
                 for ref in template_refs:
                     # ref might be like "ecomm__order_items.user_selected_markdate"
                     if '.' in ref:
@@ -1121,8 +1123,13 @@ class SemanticViewGenerator:
                             # This fact references a skipped field, so skip it too
                             references_skipped = True
                             break
+                        # Check if this references a different view/table (cross-table reference)
+                        # Snowflake semantic views don't allow facts to reference other tables
+                        if ref_view != view_name and ref_view in view_to_alias:
+                            references_other_table = True
+                            break
                 
-                if references_skipped:
+                if references_skipped or references_other_table:
                     continue
                 
                 # Convert Omni granularity syntax [date], [month], [quarter] to Snowflake SQL
@@ -1443,13 +1450,23 @@ class SemanticViewGenerator:
     def find_topic_by_name(self, topic_name: str) -> Optional[Path]:
         """Find a topic file by name (without .topic.yaml extension)."""
         # Search for topic files matching the name
+        # Skip topics in Snowflake folder (they use PUBLIC schema)
+        candidates = []
         for topic_path in self.project_root.rglob("*.topic.yaml"):
+            # Skip topics in Snowflake folder
+            if 'Snowflake' in topic_path.parts:
+                continue
             # Check if the topic name matches (with or without directory path)
             if topic_path.stem.replace('.topic', '') == topic_name:
-                return topic_path
+                candidates.append(topic_path)
             # Also check if the filename contains the topic name
-            if topic_name in str(topic_path):
-                return topic_path
+            elif topic_name in topic_path.stem.replace('.topic', ''):
+                candidates.append(topic_path)
+        
+        # Return first candidate (prefer exact matches)
+        if candidates:
+            return candidates[0]
+        
         return None
     
     def generate_terraform_resource(self, topic_path: Path, topic: Dict, topic_name: Optional[str] = None) -> str:
