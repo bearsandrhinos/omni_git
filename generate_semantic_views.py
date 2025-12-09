@@ -1463,13 +1463,18 @@ class SemanticViewGenerator:
         if not base_view:
             raise ValueError(f"Could not find view file for: {base_view_name}")
         
+        # Get actual Snowflake schema and table (for the schema where semantic view will be created)
+        schema, _ = self.get_snowflake_schema_and_table(base_view, base_view_name)
+        
+        # Skip topics that use PUBLIC schema (tables don't exist in PUBLIC schema)
+        if schema == 'PUBLIC':
+            raise ValueError(f"Topic {topic_path} uses PUBLIC schema which is not supported. Skipping.")
+        
         # Generate semantic view name using naming convention: omni_[topic_filename]_sv
         # Always use just the filename (without directory path) from the topic file
         clean_topic_name = topic_path.stem.replace('.topic', '').replace('__', '_').replace('-', '_')
         semantic_view_name = f"omni_{clean_topic_name}_sv"
         
-        # Get actual Snowflake schema and table (for the schema where semantic view will be created)
-        schema, _ = self.get_snowflake_schema_and_table(base_view, base_view_name)
         # Use Terraform variable so it reads from terraform.tfvars
         database = "var.snowflake_database"
         
@@ -1519,10 +1524,21 @@ class SemanticViewGenerator:
         main_tf_content += "# Generated from Omni topic YAML files\n\n"
         
         for topic_path in sorted(topic_files):
+            # Skip topics in Snowflake folder (they use PUBLIC schema which doesn't exist)
+            if 'Snowflake' in topic_path.parts:
+                print(f"Skipping {topic_path} (Snowflake folder - uses PUBLIC schema)")
+                continue
+            
             print(f"Processing {topic_path}...")
             topic_name = topic_path.stem.replace('.topic', '')
-            tf_resource = self.process_topic(topic_path, topic_name)
-            main_tf_content += tf_resource + "\n"
+            try:
+                tf_resource = self.process_topic(topic_path, topic_name)
+                main_tf_content += tf_resource + "\n"
+            except ValueError as e:
+                if 'PUBLIC schema' in str(e):
+                    print(f"Skipping {topic_path}: {e}")
+                    continue
+                raise
         
         # Write to terraform/main.tf
         output_file = self.output_dir / "main.tf"
@@ -1537,7 +1553,18 @@ class SemanticViewGenerator:
         if topic_name is None:
             topic_name = topic_path.stem.replace('.topic', '')
         
-        tf_resource = self.process_topic(topic_path, topic_name)
+        # Skip topics in Snowflake folder (they use PUBLIC schema which doesn't exist)
+        if 'Snowflake' in topic_path.parts:
+            print(f"Skipping {topic_path} (Snowflake folder - uses PUBLIC schema)")
+            return
+        
+        try:
+            tf_resource = self.process_topic(topic_path, topic_name)
+        except ValueError as e:
+            if 'PUBLIC schema' in str(e):
+                print(f"Skipping {topic_path}: {e}")
+                return
+            raise
         
         # Use semantic view name for output file - always use just the filename
         clean_topic_name = topic_path.stem.replace('.topic', '').replace('__', '_').replace('-', '_')
