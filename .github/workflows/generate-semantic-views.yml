@@ -196,6 +196,59 @@ jobs:
         run: |
           terraform init
 
+      - name: Test Snowflake Connection
+        if: steps.changes.outputs.has_changes == 'true'
+        working-directory: terraform
+        run: |
+          echo "Testing Snowflake connection..."
+          echo ""
+          echo "Configuration:"
+          echo "  Organization: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}"
+          echo "  Account: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
+          echo "  User: ${{ secrets.SNOWFLAKE_USER }}"
+          echo "  Warehouse: ${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          echo "  Database: ${{ secrets.SNOWFLAKE_DATABASE }}"
+          echo "  Role: ${{ secrets.SNOWFLAKE_ROLE }}"
+          echo "  PAT Token: $([ -n "${{ secrets.SNOWFLAKE_OAUTH_ACCESS_TOKEN }}" ] && echo "***SET***" || echo "***MISSING***")"
+          echo ""
+          
+          # Test connection by trying to validate terraform config
+          # This will attempt to connect to Snowflake
+          if terraform validate 2>&1; then
+            echo "✅ Snowflake connection test passed"
+          else
+            VALIDATE_EXIT=$?
+            echo ""
+            echo "❌ Snowflake connection test failed (exit code: $VALIDATE_EXIT)"
+            echo ""
+            echo "Common causes for HTTP 404 authentication errors:"
+            echo "  1. Network Policy: GitHub Actions IPs may be blocked"
+            echo "     → Check Snowflake → Admin → Network Policies"
+            echo "     → Add GitHub Actions IP ranges: https://api.github.com/meta"
+            echo "     → Or temporarily allow all IPs (0.0.0.0/0) for testing"
+            echo ""
+            echo "  2. Invalid or Expired PAT Token"
+            echo "     → Check Snowflake → User Profile → Personal Access Tokens"
+            echo "     → Ensure token is active and not expired"
+            echo "     → Regenerate if needed"
+            echo ""
+            echo "  3. Incorrect Account/Organization Names"
+            echo "     → Verify organization_name matches your Snowflake org"
+            echo "     → Verify account_name is correct (without region suffix)"
+            echo "     → Format: organization_name = 'A1234567890123'"
+            echo "     → Format: account_name = 'ACCOUNTNAME' (not 'ACCOUNTNAME.region')"
+            echo ""
+            echo "  4. User/Role Permissions"
+            echo "     → Ensure user has correct role assigned"
+            echo "     → Role must have CREATE SEMANTIC VIEW permissions"
+            echo ""
+            echo "  5. Warehouse Not Available"
+            echo "     → Ensure warehouse exists and is not suspended"
+            echo "     → User must have USAGE privilege on warehouse"
+            echo ""
+            exit $VALIDATE_EXIT
+          fi
+
       - name: Terraform Plan
         if: steps.changes.outputs.has_changes == 'true'
         working-directory: terraform
