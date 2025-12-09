@@ -1,24 +1,19 @@
 provider "snowflake" {
-  organization_name = var.snowflake_organization_name
-  account_name      = var.snowflake_account_name
-  user              = var.snowflake_user
-  authenticator     = "PROGRAMMATIC_ACCESS_TOKEN"  # Required for PAT authentication
-  token             = var.snowflake_oauth_access_token  # PAT token
-  warehouse         = var.snowflake_warehouse
-  role              = var.snowflake_role
+  # For PAT authentication, use 'account' parameter
+  # Format: "account_locator" or "organization_name-account_name" or "account_locator.region.cloud"
+  account       = var.snowflake_account
+  user          = var.snowflake_user
+  authenticator = "PROGRAMMATIC_ACCESS_TOKEN"  # Required for PAT authentication
+  token         = var.snowflake_oauth_access_token  # PAT token
+  warehouse     = var.snowflake_warehouse
+  role          = var.snowflake_role
   
   # Enable preview features for semantic views
   preview_features_enabled = ["snowflake_semantic_view_resource"]
 }
 
-variable "snowflake_organization_name" {
-  description = "Snowflake organization name"
-  type        = string
-  default     = ""
-}
-
-variable "snowflake_account_name" {
-  description = "Snowflake account name"
+variable "snowflake_account" {
+  description = "Snowflake account identifier. Can be: account_locator, organization_name-account_name, or account_locator.region.cloud"
   type        = string
   default     = ""
 }

@@ -51,8 +51,8 @@ This means faster runs and only the necessary semantic views are updated!
 2. Click "New environment" and create an environment named `production`
 3. In the environment, go to "Secrets and variables" → "Actions"
 4. Add the following secrets:
-   - `SNOWFLAKE_ACCOUNT_NAME` - Your Snowflake account identifier
-   - `SNOWFLAKE_ORGANIZATION_NAME` - Your Snowflake organization (if applicable)
+   - `SNOWFLAKE_ACCOUNT_NAME` - Your Snowflake account identifier (account locator, e.g., "xy12345")
+   - `SNOWFLAKE_ORGANIZATION_NAME` - Your Snowflake organization (optional, only if using org-account format)
    - `SNOWFLAKE_USER` - Snowflake username
    - `SNOWFLAKE_OAUTH_ACCESS_TOKEN` - Personal Access Token (PAT) from Snowflake
    - `SNOWFLAKE_WAREHOUSE` - Snowflake warehouse name

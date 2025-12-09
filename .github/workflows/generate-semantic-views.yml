@@ -58,15 +58,23 @@ jobs:
         run: |
           # Create terraform.tfvars from GitHub environment secrets
           # These come from the 'production' environment configured in the job
+          # Build account identifier: if organization_name is set, use "org-account", otherwise just account
+          if [ -n "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}" ] && [ "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}" != "" ]; then
+            SNOWFLAKE_ACCOUNT="${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}-${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
+          else
+            SNOWFLAKE_ACCOUNT="${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
+          fi
+          
           cat > terraform/terraform.tfvars << EOF
-          snowflake_account_name = "${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
-          snowflake_organization_name = "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}"
+          snowflake_account = "$SNOWFLAKE_ACCOUNT"
           snowflake_user = "${{ secrets.SNOWFLAKE_USER }}"
           snowflake_oauth_access_token = "${{ secrets.SNOWFLAKE_OAUTH_ACCESS_TOKEN }}"
           snowflake_warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
           snowflake_database = "${{ secrets.SNOWFLAKE_DATABASE }}"
           snowflake_role = "${{ secrets.SNOWFLAKE_ROLE }}"
           EOF
+          
+          echo "Configured Snowflake account: $SNOWFLAKE_ACCOUNT"
 
       - name: Find affected topics
         id: find-topics
