@@ -362,20 +362,6 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
 
   metrics {
     semantic_expression {
-      qualified_expression_name = "ECOMM_ORDER_ITEMS.margin_average"
-      sql_expression            = "AVG(ECOMM_ORDER_ITEMS.MARGIN)"
-    }
-  }
-
-  metrics {
-    semantic_expression {
-      qualified_expression_name = "ECOMM_ORDER_ITEMS.margin_sum"
-      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.MARGIN)"
-    }
-  }
-
-  metrics {
-    semantic_expression {
       qualified_expression_name = "ECOMM_USERS.count"
       sql_expression            = "COUNT(DISTINCT ECOMM_USERS.ID)"
     }
@@ -421,13 +407,6 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
     semantic_expression {
       qualified_expression_name = "ECOMM_INVENTORY_ITEMS.product_retail_price_average"
       sql_expression            = "AVG(ECOMM_INVENTORY_ITEMS.PRODUCT_RETAIL_PRICE)"
-    }
-  }
-
-  metrics {
-    semantic_expression {
-      qualified_expression_name = "ECOMM_INVENTORY_ITEMS.margin_average"
-      sql_expression            = "AVG(ECOMM_ORDER_ITEMS.MARGIN)"
     }
   }
 
