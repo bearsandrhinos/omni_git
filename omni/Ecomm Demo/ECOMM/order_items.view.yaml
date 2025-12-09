@@ -99,7 +99,7 @@ measures:
     aggregate_type: min
 
   total_sale_price:
-    sql: ${ecomm__order_items.sale_price} * 0.99
+    sql: ${ecomm__order_items.sale_price} * 100
     label: Total Sale Price
     format: CURRENCY_2
     aggregate_type: sum
