@@ -40,7 +40,7 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
 
   dimensions {
     qualified_expression_name = "ECOMM_ORDER_ITEMS.json"
-    sql_expression            = "PARSE_JSON(CONCAT('{\"status\":\"', ECOMM_ORDER_ITEMS.STATUS :: STRING, '\", \"email\":\"', ECOMM_ORDER_ITEMS.EMAIL, '\", \"state\":\"', ECOMM_ORDER_ITEMS.STATE, '\"}'))"
+    sql_expression            = "PARSE_JSON(CONCAT('{\"status\":\"', ECOMM_ORDER_ITEMS.STATUS :: STRING, '\", \"email\":\"', ECOMM_USERS.EMAIL, '\", \"state\":\"', ECOMM_USERS.STATE, '\"}'))"
   }
 
   dimensions {
@@ -312,7 +312,7 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
 
   facts {
     qualified_expression_name = "ECOMM_ORDER_ITEMS.margin"
-    sql_expression            = "ECOMM_ORDER_ITEMS.SALE_PRICE - ECOMM_ORDER_ITEMS.COST"
+    sql_expression            = "ECOMM_ORDER_ITEMS.SALE_PRICE - ECOMM_INVENTORY_ITEMS.COST"
     comment                   = "Calculated by subtracting inventory item cost from sale price"
   }
 

@@ -1033,7 +1033,7 @@ class SemanticViewGenerator:
                 # [date] -> DATE(...), [month] -> DATE_TRUNC('month', ...), [quarter] -> DATE_TRUNC('quarter', ...)
                 sql_expr = self.convert_omni_granularity(sql_expr, table_alias)
                 
-                qualified_expr = self.parse_sql_expression(sql_expr, table_alias)
+                qualified_expr = self.parse_sql_expression(sql_expr, table_alias, view_to_alias)
                 
                 # Extract the actual column name from the SQL expression for qualified_expression_name
                 # Use the dimension name (lowercase) as the semantic expression name, not the column name
@@ -1122,7 +1122,7 @@ class SemanticViewGenerator:
                 # Convert Omni granularity syntax [date], [month], [quarter] to Snowflake SQL
                 sql_expr = self.convert_omni_granularity(sql_expr, table_alias)
                 
-                qualified_expr = self.parse_sql_expression(sql_expr, table_alias)
+                qualified_expr = self.parse_sql_expression(sql_expr, table_alias, view_to_alias)
                 
                 fact_block = f'  facts {{\n'
                 fact_block += f'    qualified_expression_name = {self.tf_string(self.format_qualified_expression(table_alias, dim_name))}\n'
