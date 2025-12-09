@@ -45,15 +45,32 @@ This means faster runs and only the necessary semantic views are updated!
 
 ### 1. Configure GitHub Secrets
 
-Go to your repository Settings → Secrets and variables → Actions, and add:
+**Recommended: Use Environment Secrets** (better security and flexibility)
 
-- `SNOWFLAKE_ACCOUNT_NAME` - Your Snowflake account identifier
-- `SNOWFLAKE_ORGANIZATION_NAME` - Your Snowflake organization (if applicable)
-- `SNOWFLAKE_USER` - Snowflake username
-- `SNOWFLAKE_OAUTH_ACCESS_TOKEN` - Personal Access Token (PAT) from Snowflake
-- `SNOWFLAKE_WAREHOUSE` - Snowflake warehouse name
-- `SNOWFLAKE_DATABASE` - Database where semantic views will be created
-- `SNOWFLAKE_ROLE` - Snowflake role to use
+1. Go to your repository Settings → Environments
+2. Click "New environment" and create an environment named `production`
+3. In the environment, go to "Secrets and variables" → "Actions"
+4. Add the following secrets:
+   - `SNOWFLAKE_ACCOUNT_NAME` - Your Snowflake account identifier
+   - `SNOWFLAKE_ORGANIZATION_NAME` - Your Snowflake organization (if applicable)
+   - `SNOWFLAKE_USER` - Snowflake username
+   - `SNOWFLAKE_OAUTH_ACCESS_TOKEN` - Personal Access Token (PAT) from Snowflake
+   - `SNOWFLAKE_WAREHOUSE` - Snowflake warehouse name
+   - `SNOWFLAKE_DATABASE` - Database where semantic views will be created
+   - `SNOWFLAKE_ROLE` - Snowflake role to use
+
+**Alternative: Repository Secrets** (simpler, but less flexible)
+
+If you prefer repository secrets instead:
+1. Go to Settings → Secrets and variables → Actions → Repository secrets
+2. Add the same secrets listed above
+3. Remove the `environment: production` line from the workflow file
+
+**Why Environment Secrets?**
+- ✅ Better security: Can require approval before deployment
+- ✅ Flexibility: Can have different secrets for dev/staging/prod
+- ✅ Audit trail: Better tracking of who deployed what
+- ✅ Protection rules: Can restrict which branches can deploy
 
 **To get a Personal Access Token:**
 1. Log into Snowflake Web UI
