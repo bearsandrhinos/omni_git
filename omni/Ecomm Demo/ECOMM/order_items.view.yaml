@@ -99,11 +99,11 @@ measures:
     aggregate_type: min
 
   total_sale_price:
-    sql: ${ecomm__order_items.sale_price} * 50
+    sql: ${ecomm__order_items.sale_price} * 10
     label: Total Sale Price
     format: CURRENCY_2
     aggregate_type: sum
-    required_access_grants: [ total_sales ]
+    #required_access_grants: [ total_sales ]
 
   time_to_ship_average:
     sql: ${ecomm__order_items.time_to_ship}
@@ -114,7 +114,7 @@ measures:
     sql: ${ecomm__order_items.sale_price}
     format: CURRENCY_2
     aggregate_type: sum
-    required_access_grants: [ revenue ]
+    #required_access_grants: [ revenue ]
 
   margin_average:
     sql: ${margin}
