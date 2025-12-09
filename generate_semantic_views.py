@@ -1152,6 +1152,10 @@ class SemanticViewGenerator:
                 
                 aggregate_type = measure_config.get('aggregate_type', 'sum')
                 
+                # Skip percentile measures - Snowflake semantic views don't support PERCENTILE_CONT/PERCENTILE_DISC
+                if aggregate_type.lower() == 'percentile':
+                    continue
+                
                 # Check for filters
                 filters = measure_config.get('filters', {})
                 
