@@ -371,21 +371,36 @@ jobs:
         run: |
           PLAN_SUCCESS="${{ steps.plan.outputs.plan_success }}"
           IMPORTS_HAPPENED="${{ steps.import.outputs.imports_happened }}"
+          RESOURCES_TO_REPLACE="${{ steps.import.outputs.resources_to_replace }}"
           echo "Plan success status: $PLAN_SUCCESS"
           echo "Imports happened: $IMPORTS_HAPPENED"
+          echo "Resources to replace: $RESOURCES_TO_REPLACE"
           
           # If imports happened, the saved plan is stale - regenerate it
+          # Also force replacement of imported resources to overwrite existing views
           if [ "$IMPORTS_HAPPENED" = "true" ]; then
             echo "⚠️  Imports changed state, regenerating plan..."
             rm -f tfplan
-            terraform plan -out=tfplan 2>&1 | tee /tmp/plan_after_import.txt
+            
+            # Build terraform plan command with -replace flags for imported resources
+            PLAN_CMD="terraform plan -out=tfplan"
+            if [ -n "$RESOURCES_TO_REPLACE" ]; then
+              # Split comma-separated list and add -replace flag for each
+              IFS=',' read -ra RESOURCES <<< "$RESOURCES_TO_REPLACE"
+              for resource in "${RESOURCES[@]}"; do
+                PLAN_CMD="$PLAN_CMD -replace=$resource"
+                echo "  Will replace: $resource"
+              done
+            fi
+            
+            $PLAN_CMD 2>&1 | tee /tmp/plan_after_import.txt
             PLAN_EXIT_CODE=${PIPESTATUS[0]}
             if [ $PLAN_EXIT_CODE -ne 0 ]; then
               echo "❌ Plan regeneration failed"
               cat /tmp/plan_after_import.txt
               exit $PLAN_EXIT_CODE
             fi
-            echo "✅ Plan regenerated successfully after imports"
+            echo "✅ Plan regenerated successfully after imports (with replacements)"
           fi
           
           # Capture current runner IP for network policy errors
