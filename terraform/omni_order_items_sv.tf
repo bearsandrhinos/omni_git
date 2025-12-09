@@ -4,11 +4,6 @@ resource "snowflake_semantic_view" "omni_order_items_sv" {
   name     = "omni_order_items_sv"
   comment  = "Detail on historical customer purchases"
 
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
   tables {
     table_alias = "ORDER_ITEMS"
     table_name  = "${var.snowflake_database}.\"PUBLIC\".\"ORDER_ITEMS\""
