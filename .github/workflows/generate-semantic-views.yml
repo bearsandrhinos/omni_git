@@ -329,27 +329,64 @@ jobs:
           # Capture current runner IP for network policy errors
           RUNNER_IP=$(curl -s https://api.ipify.org || echo "unknown")
           
+          # Function to handle apply errors
+          handle_apply_error() {
+            APPLY_EXIT=$1
+            OUTPUT_FILE=$2
+            
+            # Check for network policy error
+            if grep -q "is not allowed to access Snowflake" "$OUTPUT_FILE" 2>/dev/null; then
+              echo ""
+              echo "🚫 NETWORK POLICY ERROR DETECTED"
+              echo ""
+              echo "The GitHub Actions runner IP ($RUNNER_IP) is blocked by Snowflake network policy."
+              echo ""
+              echo "To fix this:"
+              echo "1. Go to Snowflake → Admin → Network Policies"
+              echo "2. Edit your network policy and add GitHub Actions IP ranges"
+              echo "3. See: https://api.github.com/meta for GitHub's IP ranges"
+              echo "4. Re-run this workflow after updating the network policy"
+              echo ""
+            fi
+            
+            # Check for "already exists" error - need to import or destroy first
+            if grep -q "already exists" "$OUTPUT_FILE" 2>/dev/null; then
+              echo ""
+              echo "⚠️  SEMANTIC VIEW ALREADY EXISTS"
+              echo ""
+              echo "One or more semantic views already exist in Snowflake."
+              echo "Terraform will attempt to replace them on the next run."
+              echo ""
+              echo "If this persists, you may need to:"
+              echo "1. Manually import existing views: terraform import <resource> <fully_qualified_name>"
+              echo "2. Or destroy existing views in Snowflake first"
+              echo ""
+            fi
+            
+            # Check for SQL syntax errors
+            if grep -q "SQL compilation error" "$OUTPUT_FILE" 2>/dev/null || grep -q "syntax error" "$OUTPUT_FILE" 2>/dev/null; then
+              echo ""
+              echo "❌ SQL SYNTAX ERROR DETECTED"
+              echo ""
+              echo "There are SQL syntax errors in the generated Terraform."
+              echo "This may be due to:"
+              echo "1. Field names starting with numbers (need to be quoted)"
+              echo "2. Invalid SQL expressions in view definitions"
+              echo "3. Special characters in field names"
+              echo ""
+              echo "Check the error messages above for details."
+              echo ""
+            fi
+            
+            exit $APPLY_EXIT
+          }
+          
           if [ -f tfplan ] && [ "$PLAN_SUCCESS" = "true" ]; then
             echo "Applying saved plan file..."
             if terraform apply -auto-approve tfplan 2>&1 | tee /tmp/apply_output.txt; then
               echo "✅ Apply succeeded"
             else
-              APPLY_EXIT=$?
-              # Check for network policy error
-              if grep -q "is not allowed to access Snowflake" /tmp/apply_output.txt 2>/dev/null; then
-                echo ""
-                echo "🚫 NETWORK POLICY ERROR DETECTED"
-                echo ""
-                echo "The GitHub Actions runner IP ($RUNNER_IP) is blocked by Snowflake network policy."
-                echo ""
-                echo "To fix this:"
-                echo "1. Go to Snowflake → Admin → Network Policies"
-                echo "2. Edit your network policy and add GitHub Actions IP ranges"
-                echo "3. See: https://api.github.com/meta for GitHub's IP ranges"
-                echo "4. Re-run this workflow after updating the network policy"
-                echo ""
-              fi
-              exit $APPLY_EXIT
+              handle_apply_error $? /tmp/apply_output.txt
             fi
           else
             echo "No valid plan file available (file exists: $([ -f tfplan ] && echo 'yes' || echo 'no'), plan_success: $PLAN_SUCCESS)"
@@ -357,22 +394,7 @@ jobs:
             if terraform apply -auto-approve 2>&1 | tee /tmp/apply_output.txt; then
               echo "✅ Apply succeeded"
             else
-              APPLY_EXIT=$?
-              # Check for network policy error
-              if grep -q "is not allowed to access Snowflake" /tmp/apply_output.txt 2>/dev/null; then
-                echo ""
-                echo "🚫 NETWORK POLICY ERROR DETECTED"
-                echo ""
-                echo "The GitHub Actions runner IP ($RUNNER_IP) is blocked by Snowflake network policy."
-                echo ""
-                echo "To fix this:"
-                echo "1. Go to Snowflake → Admin → Network Policies"
-                echo "2. Edit your network policy and add GitHub Actions IP ranges"
-                echo "3. See: https://api.github.com/meta for GitHub's IP ranges"
-                echo "4. Re-run this workflow after updating the network policy"
-                echo ""
-              fi
-              exit $APPLY_EXIT
+              handle_apply_error $? /tmp/apply_output.txt
             fi
           fi
         env:
