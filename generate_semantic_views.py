@@ -920,6 +920,25 @@ class SemanticViewGenerator:
             table_block += f'  }}\n'
             blocks.append(('tables', table_block))
         
+        # First pass: identify all dimensions with {{...}} template variables
+        # This needs to happen before we process dimensions so we can check references
+        for view_name in join_tree:
+            if view_name in self.query_views or view_name in self.uploaded_tables:
+                continue
+            view = self.load_view(view_name)
+            if not view:
+                continue
+            if self.is_query_view(view) or self.is_uploaded_table(view):
+                continue
+            
+            dimensions = view.get('dimensions', {})
+            for dim_name, dim_config in dimensions.items():
+                if not isinstance(dim_config, dict):
+                    continue
+                sql_expr = dim_config.get('sql', '')
+                if '{{' in str(sql_expr):
+                    skipped_dimensions.add(f"{view_name}.{dim_name}")
+        
         # Generate dimensions blocks (skip query views and uploaded tables)
         for view_name in join_tree:
             # Skip query views and uploaded tables entirely - they don't exist in Snowflake
@@ -984,20 +1003,19 @@ class SemanticViewGenerator:
                 else:
                     sql_expr = dim_config.get('sql', f'"{dim_name.upper()}"')
                 
-                # Skip dimensions that reference query views
-                if self.references_query_view(sql_expr):
+                # Skip if this dimension was identified as having {{...}} template variables
+                if f"{view_name}.{dim_name}" in skipped_dimensions:
                     continue
                 
-                # Skip dimensions with Omni template variables ({{...}}) - but handle [date], [month], [quarter] syntax
-                if '{{' in sql_expr:
-                    # Track skipped dimension so measures can check against it
-                    skipped_dimensions.add(f"{view_name}.{dim_name}")
+                # Skip dimensions that reference query views
+                if self.references_query_view(sql_expr):
                     continue
                 
                 # Check if this dimension references another dimension that was skipped (has {{...}} in its SQL)
                 # Parse ${view.field} references and check if those fields are in skipped_dimensions
                 import re
-                template_refs = re.findall(r'\$\{([^}]+)\}', sql_expr)
+                template_refs = re.findall(r'\$\{([^}]+)\}', str(sql_expr))
+                references_skipped = False
                 for ref in template_refs:
                     # ref might be like "ecomm__order_items.user_selected_markdate"
                     if '.' in ref:
@@ -1005,8 +1023,11 @@ class SemanticViewGenerator:
                         # Check if this referenced field is in skipped_dimensions
                         if f"{ref_view}.{ref_field}" in skipped_dimensions:
                             # This dimension references a skipped field, so skip it too
-                            skipped_dimensions.add(f"{view_name}.{dim_name}")
-                            continue
+                            references_skipped = True
+                            break
+                
+                if references_skipped:
+                    continue
                 
                 # Convert Omni granularity syntax [date], [month], [quarter] to Snowflake SQL
                 # [date] -> DATE(...), [month] -> DATE_TRUNC('month', ...), [quarter] -> DATE_TRUNC('quarter', ...)

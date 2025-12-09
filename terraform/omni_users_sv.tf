@@ -166,11 +166,6 @@ resource "snowflake_semantic_view" "omni_users_sv" {
   }
 
   dimensions {
-    qualified_expression_name = "ECOMM_ORDER_ITEMS.user_selected_markdate_180_days_before"
-    sql_expression            = "DATEADD(DAY, -180, ECOMM_ORDER_ITEMS.USER_SELECTED_MARKDATE)"
-  }
-
-  dimensions {
     qualified_expression_name = "ECOMM_INVENTORY_ITEMS.id"
     sql_expression            = "ECOMM_INVENTORY_ITEMS.ID"
   }
