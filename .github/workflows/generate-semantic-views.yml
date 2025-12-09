@@ -266,13 +266,48 @@ jobs:
         working-directory: terraform
         id: plan
         run: |
-          if terraform plan -out=tfplan 2>&1; then
+          # Capture current runner IP for network policy errors
+          RUNNER_IP=$(curl -s https://api.ipify.org || echo "unknown")
+          echo "GitHub Actions runner IP: $RUNNER_IP"
+          echo ""
+          
+          if terraform plan -out=tfplan 2>&1 | tee /tmp/plan_output.txt; then
             echo "plan_success=true" >> $GITHUB_OUTPUT
             echo "Plan generated successfully"
           else
             PLAN_EXIT_CODE=$?
             echo "plan_success=false" >> $GITHUB_OUTPUT
             echo "Plan failed with exit code: $PLAN_EXIT_CODE"
+            
+            # Check for network policy error
+            if grep -q "is not allowed to access Snowflake" /tmp/plan_output.txt 2>/dev/null; then
+              echo ""
+              echo "🚫 NETWORK POLICY ERROR DETECTED"
+              echo ""
+              echo "The GitHub Actions runner IP ($RUNNER_IP) is blocked by Snowflake network policy."
+              echo ""
+              echo "To fix this:"
+              echo "1. Go to Snowflake → Admin → Network Policies"
+              echo "2. Edit your network policy (or create one if none exists)"
+              echo "3. Add GitHub Actions IP ranges:"
+              echo ""
+              echo "   Option A: Allow all GitHub Actions IPs (recommended)"
+              echo "   - Fetch IP ranges: curl https://api.github.com/meta | jq '.actions[]'"
+              echo "   - Add all IP ranges from the 'actions' array to your network policy"
+              echo ""
+              echo "   Option B: Allow all IPs temporarily (for testing only)"
+              echo "   - Add: 0.0.0.0/0 (NOT recommended for production)"
+              echo ""
+              echo "   Option C: Allow specific runner IP"
+              echo "   - Add: $RUNNER_IP/32"
+              echo "   - Note: This will only work for this specific runner"
+              echo ""
+              echo "4. Save the network policy"
+              echo "5. Wait a few minutes for changes to propagate"
+              echo "6. Re-run this workflow"
+              echo ""
+            fi
+            
             echo "Will skip plan file on apply"
             # Remove incomplete plan file if it exists
             rm -f tfplan
@@ -287,13 +322,54 @@ jobs:
           PLAN_SUCCESS="${{ steps.plan.outputs.plan_success }}"
           echo "Plan success status: $PLAN_SUCCESS"
           
+          # Capture current runner IP for network policy errors
+          RUNNER_IP=$(curl -s https://api.ipify.org || echo "unknown")
+          
           if [ -f tfplan ] && [ "$PLAN_SUCCESS" = "true" ]; then
             echo "Applying saved plan file..."
-            terraform apply -auto-approve tfplan
+            if terraform apply -auto-approve tfplan 2>&1 | tee /tmp/apply_output.txt; then
+              echo "✅ Apply succeeded"
+            else
+              APPLY_EXIT=$?
+              # Check for network policy error
+              if grep -q "is not allowed to access Snowflake" /tmp/apply_output.txt 2>/dev/null; then
+                echo ""
+                echo "🚫 NETWORK POLICY ERROR DETECTED"
+                echo ""
+                echo "The GitHub Actions runner IP ($RUNNER_IP) is blocked by Snowflake network policy."
+                echo ""
+                echo "To fix this:"
+                echo "1. Go to Snowflake → Admin → Network Policies"
+                echo "2. Edit your network policy and add GitHub Actions IP ranges"
+                echo "3. See: https://api.github.com/meta for GitHub's IP ranges"
+                echo "4. Re-run this workflow after updating the network policy"
+                echo ""
+              fi
+              exit $APPLY_EXIT
+            fi
           else
             echo "No valid plan file available (file exists: $([ -f tfplan ] && echo 'yes' || echo 'no'), plan_success: $PLAN_SUCCESS)"
             echo "Running direct apply..."
-            terraform apply -auto-approve
+            if terraform apply -auto-approve 2>&1 | tee /tmp/apply_output.txt; then
+              echo "✅ Apply succeeded"
+            else
+              APPLY_EXIT=$?
+              # Check for network policy error
+              if grep -q "is not allowed to access Snowflake" /tmp/apply_output.txt 2>/dev/null; then
+                echo ""
+                echo "🚫 NETWORK POLICY ERROR DETECTED"
+                echo ""
+                echo "The GitHub Actions runner IP ($RUNNER_IP) is blocked by Snowflake network policy."
+                echo ""
+                echo "To fix this:"
+                echo "1. Go to Snowflake → Admin → Network Policies"
+                echo "2. Edit your network policy and add GitHub Actions IP ranges"
+                echo "3. See: https://api.github.com/meta for GitHub's IP ranges"
+                echo "4. Re-run this workflow after updating the network policy"
+                echo ""
+              fi
+              exit $APPLY_EXIT
+            fi
           fi
         env:
           TF_LOG: INFO
