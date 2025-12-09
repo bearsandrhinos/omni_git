@@ -431,11 +431,19 @@ class SemanticViewGenerator:
     def format_qualified_expression(self, table_alias: str, field_name: str) -> str:
         """
         Format qualified expression name for Terraform.
-        According to Snowflake SQL docs, identifiers should be UNQUOTED.
+        According to Snowflake SQL docs, identifiers should be UNQUOTED unless they:
+        - Start with a number
+        - Contain special characters
+        - Need to preserve case
         Example: customers.customer_name (not "customers"."customer_name")
+        But: customers."25_perc" (must quote if starts with number)
         Snowflake treats unquoted identifiers as uppercase, which matches our uppercase table aliases.
-        Format: alias.field (unquoted) - tf_string() will wrap the whole thing.
+        Format: alias.field or alias."field" if field starts with number
         """
+        # Check if field name starts with a number - these must be quoted
+        if field_name and field_name[0].isdigit():
+            # Field name starts with number, must quote it
+            return f'{table_alias}."{field_name}"'
         # Use unquoted identifiers - Snowflake treats them as uppercase
         # This matches the Snowflake SQL syntax shown in their documentation
         return f'{table_alias}.{field_name}'
@@ -1397,12 +1405,17 @@ class SemanticViewGenerator:
             comment = description.split('\n')[0].strip()
             comment_block = f'  comment  = {self.tf_string(comment)}\n\n'
         
-        # Generate Terraform resource
+        # Generate Terraform resource with lifecycle to replace existing views
         tf_resource = f'''resource "snowflake_semantic_view" "{semantic_view_name}" {{
   database = {database}
   schema   = "{schema}"
   name     = "{semantic_view_name}"
-{comment_block}{blocks}
+{comment_block}
+  lifecycle {{
+    create_before_destroy = true
+  }}
+
+{blocks}
 }}
 '''
         return tf_resource
