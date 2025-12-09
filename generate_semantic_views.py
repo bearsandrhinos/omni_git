@@ -994,6 +994,20 @@ class SemanticViewGenerator:
                     skipped_dimensions.add(f"{view_name}.{dim_name}")
                     continue
                 
+                # Check if this dimension references another dimension that was skipped (has {{...}} in its SQL)
+                # Parse ${view.field} references and check if those fields are in skipped_dimensions
+                import re
+                template_refs = re.findall(r'\$\{([^}]+)\}', sql_expr)
+                for ref in template_refs:
+                    # ref might be like "ecomm__order_items.user_selected_markdate"
+                    if '.' in ref:
+                        ref_view, ref_field = ref.split('.', 1)
+                        # Check if this referenced field is in skipped_dimensions
+                        if f"{ref_view}.{ref_field}" in skipped_dimensions:
+                            # This dimension references a skipped field, so skip it too
+                            skipped_dimensions.add(f"{view_name}.{dim_name}")
+                            continue
+                
                 # Convert Omni granularity syntax [date], [month], [quarter] to Snowflake SQL
                 # [date] -> DATE(...), [month] -> DATE_TRUNC('month', ...), [quarter] -> DATE_TRUNC('quarter', ...)
                 sql_expr = self.convert_omni_granularity(sql_expr, table_alias)
@@ -1060,9 +1074,28 @@ class SemanticViewGenerator:
                     continue
                 
                 # Skip facts with Omni template variables ({{...}}) - but handle [date], [month], [quarter] syntax
-                if '{{' in sql_expr:
-                    # Track skipped fact so measures can check against it
-                    skipped_dimensions.add(f"{view_name}.{dim_name}")
+                if '{{' in str(sql_expr):
+                    continue
+                
+                # Skip if this fact was identified as having {{...}} template variables
+                if f"{view_name}.{dim_name}" in skipped_dimensions:
+                    continue
+                
+                # Check if this fact references another dimension that was skipped (has {{...}} in its SQL)
+                import re
+                template_refs = re.findall(r'\$\{([^}]+)\}', str(sql_expr))
+                references_skipped = False
+                for ref in template_refs:
+                    # ref might be like "ecomm__order_items.user_selected_markdate"
+                    if '.' in ref:
+                        ref_view, ref_field = ref.split('.', 1)
+                        # Check if this referenced field is in skipped_dimensions
+                        if f"{ref_view}.{ref_field}" in skipped_dimensions:
+                            # This fact references a skipped field, so skip it too
+                            references_skipped = True
+                            break
+                
+                if references_skipped:
                     continue
                 
                 # Convert Omni granularity syntax [date], [month], [quarter] to Snowflake SQL
