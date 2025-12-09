@@ -78,6 +78,24 @@ If you prefer repository secrets instead:
 3. Generate a new token
 4. Copy the token and add it as a GitHub secret
 
+**⚠️ Important: Network Policies**
+
+If you see 404 authentication errors, it's likely a **network policy** issue. GitHub Actions runs from dynamic IP addresses that need to be allowed in Snowflake:
+
+1. **Check your Snowflake network policies:**
+   - Go to Admin → Network Policies
+   - Ensure GitHub Actions IPs are allowed, OR
+   - Temporarily allow all IPs for testing: `0.0.0.0/0`
+
+2. **Alternative: Use Snowflake's IP allowlist:**
+   - GitHub Actions uses GitHub's IP ranges
+   - You may need to add GitHub's IP ranges to your Snowflake network policy
+   - See: https://api.github.com/meta for GitHub's IP ranges
+
+3. **For testing, you can temporarily:**
+   - Allow all IPs in Snowflake network policy
+   - Or use a VPN/static IP for GitHub Actions runners
+
 ### 2. Local Development (Optional)
 
 If you want to test locally:

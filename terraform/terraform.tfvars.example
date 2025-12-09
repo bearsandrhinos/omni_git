@@ -2,13 +2,9 @@
 # Copy this file to terraform.tfvars and fill in your actual values
 # terraform.tfvars is gitignored and will not be committed
 
-# Snowflake account identifier
-# Format options:
-#   - Account locator only: "xy12345"
-#   - With region: "xy12345.us-east-1"
-#   - With organization: "orgname-accountname"
-#   - Full format: "orgname-accountname.region.cloud"
-snowflake_account = "your-account"
+# Provider v2.0+ requires both organization_name and account_name
+snowflake_organization_name = "your-organization"
+snowflake_account_name = "your-account"
 
 # Snowflake username
 snowflake_user = "your-username"

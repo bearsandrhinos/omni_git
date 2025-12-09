@@ -58,15 +58,10 @@ jobs:
         run: |
           # Create terraform.tfvars from GitHub environment secrets
           # These come from the 'production' environment configured in the job
-          # Build account identifier: if organization_name is set, use "org-account", otherwise just account
-          if [ -n "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}" ] && [ "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}" != "" ]; then
-            SNOWFLAKE_ACCOUNT="${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}-${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
-          else
-            SNOWFLAKE_ACCOUNT="${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
-          fi
-          
+          # Provider v2.0+ requires both organization_name and account_name
           cat > terraform/terraform.tfvars << EOF
-          snowflake_account = "$SNOWFLAKE_ACCOUNT"
+          snowflake_organization_name = "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}"
+          snowflake_account_name = "${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
           snowflake_user = "${{ secrets.SNOWFLAKE_USER }}"
           snowflake_oauth_access_token = "${{ secrets.SNOWFLAKE_OAUTH_ACCESS_TOKEN }}"
           snowflake_warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
@@ -74,7 +69,13 @@ jobs:
           snowflake_role = "${{ secrets.SNOWFLAKE_ROLE }}"
           EOF
           
-          echo "Configured Snowflake account: $SNOWFLAKE_ACCOUNT"
+          echo "Configured Snowflake organization: ${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}"
+          echo "Configured Snowflake account: ${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
+          echo ""
+          echo "⚠️  If you see 404 authentication errors, check:"
+          echo "   1. Network policies allow GitHub Actions IPs"
+          echo "   2. PAT token is valid and not expired"
+          echo "   3. Organization and account names are correct"
 
       - name: Find affected topics
         id: find-topics
