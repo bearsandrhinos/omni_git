@@ -4,6 +4,11 @@ resource "snowflake_semantic_view" "omni_users_sv" {
   name     = "omni_users_sv"
   comment  = "All registered users"
 
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tables {
     table_alias = "ECOMM_USERS"
     table_name  = "${var.snowflake_database}.\"ECOMM\".\"USERS\""
@@ -318,13 +323,6 @@ resource "snowflake_semantic_view" "omni_users_sv" {
 
   metrics {
     semantic_expression {
-      qualified_expression_name = "ECOMM_ORDER_ITEMS.25_perc_180_days"
-      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE)"
-    }
-  }
-
-  metrics {
-    semantic_expression {
       qualified_expression_name = "ECOMM_ORDER_ITEMS.count"
       sql_expression            = "COUNT(DISTINCT ECOMM_ORDER_ITEMS.ID)"
     }
@@ -340,7 +338,7 @@ resource "snowflake_semantic_view" "omni_users_sv" {
   metrics {
     semantic_expression {
       qualified_expression_name = "ECOMM_ORDER_ITEMS.total_sale_price"
-      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE * 0.99)"
+      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE * 100)"
     }
   }
 

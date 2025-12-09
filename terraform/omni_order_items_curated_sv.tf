@@ -4,6 +4,11 @@ resource "snowflake_semantic_view" "omni_order_items_curated_sv" {
   name     = "omni_order_items_curated_sv"
   comment  = "Detail on historical customer purchases"
 
+
+  lifecycle {
+    create_before_destroy = true
+  }
+
   tables {
     table_alias = "ECOMM_ORDER_ITEMS"
     table_name  = "${var.snowflake_database}.\"ECOMM\".\"ORDER_ITEMS\""
@@ -119,7 +124,7 @@ resource "snowflake_semantic_view" "omni_order_items_curated_sv" {
   metrics {
     semantic_expression {
       qualified_expression_name = "ECOMM_ORDER_ITEMS.total_sale_price"
-      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE * 0.99)"
+      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE * 100)"
     }
   }
 
