@@ -589,13 +589,21 @@ class SemanticViewGenerator:
         alias = alias.upper().replace('-', '_')
         return alias
     
-    def parse_sql_expression(self, sql_expr: str, table_alias: str) -> str:
+    def parse_sql_expression(self, sql_expr: str, table_alias: str, view_to_alias: Optional[Dict[str, str]] = None) -> str:
         """
         Parse SQL expression and convert to Snowflake format.
         Handles ${view.field} format and converts to "alias"."column" format.
         For complex expressions (function calls, etc.), replaces column references within them.
+        
+        Args:
+            sql_expr: SQL expression to parse
+            table_alias: Default table alias to use
+            view_to_alias: Optional mapping of view names to table aliases for cross-view references
         """
         import re
+        
+        if view_to_alias is None:
+            view_to_alias = {}
         
         # Handle ${view.field} format - simple reference
         if sql_expr.startswith('${') and sql_expr.endswith('}') and '.' not in sql_expr[2:-1]:
@@ -621,13 +629,19 @@ class SemanticViewGenerator:
             if '.' not in field_ref:
                 # Use unquoted uppercase identifier
                 return f'{table_alias}.{field_ref.upper()}'
-            # Otherwise, parse the view.field format (e.g., omni_dbt_ecomm__order_items.status)
+            # Otherwise, parse the view.field format (e.g., ecomm__order_items.status)
             parts = field_ref.split('.')
             if len(parts) >= 2:
-                # The last part is the column name - use unquoted uppercase
-                column = parts[-1].upper()
-                # For now, assume it's from the current table (we could improve this by tracking view mappings)
-                return f'{table_alias}.{column}'
+                view_name = parts[0]  # e.g., ecomm__order_items
+                column = parts[-1].upper()  # e.g., status -> STATUS
+                
+                # Check if this is a cross-view reference
+                if view_name in view_to_alias:
+                    # Use the correct table alias for the referenced view
+                    return f'{view_to_alias[view_name]}.{column}'
+                else:
+                    # View not in mapping, assume current table alias
+                    return f'{table_alias}.{column}'
             return match.group(0)  # Return as-is if we can't parse
         
         # Replace ${...} patterns - must do this BEFORE other replacements
@@ -1185,8 +1199,8 @@ class SemanticViewGenerator:
                     # Has SQL expression or is not COUNT
                     sql_expr = measure_config.get('sql', f'"{measure_name.upper()}"')
                     
-                    # Parse the SQL expression
-                    base_expr = self.parse_sql_expression(sql_expr, table_alias)
+                    # Parse the SQL expression - pass view_to_alias to handle cross-view references
+                    base_expr = self.parse_sql_expression(sql_expr, table_alias, view_to_alias)
                     
                     # Build filtered SQL if filters exist
                     if filters:
@@ -1409,17 +1423,14 @@ class SemanticViewGenerator:
             comment = description.split('\n')[0].strip()
             comment_block = f'  comment  = {self.tf_string(comment)}\n\n'
         
-        # Generate Terraform resource with lifecycle to replace existing views
+        # Generate Terraform resource
+        # Note: Terraform will replace existing views automatically when the resource definition changes
+        # If a view already exists, use: terraform import or terraform destroy -target first
         tf_resource = f'''resource "snowflake_semantic_view" "{semantic_view_name}" {{
   database = {database}
   schema   = "{schema}"
   name     = "{semantic_view_name}"
-{comment_block}
-  lifecycle {{
-    create_before_destroy = true
-  }}
-
-{blocks}
+{comment_block}{blocks}
 }}
 '''
         return tf_resource

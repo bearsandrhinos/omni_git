@@ -2,11 +2,6 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   database = var.snowflake_database
   schema   = "ECOMM"
   name     = "omni_order_items_embed_sv"
-
-  lifecycle {
-    create_before_destroy = true
-  }
-
   tables {
     table_alias = "ECOMM_ORDER_ITEMS"
     table_name  = "${var.snowflake_database}.\"ECOMM\".\"ORDER_ITEMS\""
@@ -448,7 +443,7 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   metrics {
     semantic_expression {
       qualified_expression_name = "ECOMM_INVENTORY_ITEMS.margin_average"
-      sql_expression            = "AVG(ECOMM_INVENTORY_ITEMS.MARGIN)"
+      sql_expression            = "AVG(ECOMM_ORDER_ITEMS.MARGIN)"
     }
   }
 

@@ -408,7 +408,7 @@ resource "snowflake_semantic_view" "omni_users_sv" {
   metrics {
     semantic_expression {
       qualified_expression_name = "ECOMM_INVENTORY_ITEMS.margin_average"
-      sql_expression            = "AVG(ECOMM_INVENTORY_ITEMS.MARGIN)"
+      sql_expression            = "AVG(ECOMM_ORDER_ITEMS.MARGIN)"
     }
   }
 
