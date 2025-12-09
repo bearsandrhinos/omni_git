@@ -1030,6 +1030,8 @@ class SemanticViewGenerator:
                         # Snowflake semantic views don't allow dimensions to reference other tables
                         if ref_view != view_name and ref_view in view_to_alias:
                             references_other_table = True
+                            # Add to skipped_dimensions so measures can check against it
+                            skipped_dimensions.add(f"{view_name}.{dim_name}")
                             break
                 
                 if references_skipped or references_other_table:
