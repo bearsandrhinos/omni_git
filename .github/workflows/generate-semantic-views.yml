@@ -324,11 +324,12 @@ jobs:
         working-directory: terraform
         id: import
         run: |
-          # Try to import existing semantic views
+          # Try to import existing semantic views, then mark them for replacement
           echo "Checking for existing semantic views..."
           
           DATABASE="${{ secrets.SNOWFLAKE_DATABASE }}"
           IMPORTED_COUNT=0
+          RESOURCES_TO_REPLACE=""
           
           # Get list of semantic view resources from generated .tf files
           for tf_file in *.tf; do
@@ -343,8 +344,14 @@ jobs:
                 FULL_NAME="${DATABASE}.${SCHEMA}.${VIEW_NAME}"
                 echo "Attempting to import $RESOURCE_NAME as $FULL_NAME..."
                 if terraform import "snowflake_semantic_view.${RESOURCE_NAME}" "$FULL_NAME" 2>&1; then
-                  echo "  ✅ Successfully imported $RESOURCE_NAME"
+                  echo "  ✅ Successfully imported $RESOURCE_NAME (will be replaced)"
                   IMPORTED_COUNT=$((IMPORTED_COUNT + 1))
+                  # Add to list of resources to replace
+                  if [ -z "$RESOURCES_TO_REPLACE" ]; then
+                    RESOURCES_TO_REPLACE="snowflake_semantic_view.${RESOURCE_NAME}"
+                  else
+                    RESOURCES_TO_REPLACE="$RESOURCES_TO_REPLACE,snowflake_semantic_view.${RESOURCE_NAME}"
+                  fi
                 else
                   echo "  (View does not exist, will be created)"
                 fi
@@ -352,9 +359,10 @@ jobs:
             fi
           done
           
-          # Set output to indicate if any imports happened
+          # Set output to indicate if any imports happened and which resources to replace
           echo "imports_happened=$([ $IMPORTED_COUNT -gt 0 ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
           echo "imported_count=$IMPORTED_COUNT" >> $GITHUB_OUTPUT
+          echo "resources_to_replace=$RESOURCES_TO_REPLACE" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Terraform Apply
