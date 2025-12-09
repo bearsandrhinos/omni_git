@@ -1110,12 +1110,14 @@ class SemanticViewGenerator:
                 
                 # Check if this fact references another dimension that was skipped (has {{...}} in its SQL)
                 # Also check if it references fields from other tables (cross-table references not allowed in facts)
+                # IMPORTANT: Check the ORIGINAL SQL expression before parsing/conversion
                 import re
-                template_refs = re.findall(r'\$\{([^}]+)\}', str(sql_expr))
+                original_sql = str(sql_expr)
+                template_refs = re.findall(r'\$\{([^}]+)\}', original_sql)
                 references_skipped = False
                 references_other_table = False
                 for ref in template_refs:
-                    # ref might be like "ecomm__order_items.user_selected_markdate"
+                    # ref might be like "ecomm__order_items.user_selected_markdate" or "ecomm__inventory_items.cost"
                     if '.' in ref:
                         ref_view, ref_field = ref.split('.', 1)
                         # Check if this referenced field is in skipped_dimensions
@@ -1206,11 +1208,18 @@ class SemanticViewGenerator:
                 
                 # Skip measures that reference skipped dimensions
                 # Check if the SQL expression references any skipped dimension
+                # IMPORTANT: Check the ORIGINAL SQL expression before parsing/conversion
+                original_sql = str(sql_expr)
                 references_skipped_dim = False
                 for skipped_dim in skipped_dimensions:
                     dim_view, dim_name = skipped_dim.split('.', 1)
                     # Check if the measure SQL references this dimension
-                    if dim_name in sql_expr or f"{dim_view}.{dim_name}" in sql_expr:
+                    # Look for ${dim_name} or ${dim_view.dim_name} patterns
+                    if f"${{{dim_name}}}" in original_sql or f"${{{dim_view}.{dim_name}}}" in original_sql:
+                        references_skipped_dim = True
+                        break
+                    # Also check without ${} wrapper (in case it's already parsed)
+                    if dim_name in original_sql or f"{dim_view}.{dim_name}" in original_sql:
                         references_skipped_dim = True
                         break
                 

@@ -306,12 +306,6 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   }
 
   facts {
-    qualified_expression_name = "ECOMM_ORDER_ITEMS.margin"
-    sql_expression            = "ECOMM_ORDER_ITEMS.SALE_PRICE - ECOMM_INVENTORY_ITEMS.COST"
-    comment                   = "Calculated by subtracting inventory item cost from sale price"
-  }
-
-  facts {
     qualified_expression_name = "ECOMM_ORDER_ITEMS.sale_price"
     sql_expression            = "ECOMM_ORDER_ITEMS.SALE_PRICE"
   }
