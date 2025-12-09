@@ -105,33 +105,53 @@ class SemanticViewGenerator:
             view_name.replace('__', '_'),  # omni_dbt_ecomm_order_items
         ]
         
+        # First, collect all matching view files and prioritize by comment match
+        candidate_files = []
         for view_path in self.project_root.rglob("*.view.yaml"):
             # Check if path matches any variant
             path_str = str(view_path.relative_to(self.project_root))
             view_ref = view_path.stem.replace('.view', '').replace('.query', '')
             
-            # Check direct match or if view_name appears in path
-            if (view_ref == view_name or 
-                any(variant in path_str for variant in view_name_variants) or
-                view_name in path_str):
-                # Also check the comment in the file for the reference name
-                try:
-                    with open(view_path, 'r') as f:
-                        first_line = f.readline()
-                        if view_name in first_line or any(variant in first_line for variant in view_name_variants):
-                            f.seek(0)
-                            content = yaml.safe_load(f)
-                            view_file = content
-                            break
-                except:
-                    pass
-                
-                # If comment check didn't work, try loading anyway if path matches
-                if not view_file:
-                    with open(view_path, 'r') as f:
-                        content = yaml.safe_load(f)
-                        view_file = content
-                        break
+            # Skip semantic view reference files (they're in directories like ECOMM__omni__*)
+            # These are generated reference files, not the source view files
+            if '__omni__' in path_str:
+                continue
+            
+            # Check the comment in the file for the reference name
+            try:
+                with open(view_path, 'r') as f:
+                    first_line = f.readline()
+                    f.seek(0)
+                    content = yaml.safe_load(f)
+                    
+                    # Extract view name from comment line (format: "# Reference this view as {view_name}")
+                    comment_view_name = None
+                    if first_line and 'Reference this view as' in first_line:
+                        # Extract the view name after "as "
+                        parts = first_line.split('Reference this view as')
+                        if len(parts) > 1:
+                            comment_view_name = parts[1].strip()
+                    
+                    # Check if comment view name exactly matches (highest priority)
+                    if comment_view_name == view_name:
+                        candidate_files.insert(0, (0, view_path, content))
+                    # Check path matches
+                    elif (view_ref == view_name or 
+                          any(variant in path_str for variant in view_name_variants) or
+                          view_name in path_str):
+                        if first_line and view_name in first_line:
+                            # Contains view name in comment but not exact - medium-high priority
+                            candidate_files.append((1, view_path, content))
+                        else:
+                            # Good path match - medium priority
+                            candidate_files.append((2, view_path, content))
+            except:
+                pass
+        
+        # Use the first candidate (highest priority, lowest number)
+        if candidate_files:
+            candidate_files.sort(key=lambda x: x[0])
+            _, view_path, view_file = candidate_files[0]
         
         # Also try .query.view.yaml files
         if not view_file:
@@ -328,6 +348,81 @@ class SemanticViewGenerator:
         
         traverse_joins(joins)
         return views
+    
+    def parse_fields_list(self, topic: Dict, join_tree: List[str]) -> Dict[str, set]:
+        """
+        Parse the fields list from topic and expand wildcards.
+        Returns a dict mapping view_name -> set of field names to include.
+        If no fields parameter, returns None (meaning include all fields).
+        """
+        fields_list = topic.get('fields', [])
+        if not fields_list:
+            return None  # No fields specified, include all
+        
+        # Build a set of included fields per view
+        included_fields = {}
+        all_views_wildcard = False
+        
+        for field_spec in fields_list:
+            if isinstance(field_spec, str):
+                # Handle wildcards
+                if field_spec == 'ALL_VIEWS.*' or field_spec == 'all_views.*':
+                    all_views_wildcard = True
+                    continue
+                
+                # Handle view_name.* wildcard
+                if field_spec.endswith('.*'):
+                    view_name = field_spec[:-2]  # Remove .*
+                    if view_name in join_tree:
+                        if view_name not in included_fields:
+                            included_fields[view_name] = set()
+                        # Mark all fields for this view (we'll check against actual fields later)
+                        included_fields[view_name] = None  # None means all fields
+                    continue
+                
+                # Handle specific field: view_name.field_name
+                if '.' in field_spec:
+                    parts = field_spec.split('.', 1)
+                    view_name = parts[0]
+                    field_name = parts[1]
+                    
+                    if view_name in join_tree:
+                        if view_name not in included_fields:
+                            included_fields[view_name] = set()
+                        if included_fields[view_name] is not None:  # Not a wildcard
+                            included_fields[view_name].add(field_name)
+                else:
+                    # Field without view prefix - assume it's from base_view
+                    base_view = topic.get('base_view')
+                    if base_view:
+                        if base_view not in included_fields:
+                            included_fields[base_view] = set()
+                        if included_fields[base_view] is not None:
+                            included_fields[base_view].add(field_spec)
+        
+        # If ALL_VIEWS.* was specified, include all fields for all views
+        if all_views_wildcard:
+            for view_name in join_tree:
+                included_fields[view_name] = None  # None means all fields
+        
+        return included_fields
+    
+    def should_include_field(self, view_name: str, field_name: str, included_fields: Optional[Dict[str, set]]) -> bool:
+        """
+        Check if a field should be included based on the fields list.
+        If included_fields is None, include all fields.
+        """
+        if included_fields is None:
+            return True  # No fields specified, include all
+        
+        if view_name not in included_fields:
+            return False  # View not in fields list
+        
+        view_fields = included_fields[view_name]
+        if view_fields is None:
+            return True  # Wildcard for this view, include all fields
+        
+        return field_name in view_fields
     
     def escape_identifier(self, name: str) -> str:
         """Escape identifier for Snowflake (add quotes)."""
@@ -731,6 +826,9 @@ class SemanticViewGenerator:
         # Build join tree to get all views
         join_tree = self.build_join_tree(topic, base_view_name)
         
+        # Parse fields list to determine which fields to include
+        included_fields = self.parse_fields_list(topic, join_tree)
+        
         blocks = []
         view_to_alias = {}
         skipped_dimensions = set()  # Track dimensions that were skipped (for measures to check against)
@@ -819,6 +917,10 @@ class SemanticViewGenerator:
             
             for dim_name, dim_config in dimensions.items():
                 if not isinstance(dim_config, dict):
+                    continue
+                
+                # Check if this field should be included based on fields list
+                if not self.should_include_field(view_name, dim_name, included_fields):
                     continue
                 
                 # Skip if this is a numeric dimension (will be a fact)
@@ -921,6 +1023,10 @@ class SemanticViewGenerator:
                 if not isinstance(dim_config, dict):
                     continue
                 
+                # Check if this field should be included based on fields list
+                if not self.should_include_field(view_name, dim_name, included_fields):
+                    continue
+                
                 # Only include numeric dimensions as facts
                 if not self.is_numeric_dimension(dim_config):
                     continue
@@ -993,6 +1099,10 @@ class SemanticViewGenerator:
             
             for measure_name, measure_config in measures.items():
                 if not isinstance(measure_config, dict):
+                    continue
+                
+                # Check if this field should be included based on fields list
+                if not self.should_include_field(view_name, measure_name, included_fields):
                     continue
                 
                 sql_expr = measure_config.get('sql', f'"{measure_name.upper()}"')

@@ -199,15 +199,30 @@ jobs:
       - name: Terraform Plan
         if: steps.changes.outputs.has_changes == 'true'
         working-directory: terraform
+        id: plan
         run: |
-          terraform plan -out=tfplan
+          if terraform plan -out=tfplan; then
+            echo "plan_success=true" >> $GITHUB_OUTPUT
+            echo "Plan generated successfully"
+          else
+            echo "plan_success=false" >> $GITHUB_OUTPUT
+            echo "Plan failed, will skip plan file on apply"
+            # Remove incomplete plan file if it exists
+            rm -f tfplan
+          fi
         continue-on-error: true
 
       - name: Terraform Apply
         if: steps.changes.outputs.has_changes == 'true' && github.event.pull_request.merged == true
         working-directory: terraform
         run: |
-          terraform apply -auto-approve tfplan || terraform apply -auto-approve
+          if [ -f tfplan ] && [ "${{ steps.plan.outputs.plan_success }}" == "true" ]; then
+            echo "Applying saved plan file..."
+            terraform apply -auto-approve tfplan
+          else
+            echo "No valid plan file, running direct apply..."
+            terraform apply -auto-approve
+          fi
         env:
           TF_LOG: INFO
 
