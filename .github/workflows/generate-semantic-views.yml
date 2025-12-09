@@ -322,11 +322,13 @@ jobs:
       - name: Handle existing semantic views
         if: steps.changes.outputs.has_changes == 'true' && github.event.pull_request.merged == true
         working-directory: terraform
+        id: import
         run: |
-          # Try to import existing semantic views, or destroy them if import fails
+          # Try to import existing semantic views
           echo "Checking for existing semantic views..."
           
           DATABASE="${{ secrets.SNOWFLAKE_DATABASE }}"
+          IMPORTED_COUNT=0
           
           # Get list of semantic view resources from generated .tf files
           for tf_file in *.tf; do
@@ -342,14 +344,17 @@ jobs:
                 echo "Attempting to import $RESOURCE_NAME as $FULL_NAME..."
                 if terraform import "snowflake_semantic_view.${RESOURCE_NAME}" "$FULL_NAME" 2>&1; then
                   echo "  ✅ Successfully imported $RESOURCE_NAME"
+                  IMPORTED_COUNT=$((IMPORTED_COUNT + 1))
                 else
-                  echo "  Import failed, will try to destroy existing view if it exists..."
-                  # Try to destroy the existing view so it can be recreated
-                  terraform destroy -auto-approve -target="snowflake_semantic_view.${RESOURCE_NAME}" 2>&1 || echo "  (View may not exist, will be created)"
+                  echo "  (View does not exist, will be created)"
                 fi
               fi
             fi
           done
+          
+          # Set output to indicate if any imports happened
+          echo "imports_happened=$([ $IMPORTED_COUNT -gt 0 ] && echo 'true' || echo 'false')" >> $GITHUB_OUTPUT
+          echo "imported_count=$IMPORTED_COUNT" >> $GITHUB_OUTPUT
         continue-on-error: true
 
       - name: Terraform Apply
@@ -357,7 +362,22 @@ jobs:
         working-directory: terraform
         run: |
           PLAN_SUCCESS="${{ steps.plan.outputs.plan_success }}"
+          IMPORTS_HAPPENED="${{ steps.import.outputs.imports_happened }}"
           echo "Plan success status: $PLAN_SUCCESS"
+          echo "Imports happened: $IMPORTS_HAPPENED"
+          
+          # If imports happened, the saved plan is stale - regenerate it
+          if [ "$IMPORTS_HAPPENED" = "true" ]; then
+            echo "⚠️  Imports changed state, regenerating plan..."
+            rm -f tfplan
+            terraform plan -out=tfplan
+            PLAN_EXIT_CODE=$?
+            if [ $PLAN_EXIT_CODE -ne 0 ]; then
+              echo "❌ Plan regeneration failed"
+              exit $PLAN_EXIT_CODE
+            fi
+            echo "✅ Plan regenerated successfully"
+          fi
           
           # Capture current runner IP for network policy errors
           RUNNER_IP=$(curl -s https://api.ipify.org || echo "unknown")
