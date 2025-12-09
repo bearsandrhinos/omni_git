@@ -25,7 +25,7 @@ dimensions:
       WHEN ${status} = 'Processing' THEN 3 WHEN ${status} = 'Cancelled' THEN 4
       WHEN ${status} = 'Returned' THEN 5 ELSE 6 END
     label: Status Ordering
-    description: attempting to order fields
+    description: This actually will order the fields, trust me
 
   order_id:
     sql: '"ORDER_ID"'
