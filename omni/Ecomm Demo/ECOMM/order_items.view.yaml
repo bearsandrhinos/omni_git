@@ -75,7 +75,7 @@ dimensions:
     sql: datediff('days', ${ecomm__order_items.created_at},
       ${ecomm__order_items.shipped_at})
     label: Time To Ship
-    description: Time between order created and order shipped
+    description: TEST UPDATE - Time between order created and order shipped
 
   user_selected_markdate:
     sql: "{{filters.order_items.markdate_filter.range_start}}"

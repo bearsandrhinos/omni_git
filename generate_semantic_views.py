@@ -1606,6 +1606,44 @@ class SemanticViewGenerator:
         
         print(f"Generated Terraform resource for semantic view '{semantic_view_name}' in {output_file}")
     
+    def find_topics_by_base_view(self, base_view: str) -> List[Path]:
+        """Find all topic files that use a specific base_view."""
+        topic_files = list(self.project_root.rglob("*.topic.yaml"))
+        matching_topics = []
+        
+        for topic_path in topic_files:
+            # Skip topics in Snowflake folder
+            if 'Snowflake' in topic_path.parts:
+                continue
+            
+            try:
+                with open(topic_path, 'r') as f:
+                    topic_data = yaml.safe_load(f)
+                    if topic_data and topic_data.get('base_view') == base_view:
+                        matching_topics.append(topic_path)
+            except Exception as e:
+                print(f"Warning: Could not read {topic_path}: {e}")
+                continue
+        
+        return matching_topics
+    
+    def process_topics_by_base_view(self, base_view: str) -> None:
+        """Process all topics that use a specific base_view."""
+        topic_paths = self.find_topics_by_base_view(base_view)
+        
+        if not topic_paths:
+            print(f"No topics found with base_view: {base_view}")
+            return
+        
+        print(f"Found {len(topic_paths)} topic(s) using base_view '{base_view}':")
+        for topic_path in topic_paths:
+            print(f"  - {topic_path}")
+        
+        for topic_path in topic_paths:
+            topic_name = topic_path.stem.replace('.topic', '')
+            print(f"\nProcessing {topic_name}...")
+            self.process_single_topic(topic_path, topic_name)
+    
     def process_topic_by_name(self, topic_name: str) -> None:
         """Process a topic by name (finds the topic file automatically)."""
         topic_path = self.find_topic_by_name(topic_name)
@@ -1637,6 +1675,10 @@ def main():
         default='my-omni-project',
         help='Root directory of the Omni project (default: my-omni-project)'
     )
+    parser.add_argument(
+        '--base-view',
+        help='Generate all topics that use this base_view (e.g., "ecomm__order_items")'
+    )
     
     args = parser.parse_args()
     
@@ -1645,7 +1687,10 @@ def main():
         output_dir=args.output_dir
     )
     
-    if args.topic:
+    if args.base_view:
+        # Generate all topics that use this base_view
+        generator.process_topics_by_base_view(args.base_view)
+    elif args.topic:
         # Check if it's a file path or topic name
         topic_path = Path(args.topic)
         if topic_path.exists() and topic_path.suffix in ['.yaml', '.yml']:
