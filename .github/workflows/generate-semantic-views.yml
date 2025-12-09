@@ -1,0 +1,259 @@
+name: Generate Semantic Views
+
+on:
+  # Trigger when a PR is opened or updated (to show what would change)
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - 'omni/**/*.topic.yaml'
+      - 'omni/**/*.view.yaml'
+      - 'omni/**/relationships.yaml'
+  # Trigger when a PR is merged to main
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - master
+  # Also trigger on direct push to main (for manual commits)
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - 'omni/**/*.topic.yaml'
+      - 'omni/**/*.view.yaml'
+      - 'omni/**/relationships.yaml'
+  # Allow manual trigger
+  workflow_dispatch:
+    inputs:
+      topic:
+        description: 'Specific topic to generate (leave empty for all topics)'
+        required: false
+        type: string
+
+env:
+  PYTHON_VERSION: '3.11'
+  TERRAFORM_VERSION: '1.6.0'
+
+jobs:
+  generate-semantic-views:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch full history for better diff detection
+          # For PR events, checkout both base and head to compare
+          # For merged PRs, checkout the base branch (main) which has the merged code
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.merged == true && format('refs/heads/{0}', github.event.pull_request.base.ref) || (github.event_name == 'pull_request' && github.head_ref || github.ref) }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Set up Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+
+      - name: Configure Snowflake credentials
+        run: |
+          # Create terraform.tfvars from GitHub secrets
+          cat > terraform/terraform.tfvars << EOF
+          snowflake_account_name = "${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
+          snowflake_organization_name = "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}"
+          snowflake_user = "${{ secrets.SNOWFLAKE_USER }}"
+          snowflake_oauth_access_token = "${{ secrets.SNOWFLAKE_OAUTH_ACCESS_TOKEN }}"
+          snowflake_warehouse = "${{ secrets.SNOWFLAKE_WAREHOUSE }}"
+          snowflake_database = "${{ secrets.SNOWFLAKE_DATABASE }}"
+          snowflake_role = "${{ secrets.SNOWFLAKE_ROLE }}"
+          EOF
+
+      - name: Find affected topics
+        id: find-topics
+        run: |
+          cd ${{ github.workspace }}
+          
+          # Determine base and head refs for comparison
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            if [ "${{ github.event.pull_request.merged }}" == "true" ]; then
+              # PR was merged, compare base before merge to base after merge
+              BASE_REF="${{ github.event.pull_request.base.sha }}"
+              HEAD_REF="${{ github.event.pull_request.merge_commit_sha }}"
+            else
+              # PR is open/updated, compare base to PR head
+              BASE_REF="${{ github.event.pull_request.base.sha }}"
+              HEAD_REF="${{ github.event.pull_request.head.sha }}"
+            fi
+          elif [ "${{ github.event_name }}" == "push" ]; then
+            # Push event - compare previous commit to current
+            BASE_REF="${{ github.event.before }}"
+            HEAD_REF="${{ github.event.after }}"
+            # Handle case where before is empty (first commit)
+            if [ -z "$BASE_REF" ] || [ "$BASE_REF" == "0000000000000000000000000000000000000000" ]; then
+              BASE_REF="HEAD~1"
+            fi
+          else
+            # Manual trigger - use current HEAD
+            BASE_REF="HEAD~1"
+            HEAD_REF="HEAD"
+          fi
+          
+          echo "Comparing $BASE_REF..$HEAD_REF"
+          
+          # Verify refs exist
+          if ! git rev-parse --verify "$BASE_REF" >/dev/null 2>&1; then
+            echo "Warning: Base ref $BASE_REF not found, using HEAD~1"
+            BASE_REF="HEAD~1"
+          fi
+          if ! git rev-parse --verify "$HEAD_REF" >/dev/null 2>&1; then
+            echo "Warning: Head ref $HEAD_REF not found, using HEAD"
+            HEAD_REF="HEAD"
+          fi
+          
+          # Find affected topics
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ] && [ -n "${{ github.event.inputs.topic }}" ]; then
+            # Manual trigger with specific topic
+            TOPICS="${{ github.event.inputs.topic }}"
+            echo "topics=$TOPICS" >> $GITHUB_OUTPUT
+            echo "has_topics=true" >> $GITHUB_OUTPUT
+            echo "Using manually specified topic: $TOPICS"
+          else
+            # Auto-detect affected topics
+            TOPICS=$(python .github/scripts/find_affected_topics.py \
+              --base-ref "$BASE_REF" \
+              --head-ref "$HEAD_REF" \
+              --project-root omni \
+              --output-format newline 2>&1) || true
+            
+            # Filter out error messages and empty lines
+            TOPICS=$(echo "$TOPICS" | grep -v "^Warning:" | grep -v "^Error:" | grep -v "^$" || true)
+            
+            if [ -z "$TOPICS" ] || [ -z "$(echo "$TOPICS" | tr -d '\n' | tr -d ' ')" ]; then
+              echo "has_topics=false" >> $GITHUB_OUTPUT
+              echo "No affected topics found"
+            else
+              echo "topics<<EOF" >> $GITHUB_OUTPUT
+              echo "$TOPICS" >> $GITHUB_OUTPUT
+              echo "EOF" >> $GITHUB_OUTPUT
+              echo "has_topics=true" >> $GITHUB_OUTPUT
+              echo "Affected topics:"
+              echo "$TOPICS"
+            fi
+          fi
+
+      - name: Generate Terraform resources
+        id: generate
+        if: steps.find-topics.outputs.has_topics == 'true'
+        run: |
+          cd ${{ github.workspace }}
+          
+          TOPICS="${{ steps.find-topics.outputs.topics }}"
+          
+          if [ -z "$TOPICS" ]; then
+            echo "No topics to generate"
+            exit 0
+          fi
+          
+          # Generate for each affected topic
+          echo "$TOPICS" | while read -r topic; do
+            if [ -n "$topic" ]; then
+              echo "Generating semantic view for topic: $topic"
+              python generate_semantic_views.py "$topic" --output-dir terraform --project-root omni || {
+                echo "Warning: Failed to generate for topic $topic"
+              }
+            fi
+          done
+          
+          # List generated files
+          echo "Generated Terraform files:"
+          find terraform -name "*.tf" -type f | head -20 || echo "No .tf files generated"
+
+      - name: Check for changes
+        id: changes
+        if: steps.find-topics.outputs.has_topics == 'true'
+        run: |
+          if [ -n "$(git status --porcelain terraform/ 2>/dev/null)" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "Changes detected in terraform files"
+            git status terraform/ || true
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No changes detected in terraform files"
+          fi
+
+      - name: Terraform Init
+        if: steps.changes.outputs.has_changes == 'true'
+        working-directory: terraform
+        run: |
+          terraform init
+
+      - name: Terraform Plan
+        if: steps.changes.outputs.has_changes == 'true'
+        working-directory: terraform
+        run: |
+          terraform plan -out=tfplan
+        continue-on-error: true
+
+      - name: Terraform Apply
+        if: steps.changes.outputs.has_changes == 'true' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+        working-directory: terraform
+        run: |
+          terraform apply -auto-approve tfplan || terraform apply -auto-approve
+        env:
+          TF_LOG: INFO
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.has_changes == 'true' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          # Determine the branch to commit to
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            BRANCH="${{ github.event.pull_request.base.ref }}"
+            git checkout $BRANCH
+          else
+            BRANCH="${GITHUB_REF#refs/heads/}"
+          fi
+          git add terraform/*.tf
+          git commit -m "chore: auto-generate semantic views from Omni topics [skip ci]" || exit 0
+          git push origin $BRANCH
+
+      - name: Create summary
+        if: always()
+        run: |
+          echo "## Semantic View Generation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          
+          if [ "${{ steps.find-topics.outputs.has_topics }}" != "true" ]; then
+            echo "ℹ️ No affected topics found - no semantic views to generate" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "This usually means:" >> $GITHUB_STEP_SUMMARY
+            echo "- No topic/view files were changed" >> $GITHUB_STEP_SUMMARY
+            echo "- Changed files don't affect any topics" >> $GITHUB_STEP_SUMMARY
+          elif [ "${{ steps.changes.outputs.has_changes }}" == "true" ]; then
+            echo "✅ Terraform resources generated successfully" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Affected Topics:" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "${{ steps.find-topics.outputs.topics }}" >> $GITHUB_STEP_SUMMARY
+            echo '```' >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### Generated Files:" >> $GITHUB_STEP_SUMMARY
+            find terraform -name "*.tf" -type f 2>/dev/null | sed 's/^/- /' >> $GITHUB_STEP_SUMMARY || echo "- No .tf files found" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No changes detected in generated Terraform files" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "Affected topics were analyzed, but generated files match existing ones." >> $GITHUB_STEP_SUMMARY
+          fi
+

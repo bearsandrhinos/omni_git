@@ -1,0 +1,27 @@
+# Snowflake Connection Configuration
+# Copy this file to terraform.tfvars and fill in your actual values
+# terraform.tfvars is gitignored and will not be committed
+
+# Your Snowflake account identifier (e.g., "xy12345" or "xy12345.us-east-1")
+snowflake_account_name = "your-account"
+
+# Snowflake organization name (if applicable)
+snowflake_organization_name = ""
+
+# Snowflake username
+snowflake_user = "your-username"
+
+# Snowflake Personal Access Token (PAT) - OAuth access token
+# Get this from: Snowflake Web UI → User Profile → Personal Access Tokens
+# NOTE: Snowflake is deprecating username/password authentication. Use PAT instead.
+snowflake_oauth_access_token = "your-pat-token"
+
+# Snowflake warehouse to use
+snowflake_warehouse = "COMPUTE_WH"
+
+# Snowflake role to use
+snowflake_role = "ACCOUNTADMIN"
+
+# Snowflake database where semantic views will be created
+snowflake_database = "YOUR_DATABASE"
+
