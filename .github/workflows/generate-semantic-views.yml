@@ -201,14 +201,17 @@ jobs:
         working-directory: terraform
         id: plan
         run: |
-          if terraform plan -out=tfplan; then
+          if terraform plan -out=tfplan 2>&1; then
             echo "plan_success=true" >> $GITHUB_OUTPUT
             echo "Plan generated successfully"
           else
+            PLAN_EXIT_CODE=$?
             echo "plan_success=false" >> $GITHUB_OUTPUT
-            echo "Plan failed, will skip plan file on apply"
+            echo "Plan failed with exit code: $PLAN_EXIT_CODE"
+            echo "Will skip plan file on apply"
             # Remove incomplete plan file if it exists
             rm -f tfplan
+            exit 0  # Don't fail the step, continue-on-error handles this
           fi
         continue-on-error: true
 
@@ -216,11 +219,15 @@ jobs:
         if: steps.changes.outputs.has_changes == 'true' && github.event.pull_request.merged == true
         working-directory: terraform
         run: |
-          if [ -f tfplan ] && [ "${{ steps.plan.outputs.plan_success }}" == "true" ]; then
+          PLAN_SUCCESS="${{ steps.plan.outputs.plan_success }}"
+          echo "Plan success status: $PLAN_SUCCESS"
+          
+          if [ -f tfplan ] && [ "$PLAN_SUCCESS" = "true" ]; then
             echo "Applying saved plan file..."
             terraform apply -auto-approve tfplan
           else
-            echo "No valid plan file, running direct apply..."
+            echo "No valid plan file available (file exists: $([ -f tfplan ] && echo 'yes' || echo 'no'), plan_success: $PLAN_SUCCESS)"
+            echo "Running direct apply..."
             terraform apply -auto-approve
           fi
         env:
