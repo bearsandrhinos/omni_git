@@ -6,36 +6,29 @@ table_name: ORDER_ITEMS
 
 dimensions:
   id:
-    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"ID"'
     format: ID
     primary_key: true
 
   order_id:
-    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"ORDER_ID"'
     format: ID
 
   user_id:
-    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"USER_ID"'
     format: ID
 
   inventory_item_id:
-    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"INVENTORY_ITEM_ID"'
     format: ID
 
   sale_price:
-    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"SALE_PRICE"'
 
   status:
-    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"STATUS"'
 
   created_at:
-    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"CREATED_AT"'
 
   returned_at:
@@ -67,9 +60,4 @@ dimensions:
 
 measures:
   count:
-    # Measure is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
-    sql: COUNT(*)
-
-  total_sale_price:
-    # Measure is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
-    sql: COALESCE(SUM("SALE_PRICE"), 0)
+    aggregate_type: count

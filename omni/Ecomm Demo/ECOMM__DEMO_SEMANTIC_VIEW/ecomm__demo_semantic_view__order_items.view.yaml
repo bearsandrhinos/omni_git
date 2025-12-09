@@ -6,260 +6,59 @@ table_name: ORDER_ITEMS
 
 # __omni_extension_placeholder__
 dimensions:
-  created_at:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"CREATED_AT"'
-    description: Date and time when the order item was created.
-    synonyms:
-      [
-        created_on,
-        creation_date,
-        creation_time,
-        date_created,
-        timestamp,
-        inserted_at,
-        entry_date,
-        start_date,
-        initialization_time
-      ]
-
-  delivered_at:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"DELIVERED_AT"'
-    description: The date and time when the order item was delivered to the customer.
-    synonyms:
-      [
-        delivered_on,
-        delivery_date,
-        delivery_time,
-        received_at,
-        arrival_time,
-        arrival_date,
-        completed_delivery,
-        delivery_completion_time
-      ]
-
-  is_delivered:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"IS_DELIVERED"'
-    description: Indicates whether the order item has been delivered to the customer.
-    synonyms:
-      [
-        delivered_status,
-        delivery_status,
-        is_shipped_to_customer,
-        delivery_confirmation,
-        order_delivered
-      ]
-
-  is_returned:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"IS_RETURNED"'
-    description: Indicates whether the order item was returned by the customer.
-    synonyms:
-      [
-        is_return,
-        returned_status,
-        return_flag,
-        has_return,
-        return_indicator,
-        is_refunded,
-        return_status_flag
-      ]
-
-  is_shipped:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"IS_SHIPPED"'
-    description: Indicates whether the order item has been shipped to the customer.
-    synonyms:
-      [
-        shipped_status,
-        shipping_status,
-        has_shipped,
-        shipped_ind,
-        shipped_flag,
-        shipped_yes_no
-      ]
-
-  months_since_signup:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"MONTHS_SINCE_SIGNUP"'
-    description: The number of months that have passed since the customer signed up
-      for the service or made their first purchase.
-    synonyms:
-      [
-        months_since_registration,
-        months_since_signup_date,
-        tenure_in_months,
-        months_as_customer,
-        subscription_tenure
-      ]
-
-  order_id:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"ORDER_ID"'
-    format: ID
-    description: Unique identifier for the order that the item belongs to.
-    synonyms:
-      [
-        order_number,
-        purchase_id,
-        transaction_id,
-        order_reference,
-        sales_order_id,
-        purchase_order_id
-      ]
-
-  returned_at:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"RETURNED_AT"'
-    description: The date and time when the order item was returned.
-    synonyms:
-      [
-        return_date,
-        date_returned,
-        returned_on,
-        return_timestamp,
-        date_of_return
-      ]
-
-  shipped_at:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"SHIPPED_AT"'
-    description: The date and time when the order item was shipped.
-    synonyms:
-      [
-        dispatched_at,
-        shipped_date,
-        shipping_date,
-        sent_at,
-        delivery_initiated_at,
-        shipped_on
-      ]
-
-  status:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"STATUS"'
-    description: The current status of the order item, indicating whether it has
-      been completed, shipped, or cancelled.
-    synonyms:
-      [
-        state,
-        condition,
-        situation,
-        position,
-        standing,
-        category,
-        classification,
-        designation
-      ]
-
-  user_id:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"USER_ID"'
-    format: ID
-    description: Unique identifier of the user who placed the order.
-    synonyms:
-      [
-        customer_id,
-        account_id,
-        user_account,
-        account_number,
-        client_id,
-        member_id
-      ]
-
   id:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
     sql: '"ID"'
     format: ID
-    description: Unique identifier for each order item.
-    synonyms:
-      [
-        identifier,
-        unique_id,
-        record_id,
-        row_id,
-        key,
-        unique_identifier,
-        primary_key
-      ]
+
+  order_id:
+    sql: '"ORDER_ID"'
+    format: ID
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
 
   inventory_item_id:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
     sql: '"INVENTORY_ITEM_ID"'
     format: ID
-    description: Unique identifier for the inventory item being ordered.
-    synonyms:
-      [
-        product_id,
-        item_number,
-        stock_id,
-        item_code,
-        product_code,
-        sku,
-        stock_number,
-        item_identifier
-      ]
-
-  margin:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: '"MARGIN"'
-    description: The margin earned on each order item, representing the difference
-      between the selling price and the cost of the item, expressed as a
-      monetary value.
-    synonyms: [ profit, markup, gross_profit, net_profit, earnings, gain, surplus ]
 
   sale_price:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
     sql: '"SALE_PRICE"'
-    description: The price at which the item was sold, representing the amount the
-      customer paid for the item.
-    synonyms:
-      [
-        selling_price,
-        list_price,
-        unit_price,
-        price_paid,
-        purchase_price,
-        cost,
-        amount,
-        selling_cost,
-        unit_cost
-      ]
+
+  status:
+    sql: '"STATUS"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+
+  margin:
+    sql: '"MARGIN"'
+
+  months_since_signup:
+    sql: '"MONTHS_SINCE_SIGNUP"'
 
   time_to_ship:
-    # Dimension is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
     sql: '"TIME_TO_SHIP"'
-    description: The time it takes to ship an order item, measured in days.
-    synonyms:
-      [
-        shipping_time,
-        delivery_lead_time,
-        shipment_duration,
-        time_to_delivery,
-        lead_time_to_ship,
-        shipping_duration,
-        order_to_ship_time
-      ]
 
 measures:
-  first_purchase_date:
-    # Measure is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: MIN("CREATED_AT")
-
-  order_count:
-    # Measure is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: COUNT(DISTINCT "ORDER_ID")
-
-  time_to_ship_average:
-    # Measure is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: AVG("TIME_TO_SHIP")
-
-  total_revenue:
-    # Measure is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
-    sql: SUM("SALE_PRICE")
-
   count:
     aggregate_type: count
 custom_compound_primary_key_sql:
