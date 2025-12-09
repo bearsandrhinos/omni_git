@@ -101,11 +101,6 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   }
 
   dimensions {
-    qualified_expression_name = "ECOMM_ORDER_ITEMS.user_selected_markdate_180_days_before"
-    sql_expression            = "DATEADD(DAY, -180, ECOMM_ORDER_ITEMS.USER_SELECTED_MARKDATE)"
-  }
-
-  dimensions {
     qualified_expression_name = "ECOMM_USERS.full_name"
     sql_expression            = "INITCAP(CONCAT(ECOMM_USERS.FIRST_NAME, ' ', ECOMM_USERS.LAST_NAME))"
   }
@@ -358,7 +353,7 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   metrics {
     semantic_expression {
       qualified_expression_name = "ECOMM_ORDER_ITEMS.total_sale_price"
-      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE * 10)"
+      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE * 100000)"
     }
   }
 
