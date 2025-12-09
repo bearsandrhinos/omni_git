@@ -370,13 +370,14 @@ jobs:
           if [ "$IMPORTS_HAPPENED" = "true" ]; then
             echo "⚠️  Imports changed state, regenerating plan..."
             rm -f tfplan
-            terraform plan -out=tfplan
-            PLAN_EXIT_CODE=$?
+            terraform plan -out=tfplan 2>&1 | tee /tmp/plan_after_import.txt
+            PLAN_EXIT_CODE=${PIPESTATUS[0]}
             if [ $PLAN_EXIT_CODE -ne 0 ]; then
               echo "❌ Plan regeneration failed"
+              cat /tmp/plan_after_import.txt
               exit $PLAN_EXIT_CODE
             fi
-            echo "✅ Plan regenerated successfully"
+            echo "✅ Plan regenerated successfully after imports"
           fi
           
           # Capture current runner IP for network policy errors
@@ -413,8 +414,20 @@ jobs:
               echo ""
               echo "Options:"
               echo "1. Destroy existing views in Snowflake manually, then re-run"
-              echo "2. Or manually import: terraform import snowflake_semantic_view.<name> <schema>.<view_name>"
-              echo "3. The lifecycle block should handle replacement on next run"
+              echo "2. Or manually import: terraform import snowflake_semantic_view.<name> <database>.<schema>.<view_name>"
+              echo ""
+            fi
+            
+            # Check for stale plan error
+            if grep -q "Saved plan is stale" "$OUTPUT_FILE" 2>/dev/null; then
+              echo ""
+              echo "⚠️  STALE PLAN DETECTED"
+              echo ""
+              echo "The saved plan file is stale (state changed after plan was created)."
+              echo ""
+              echo "This can happen if imports occurred after the plan was created."
+              echo "The workflow should regenerate the plan automatically, but if you see this error,"
+              echo "it means the regeneration step may have failed."
               echo ""
             fi
             
