@@ -39,11 +39,6 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   }
 
   dimensions {
-    qualified_expression_name = "ECOMM_ORDER_ITEMS.json"
-    sql_expression            = "PARSE_JSON(CONCAT('{\"status\":\"', ECOMM_ORDER_ITEMS.STATUS :: STRING, '\", \"email\":\"', ECOMM_USERS.EMAIL, '\", \"state\":\"', ECOMM_USERS.STATE, '\"}'))"
-  }
-
-  dimensions {
     qualified_expression_name = "ECOMM_ORDER_ITEMS.id"
     sql_expression            = "ECOMM_ORDER_ITEMS.ID"
   }

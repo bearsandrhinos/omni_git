@@ -1012,10 +1012,11 @@ class SemanticViewGenerator:
                     continue
                 
                 # Check if this dimension references another dimension that was skipped (has {{...}} in its SQL)
-                # Parse ${view.field} references and check if those fields are in skipped_dimensions
+                # Also check if it references fields from other tables (cross-table references not allowed in dimensions)
                 import re
                 template_refs = re.findall(r'\$\{([^}]+)\}', str(sql_expr))
                 references_skipped = False
+                references_other_table = False
                 for ref in template_refs:
                     # ref might be like "ecomm__order_items.user_selected_markdate"
                     if '.' in ref:
@@ -1025,8 +1026,13 @@ class SemanticViewGenerator:
                             # This dimension references a skipped field, so skip it too
                             references_skipped = True
                             break
+                        # Check if this references a different view/table (cross-table reference)
+                        # Snowflake semantic views don't allow dimensions to reference other tables
+                        if ref_view != view_name and ref_view in view_to_alias:
+                            references_other_table = True
+                            break
                 
-                if references_skipped:
+                if references_skipped or references_other_table:
                     continue
                 
                 # Convert Omni granularity syntax [date], [month], [quarter] to Snowflake SQL
