@@ -4,8 +4,4 @@ group_label: Marketing
 display_order: 1
 description: All registered users
 
-joins:
-  user_order_facts: {}
-  ecomm__order_items:
-    ecomm__inventory_items:
-      ecomm__products: {}
+joins: {}
