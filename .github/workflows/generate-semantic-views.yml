@@ -319,6 +319,32 @@ jobs:
           fi
         continue-on-error: true
 
+      - name: Import existing semantic views (if needed)
+        if: steps.changes.outputs.has_changes == 'true' && github.event.pull_request.merged == true
+        working-directory: terraform
+        run: |
+          # Try to import existing semantic views to avoid "already exists" errors
+          # This is a best-effort attempt - if imports fail, Terraform will try to replace
+          echo "Checking for existing semantic views to import..."
+          
+          # Get list of semantic view resources from generated .tf files
+          for tf_file in *.tf; do
+            if [ -f "$tf_file" ]; then
+              # Extract resource name and view name from terraform file
+              RESOURCE_NAME=$(grep -oP 'resource "snowflake_semantic_view" "\K[^"]+' "$tf_file" | head -1)
+              VIEW_NAME=$(grep -oP 'name\s+=\s+"\K[^"]+' "$tf_file" | head -1)
+              SCHEMA=$(grep -oP 'schema\s+=\s+"\K[^"]+' "$tf_file" | head -1)
+              
+              if [ -n "$RESOURCE_NAME" ] && [ -n "$VIEW_NAME" ] && [ -n "$SCHEMA" ]; then
+                # Try to import - ignore errors if view doesn't exist
+                FULL_NAME="${SCHEMA}.${VIEW_NAME}"
+                echo "Attempting to import $RESOURCE_NAME as $FULL_NAME..."
+                terraform import "snowflake_semantic_view.${RESOURCE_NAME}" "$FULL_NAME" 2>&1 || echo "  (View may not exist, will be created)"
+              fi
+            fi
+          done
+        continue-on-error: true
+
       - name: Terraform Apply
         if: steps.changes.outputs.has_changes == 'true' && github.event.pull_request.merged == true
         working-directory: terraform
@@ -355,11 +381,13 @@ jobs:
               echo "⚠️  SEMANTIC VIEW ALREADY EXISTS"
               echo ""
               echo "One or more semantic views already exist in Snowflake."
-              echo "Terraform will attempt to replace them on the next run."
               echo ""
-              echo "If this persists, you may need to:"
-              echo "1. Manually import existing views: terraform import <resource> <fully_qualified_name>"
-              echo "2. Or destroy existing views in Snowflake first"
+              echo "The workflow attempted to import existing views, but some may still need manual handling."
+              echo ""
+              echo "Options:"
+              echo "1. Destroy existing views in Snowflake manually, then re-run"
+              echo "2. Or manually import: terraform import snowflake_semantic_view.<name> <schema>.<view_name>"
+              echo "3. The lifecycle block should handle replacement on next run"
               echo ""
             fi
             
@@ -370,9 +398,10 @@ jobs:
               echo ""
               echo "There are SQL syntax errors in the generated Terraform."
               echo "This may be due to:"
-              echo "1. Field names starting with numbers (need to be quoted)"
+              echo "1. Field names starting with numbers (should be quoted - check generator)"
               echo "2. Invalid SQL expressions in view definitions"
               echo "3. Special characters in field names"
+              echo "4. Unsupported aggregate functions (e.g., percentile)"
               echo ""
               echo "Check the error messages above for details."
               echo ""
