@@ -271,11 +271,12 @@ jobs:
           echo "GitHub Actions runner IP: $RUNNER_IP"
           echo ""
           
-          if terraform plan -out=tfplan 2>&1 | tee /tmp/plan_output.txt; then
-            echo "plan_success=true" >> $GITHUB_OUTPUT
-            echo "Plan generated successfully"
-          else
-            PLAN_EXIT_CODE=$?
+          # Run plan and capture output
+          terraform plan -out=tfplan 2>&1 | tee /tmp/plan_output.txt
+          PLAN_EXIT_CODE=${PIPESTATUS[0]}
+          
+          # Check for errors in output (even if exit code is 0, Terraform might have errors)
+          if grep -q "Error:" /tmp/plan_output.txt || [ $PLAN_EXIT_CODE -ne 0 ]; then
             echo "plan_success=false" >> $GITHUB_OUTPUT
             echo "Plan failed with exit code: $PLAN_EXIT_CODE"
             
@@ -312,6 +313,9 @@ jobs:
             # Remove incomplete plan file if it exists
             rm -f tfplan
             exit 0  # Don't fail the step, continue-on-error handles this
+          else
+            echo "plan_success=true" >> $GITHUB_OUTPUT
+            echo "Plan generated successfully"
           fi
         continue-on-error: true
 
