@@ -46,7 +46,7 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   dimensions {
     qualified_expression_name = "ECOMM_ORDER_ITEMS.status_ordering"
     sql_expression            = "CASE WHEN ECOMM_ORDER_ITEMS.STATUS = 'Complete' THEN 1 WHEN ECOMM_ORDER_ITEMS.STATUS = 'Shipped' THEN 2 WHEN ECOMM_ORDER_ITEMS.STATUS = 'Processing' THEN 3 WHEN ECOMM_ORDER_ITEMS.STATUS = 'Cancelled' THEN 4 WHEN ECOMM_ORDER_ITEMS.STATUS = 'Returned' THEN 5 ELSE 6 END"
-    comment                   = "attempting to order fields"
+    comment                   = "This actually will order the fields, trust me"
   }
 
   dimensions {
