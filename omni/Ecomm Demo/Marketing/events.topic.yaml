@@ -1,0 +1,6 @@
+base_view: ecomm__events
+label: Web Event Tracking
+group_label: Marketing
+display_order: 5
+
+joins: {}

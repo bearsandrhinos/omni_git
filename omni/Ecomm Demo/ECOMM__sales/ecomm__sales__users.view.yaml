@@ -1,0 +1,68 @@
+# Reference this view as ecomm__sales__users
+# View is defined in the semantic view SALES in the data warehouse
+schema: ECOMM
+folder: ECOMM/sales
+table_name: USERS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  first_name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"FIRST_NAME"'
+
+  last_name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"LAST_NAME"'
+
+  email:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"EMAIL"'
+
+  age:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"AGE"'
+
+  city:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CITY"'
+
+  state:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"STATE"'
+
+  country:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"COUNTRY"'
+
+  zip:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ZIP"'
+
+  latitude:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"LATITUDE"'
+
+  longitude:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"LONGITUDE"'
+
+  gender:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"GENDER"'
+
+  created_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CREATED_AT"'
+
+  traffic_source:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"TRAFFIC_SOURCE"'
+
+measures:
+  count:
+    aggregate_type: count

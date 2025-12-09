@@ -1,0 +1,69 @@
+# Reference this view as ecomm__omni__order_items_curated__ecomm__users
+# View is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+schema: ECOMM
+folder: ECOMM/omni__order_items_curated
+table_name: USERS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  email:
+    sql: '"EMAIL"'
+
+  age:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: '"AGE"'
+
+  city:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: '"CITY"'
+
+  state:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: '"STATE"'
+
+  country:
+    sql: '"COUNTRY"'
+
+  zip:
+    sql: '"ZIP"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+  gender:
+    sql: '"GENDER"'
+
+  created_at:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: '"CREATED_AT"'
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+
+  domain_from_email:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: SUBSTRING("EMAIL", COALESCE(CASE WHEN POSITION('@', SUBSTRING("EMAIL", 1,
+      LENGTH("EMAIL"))) > 0 THEN POSITION('@', SUBSTRING("EMAIL", 1,
+      LENGTH("EMAIL"))) + (1 - 1) ELSE NULL END, 0) + 1, LENGTH("EMAIL"))
+
+  full_name:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: INITCAP(CONCAT("FIRST_NAME", ' ', "LAST_NAME"))
+
+measures:
+  count:
+    aggregate_type: count

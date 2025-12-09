@@ -1,0 +1,11 @@
+# Reference this view as dynamic
+schema: ECOMM
+sql: select user_id from ecomm.order_items
+
+dimensions:
+  user_id:
+    sql: '"USER_ID"'
+
+measures:
+  count:
+    aggregate_type: count

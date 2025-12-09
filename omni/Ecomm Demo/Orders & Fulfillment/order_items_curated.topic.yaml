@@ -1,0 +1,39 @@
+base_view: ecomm__order_items
+base_view_label: Order Items Curated
+label: Order Transactions Curated
+group_label: Orders & Fulfillment
+display_order: 7
+description: Detail on historical customer purchases
+
+fields:
+  [
+    ecomm__order_items.created_at,
+    ecomm__order_items.status,
+    ecomm__order_items.total_sale_price,
+    ecomm__order_items.sale_price,
+    ecomm__order_items.count,
+    ecomm__order_items.order_id,
+    ecomm__order_items.id,
+    ecomm__order_items.user_id,
+    ecomm__order_items.inventory_item_id,
+    ecomm__order_items.created_at_min,
+    ecomm__inventory_items.id,
+    ecomm__inventory_items.cost,
+    ecomm__inventory_items.cost_sum,
+    ecomm__users.id,
+    ecomm__users.created_at,
+    ecomm__users.state,
+    ecomm__users.average_age,
+    ecomm__users.age,
+    ecomm__users.city,
+    ecomm__users.full_name,
+    ecomm__users.domain_from_email,
+    ecomm__users.age_average
+  ]
+default_filters:
+  ecomm__order_items.status:
+    not: [ Returned, Cancelled ]
+
+joins:
+  ecomm__users: {}
+  ecomm__inventory_items: {}

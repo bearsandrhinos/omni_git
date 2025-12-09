@@ -1,0 +1,162 @@
+# Reference this view as ecomm__order_items
+schema: ECOMM
+table_name: ORDER_ITEMS
+
+dimensions:
+  margin:
+    sql: ${ecomm__order_items.sale_price} - ${ecomm__inventory_items.cost}
+    label: Margin
+    format: currency
+    description: Calculated by subtracting inventory item cost from sale price
+
+  json:
+    sql: "PARSE_JSON(CONCAT('{\"status\":\"', ${status} :: STRING, '\",
+      \"email\":\"', ${ecomm__users.email}, '\", \"state\":\"',
+      ${ecomm__users.state}, '\"}'))"
+    label: JSON
+
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  status_ordering:
+    sql: CASE WHEN ${status} = 'Complete' THEN 1 WHEN ${status} = 'Shipped' THEN 2
+      WHEN ${status} = 'Processing' THEN 3 WHEN ${status} = 'Cancelled' THEN 4
+      WHEN ${status} = 'Returned' THEN 5 ELSE 6 END
+    label: Status Ordering
+    description: attempting to order fields
+
+  order_id:
+    sql: '"ORDER_ID"'
+    format: ID
+
+  user_id:
+    sql: '"ID"'
+    links:
+      - url: https://peter.omniapp.co/dashboards/0a968d64/edit?f--users.id=%7B%22values%22%3A%5B%22${ecomm__users.id}%22%5D%7D
+        label: User Dashboard
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+    format: ID
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+
+  status:
+    sql: '"STATUS"'
+    colors:
+      conditions:
+        - condition:
+            is: Complete
+          color: grey
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  date:
+    sql: CASE WHEN {{ filters.ecomm__order_items.day_filter.range_start }} <=
+      DATEADD(HOUR, -24, CURRENT_TIMESTAMP) then
+      ${ecomm__order_items.created_at[hour]} ELSE
+      ${ecomm__order_items.created_at[date]} END
+    timeframes: []
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+
+  time_to_ship:
+    sql: datediff('days', ${ecomm__order_items.created_at},
+      ${ecomm__order_items.shipped_at})
+    label: Time To Ship
+    description: Time between order created and order shipped
+
+  user_selected_markdate:
+    sql: "{{filters.order_items.markdate_filter.range_start}}"
+
+  user_selected_markdate_180_days_before:
+    sql: DATEADD(DAY, -180, ${ecomm__order_items.user_selected_markdate})
+
+measures:
+  25_perc_180_days:
+    sql: ${ecomm__order_items.sale_price}
+    format: financial_1
+    aggregate_type: percentile
+    percentile: 25
+
+  count:
+    aggregate_type: count
+
+  created_at_min:
+    sql: ${ecomm__order_items.created_at}
+    hidden: true
+    aggregate_type: min
+
+  total_sale_price:
+    sql: ${ecomm__order_items.sale_price}
+    label: Total Sale Price
+    format: CURRENCY_2
+    aggregate_type: sum
+    required_access_grants: [ total_sales ]
+
+  time_to_ship_average:
+    sql: ${ecomm__order_items.time_to_ship}
+    label: Time To Ship Average
+    aggregate_type: average
+
+  total_revenue:
+    sql: ${ecomm__order_items.sale_price}
+    format: CURRENCY_2
+    aggregate_type: sum
+    required_access_grants: [ revenue ]
+
+  margin_average:
+    sql: ${margin}
+    label: Margin Average
+    format: currency
+    aggregate_type: average
+
+  margin_sum:
+    sql: ${margin}
+    label: Margin Sum
+    format: currency
+    aggregate_type: sum
+
+  sale_price_last_30_days:
+    sql: ${ecomm__order_items.sale_price}
+    label: Sale Price Last 30 Days
+    format: USDCURRENCY_0
+    aggregate_type: sum
+    filters:
+      created_at:
+        time_for_duration: [ 30 days ago, 30 days ]
+
+  sale_price_previous_30_days:
+    sql: ${ecomm__order_items.sale_price}
+    label: Sale Price Last Previous 30 Days
+    format: USDCURRENCY
+    aggregate_type: sum
+    filters:
+      created_at:
+        time_for_duration: [ 60 days ago, 30 days ]
+
+  count_4_months_previous:
+    label: Count 4 Months Previous
+    aggregate_type: count
+    filters:
+      created_at:
+        date_offset_from_query: 4 month
+        cancel_query_filter: true
+
+filters:
+  markdate_filter:
+    type: timestamp
+
+  day_filter:
+    type: timestamp

@@ -1,0 +1,22 @@
+# Reference this view as demo__product
+schema: DEMO
+table_name: PRODUCT
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  created_date:
+    sql: '"CREATED_DATE"'
+
+  name:
+    sql: '"NAME"'
+
+  family:
+    sql: '"FAMILY"'
+
+measures:
+  count:
+    aggregate_type: count

@@ -1,0 +1,11 @@
+included_schemas: [ ECOMM, DEMO, SE_TEAM_UPLOAD_DATA__public ]
+
+ignored_views: [ product_images_staging, "*_js", ecomm.int_*, ecomm.stg_* ]
+
+access_grants:
+  revenue_field:
+    user_attribute: revenue
+    allowed_values: [ total_revenue ]
+  sales_field:
+    user_attribute: revenue
+    allowed_values: [ total_sale_price ]

@@ -1,0 +1,11 @@
+base_view: ecomm__inventory_items
+label: Inventory Management
+group_label: Orders & Fulfillment
+display_order: 2
+
+fields: [ all_views.*, -ecomm__inventory_items.margin_average ]
+
+joins:
+  ecomm__products:
+    demo__product_images: {}
+    ecomm__distribution_centers: {}

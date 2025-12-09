@@ -1,0 +1,12 @@
+base_view: ecomm__order_items
+base_view_label: Order Items
+
+fields: [ all_views.* ]
+
+joins:
+  ecomm__users:
+    user_order_facts: {}
+  ecomm__inventory_items:
+    ecomm__products:
+      demo__product_images: {}
+      ecomm__distribution_centers: {}

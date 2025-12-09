@@ -1,0 +1,36 @@
+# Reference this view as demo__account
+schema: DEMO
+table_name: ACCOUNT
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    hidden: true
+    primary_key: true
+
+  user_id:
+    sql: '"USER_ID"'
+    format: ID
+
+  created_date:
+    sql: '"CREATED_DATE"'
+
+  name:
+    sql: '"NAME"'
+    links:
+      - url: "{{omni_attributes.url}}/search?q=${name}"
+        label: Google search
+
+  number_of_employees:
+    sql: '"NUMBER_OF_EMPLOYEES"'
+
+  type:
+    sql: '"TYPE"'
+
+  zipcode:
+    sql: '"ZIPCODE"'
+
+measures:
+  count:
+    aggregate_type: count

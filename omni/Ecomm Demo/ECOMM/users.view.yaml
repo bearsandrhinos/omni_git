@@ -1,0 +1,102 @@
+# Reference this view as ecomm__users
+schema: ECOMM
+table_name: USERS
+
+dimensions:
+  full_name:
+    sql: INITCAP(CONCAT(${ecomm__users.first_name}, ' ', ${ecomm__users.last_name}))
+    label: Full Name
+
+  id:
+    sql: '"ID"'
+    format: ID
+    links:
+      - url: https://peter.omniapp.co/dashboards/0a968d64/edit?f--users.id=%7B%22values%22%3A%5B%22${ecomm__users.id}%22%5D%7D
+        label: User Dashboard
+    primary_key: true
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  email:
+    sql: '"EMAIL"'
+
+  age:
+    sql: '"AGE"'
+
+  city:
+    sql: '"CITY"'
+
+  state:
+    sql: '"STATE"'
+
+  country:
+    sql: '"COUNTRY"'
+
+  zip:
+    sql: '"ZIP"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+  gender:
+    sql: '"GENDER"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+
+  domain_from_email:
+    sql: SUBSTRING(${ecomm__users.email}, COALESCE(CASE WHEN POSITION('@',
+      SUBSTRING(${ecomm__users.email}, 1, LENGTH(${ecomm__users.email}))) > 0
+      THEN POSITION('@', SUBSTRING(${ecomm__users.email}, 1,
+      LENGTH(${ecomm__users.email}))) + (1 - 1) ELSE NULL END, 0) + 1,
+      LENGTH(${ecomm__users.email}))
+    label: Domain from Email
+
+  breakdown_filter:
+    sql: |-
+      -- DO NOT PARSE 
+      {{ filters.ecomm__users.dynamic_filter.value }}
+
+measures:
+  count:
+    aggregate_type: count
+
+  new_users_30_days:
+    sql: ${ecomm__users.id}
+    label: New Users (30 Days)
+    format: ID
+    description: Users created in the last 30 days
+    aggregate_type: count_distinct
+    filters:
+      created_at:
+        time_for_duration: [ 30 days ago, 30 days ]
+
+  age_average:
+    sql: ${ecomm__users.age}
+    description: The average age of a customer
+    aggregate_type: average
+
+filters:
+  dynamic_filter:
+    type: column
+    suggestion_list:
+      - value: TRAFFIC_SOURCE
+        label: Traffic Source
+      - value: STATE
+        label: State
+      - value: GENDER
+        label: Gender
+      - value: COUNTRY
+        label: Country
+    default_filter:
+      is: COUNTRY

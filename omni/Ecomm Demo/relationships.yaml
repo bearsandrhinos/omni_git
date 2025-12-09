@@ -1,0 +1,124 @@
+- join_from_view: ecomm__users
+  join_to_view: user_facts
+  join_type: always_left
+  on_sql: ${ecomm__users.id} = ${user_facts.ecomm__users_id}
+  relationship_type: one_to_one
+
+# Relationship is defined in the data warehouse
+- join_from_view: ecomm__omni__order_items_curated__ecomm__order_items
+  join_to_view: ecomm__omni__order_items_curated__ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__omni__order_items_curated__ecomm__order_items.user_id} =
+    ${ecomm__omni__order_items_curated__ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the data warehouse
+- join_from_view: ecomm__sales__order_items
+  join_to_view: ecomm__sales__users
+  join_type: always_left
+  on_sql: ${ecomm__sales__order_items.user_id} = ${ecomm__sales__users.id}
+  relationship_type: assumed_many_to_one
+
+# Relationship is defined in the data warehouse
+- join_from_view: demo__transactions__order_items
+  join_to_view: demo__transactions__users
+  join_type: always_left
+  on_sql: ${demo__transactions__order_items.user_id} = ${demo__transactions__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__products
+  join_to_view: demo__product_images
+  join_type: always_left
+  on_sql: ${ecomm__products.id} = ${demo__product_images.id}
+  relationship_type: one_to_one
+
+- join_from_view: ecomm__users
+  join_to_view: user_order_facts
+  join_type: always_left
+  on_sql: ${ecomm__users.id} = ${user_order_facts.user_id}
+  relationship_type: one_to_one
+
+- join_from_view: demo__account_history
+  join_to_view: demo__account
+  join_type: always_left
+  on_sql: ${demo__account_history.account_id} = ${demo__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: demo__contact
+  join_to_view: demo__account
+  join_type: always_left
+  on_sql: ${demo__contact.account_id} = ${demo__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: demo__opportunity
+  join_to_view: demo__account
+  join_type: always_left
+  on_sql: ${demo__opportunity.account_id} = ${demo__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: demo__opportunity
+  join_to_view: demo__contact
+  join_type: always_left
+  on_sql: ${demo__opportunity.contact_id} = ${demo__contact.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: demo__opportunity_line_item
+  join_to_view: demo__opportunity
+  join_type: always_left
+  on_sql: ${demo__opportunity_line_item.opportunity_id} = ${demo__opportunity.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: demo__opportunity_line_item
+  join_to_view: demo__product
+  join_type: always_left
+  on_sql: ${demo__opportunity_line_item.product_id} = ${demo__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__events
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__events.user_id} = ${ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__inventory_items
+  join_to_view: ecomm__products
+  join_type: always_left
+  on_sql: ${ecomm__inventory_items.product_id} = ${ecomm__products.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__order_items
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__order_items.user_id} = ${ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__order_items
+  join_to_view: ecomm__inventory_items
+  join_type: always_left
+  on_sql: ${ecomm__order_items.inventory_item_id} = ${ecomm__inventory_items.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__order_items_agg
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__order_items_agg.user_id} = ${ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__products
+  join_to_view: ecomm__distribution_centers
+  join_type: always_left
+  on_sql: ${ecomm__products.distribution_center_id} = ${ecomm__distribution_centers.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__sessions
+  join_to_view: ecomm__users
+  join_type: always_left
+  on_sql: ${ecomm__sessions.user_id} = ${ecomm__users.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: ecomm__order_items
+  join_to_view: ecomm__products
+  join_type: always_left
+  on_sql: ${ecomm__order_items.user_id} = ${ecomm__users.id} and
+    ${ecomm__products.id} = ${ecomm__users.id}
+  relationship_type: many_to_one

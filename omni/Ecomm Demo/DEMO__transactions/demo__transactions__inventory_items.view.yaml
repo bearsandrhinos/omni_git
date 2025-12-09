@@ -1,0 +1,59 @@
+# Reference this view as demo__transactions__inventory_items
+# View is defined in the semantic view TRANSACTIONS in the data warehouse
+schema: ECOMM
+folder: DEMO/transactions
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  cost:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"COST"'
+
+  id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"ID"'
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+
+  product_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_ID"'
+
+  product_retail_price:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+
+  created_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"CREATED_AT"'
+
+  product_brand:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+
+  product_category:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+
+  product_department:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+
+  product_name:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_NAME"'
+
+  product_sku:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_SKU"'
+
+  sold_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"SOLD_AT"'
+
+measures:
+  total_cost:
+    # Measure is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: SUM("COST")

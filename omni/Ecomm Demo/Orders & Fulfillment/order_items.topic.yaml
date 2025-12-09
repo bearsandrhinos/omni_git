@@ -1,0 +1,26 @@
+base_view: ecomm__order_items
+label: Order Transactions
+group_label: Orders & Fulfillment
+display_order: 1
+description: Detail on historical customer purchases
+
+fields:
+  [
+    all_views.*,
+    -ecomm__order_items.margin_average,
+    -ecomm__order_items.json,
+    -ecomm__order_items.margin,
+    -ecomm__order_items.margin_sum
+  ]
+default_filters:
+  ecomm__order_items.status:
+    not: [ Returned, Cancelled ]
+
+joins:
+  ecomm__users:
+    user_order_facts: {}
+  ecomm__inventory_items:
+    ecomm__products:
+      #product_images: {}
+      ecomm__distribution_centers: {}
+      demo__product_images: {}

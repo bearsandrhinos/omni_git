@@ -1,0 +1,64 @@
+# Reference this view as ecomm__sales__products
+# View is defined in the semantic view SALES in the data warehouse
+schema: ECOMM
+folder: ECOMM/sales
+table_name: PRODUCTS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  cost:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"COST"'
+
+  category:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CATEGORY"'
+
+  name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"NAME"'
+
+  brand:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"BRAND"'
+
+  retail_price:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"RETAIL_PRICE"'
+
+  department:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"DEPARTMENT"'
+
+  sku:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"SKU"'
+
+  distribution_center_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count
+
+  total_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM("COST")
+    description: The total cost of the product, including all expenses, overheads,
+      and profit margins, representing the final amount that the company pays or
+      charges for the product.
+    synonyms:
+      [
+        overall_cost,
+        total_expenditure,
+        total_expense,
+        total_outlay,
+        total_spend
+      ]

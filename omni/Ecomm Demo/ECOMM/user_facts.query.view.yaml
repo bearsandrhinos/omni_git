@@ -1,0 +1,52 @@
+# Reference this view as user_facts
+label: User_facts
+
+schema: ECOMM
+sql: |-
+  SELECT "ecomm__users"."ID" AS "ecomm__users.id",
+      "ecomm__users"."EMAIL" AS "ecomm__users.email",
+      INITCAP(CONCAT("ecomm__users"."FIRST_NAME", ' ', "ecomm__users"."LAST_NAME")) AS "ecomm__users.full_name",
+      "ecomm__users"."STATE" AS "ecomm__users.state",
+      "ecomm__users"."AGE" AS "ecomm__users.age",
+      MIN("ecomm__order_items"."CREATED_AT") AS "ecomm__order_items.created_at_min_1__raw",
+      COALESCE(SUM("ecomm__order_items"."SALE_PRICE"), 0) AS "ecomm__order_items.sale_price_sum",
+      COUNT(*) AS "ecomm__order_items.count",
+      TO_CHAR(MIN("ecomm__order_items"."CREATED_AT"), 'YYYY-MM-DD HH24:MI:SS.FF3') AS "ecomm__order_items.created_at_min_1"
+  FROM "ECOMM"."ORDER_ITEMS" AS "ecomm__order_items"
+      LEFT JOIN "ECOMM"."USERS" AS "ecomm__users" ON "ecomm__order_items"."ID" = "ecomm__users"."ID"
+  -- WHERE "ecomm__users"."ID" IS NOT NULL AND "ecomm__users"."STATE" = {{ omni_attributes.state }}
+  GROUP BY 5, 2, 3, 1, 4
+  ORDER BY 8 DESC NULLS LAST
+  LIMIT 1000
+
+dimensions:
+  ecomm__users_id:
+    sql: '"ecomm__users.id"'
+
+  ecomm__users_email:
+    sql: '"ecomm__users.email"'
+
+  ecomm__users_full_name:
+    sql: '"ecomm__users.full_name"'
+
+  ecomm__users_state:
+    sql: '"ecomm__users.state"'
+
+  ecomm__users_age:
+    sql: '"ecomm__users.age"'
+
+  ecomm__order_items_created_at_min_1__raw:
+    sql: '"ecomm__order_items.created_at_min_1__raw"'
+
+  ecomm__order_items_sale_price_sum:
+    sql: '"ecomm__order_items.sale_price_sum"'
+
+  ecomm__order_items_count:
+    sql: '"ecomm__order_items.count"'
+
+  ecomm__order_items_created_at_min_1:
+    sql: '"ecomm__order_items.created_at_min_1"'
+
+measures:
+  count:
+    aggregate_type: count

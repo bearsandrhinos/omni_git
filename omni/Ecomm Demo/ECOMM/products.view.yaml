@@ -1,0 +1,48 @@
+# Reference this view as ecomm__products
+schema: ECOMM
+table_name: PRODUCTS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  cost:
+    sql: '"COST"'
+
+  category:
+    sql: '"CATEGORY"'
+    colors:
+      conditions:
+        - condition:
+            is: Accessories
+          color: "#ffffff"
+
+  name_embed:
+    sql: replace("NAME", ${brand})
+    label: Name
+    hidden: true
+
+  name:
+    sql: '"NAME"'
+
+  brand:
+    sql: '"BRAND"'
+
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+
+  department:
+    sql: '"DEPARTMENT"'
+
+  sku:
+    sql: '"SKU"'
+
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count

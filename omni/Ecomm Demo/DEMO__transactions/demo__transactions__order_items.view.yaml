@@ -1,0 +1,75 @@
+# Reference this view as demo__transactions__order_items
+# View is defined in the semantic view TRANSACTIONS in the data warehouse
+schema: ECOMM
+folder: DEMO/transactions
+table_name: ORDER_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"ID"'
+
+  inventory_item_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"INVENTORY_ITEM_ID"'
+
+  margin:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"MARGIN"'
+
+  months_since_signup:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"MONTHS_SINCE_SIGNUP"'
+
+  order_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"ORDER_ID"'
+
+  sale_price:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"SALE_PRICE"'
+
+  time_to_ship:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"TIME_TO_SHIP"'
+
+  user_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"USER_ID"'
+
+  created_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"CREATED_AT"'
+
+  delivered_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"DELIVERED_AT"'
+
+  is_delivered:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"IS_DELIVERED"'
+
+  is_returned:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"IS_RETURNED"'
+
+  is_shipped:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"IS_SHIPPED"'
+
+  returned_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"RETURNED_AT"'
+
+  shipped_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"SHIPPED_AT"'
+
+  status:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"STATUS"'
+
+measures:
+  total_revenue:
+    # Measure is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: SUM("SALE_PRICE")

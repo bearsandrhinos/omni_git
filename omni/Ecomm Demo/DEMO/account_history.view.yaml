@@ -1,0 +1,29 @@
+# Reference this view as demo__account_history
+schema: DEMO
+table_name: ACCOUNT_HISTORY
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  date:
+    sql: '"DATE"'
+
+  account_id:
+    sql: '"ACCOUNT_ID"'
+    format: ID
+
+  field:
+    sql: '"FIELD"'
+
+  newvalue:
+    sql: '"NEWVALUE"'
+
+  oldvalue:
+    sql: '"OLDVALUE"'
+
+measures:
+  count:
+    aggregate_type: count

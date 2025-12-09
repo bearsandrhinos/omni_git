@@ -1,0 +1,95 @@
+# Reference this view as ecomm__inventory_items
+schema: ECOMM
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  id:
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    format: ID
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  sold_at:
+    sql: '"SOLD_AT"'
+
+  cost:
+    sql: '"COST"'
+
+  product_category:
+    sql: '"PRODUCT_CATEGORY"'
+
+  product_name:
+    sql: '"PRODUCT_NAME"'
+
+  product_brand:
+    sql: '"PRODUCT_BRAND"'
+
+  product_retail_price:
+    sql: '"PRODUCT_RETAIL_PRICE"'
+
+  product_department:
+    sql: '"PRODUCT_DEPARTMENT"'
+
+  product_sku:
+    sql: '"PRODUCT_SKU"'
+
+  product_distribution_center_id:
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+  days_in_inventory:
+    sql: case when ${sold_at} is null then datediff(day, ${created_at},
+      CURRENT_DATE()) else datediff(day, ${created_at}, ${sold_at}) end
+    label: Days In Inventory
+    hidden: true
+
+measures:
+  count:
+    aggregate_type: count
+
+  inventory_volume:
+    aggregate_type: count
+
+  cost_sum:
+    sql: ${cost}
+    label: Cost Sum
+    format: USDCURRENCY_0
+    aggregate_type: sum
+
+  days_in_inventory_average:
+    sql: ${days_in_inventory}
+    label: Days In Inventory Average
+    hidden: true
+    aggregate_type: average
+
+  average_cost_per_unit:
+    sql: ${cost_sum}/${inventory_volume}
+    label: Average Cost Per Unit
+    format: USDCURRENCY_2
+    hidden: true
+
+  product_retail_price_average:
+    sql: ${product_retail_price}
+    hidden: true
+    aggregate_type: average
+
+  margin_average:
+    sql: ${ecomm__order_items.margin}
+    label: Margin Average
+    hidden: true
+    aggregate_type: average
+
+  test_measure:
+    sql: (uniform(1, 2.01::number(10,2), RANDOM()))
+    hidden: true
+
+  inventory_projected:
+    sql: ${inventory_volume}* ${test_measure}
+    label: Inventory Projected
+    hidden: true
