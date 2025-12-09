@@ -1,18 +1,9 @@
 name: Generate Semantic Views
 
 on:
-  # Trigger when a PR is opened, updated, or merged
+  # Trigger only when a PR is merged (closed and merged)
   pull_request:
-    types: [opened, synchronize, reopened, closed]
-    paths:
-      - 'omni/**/*.topic.yaml'
-      - 'omni/**/*.view.yaml'
-      - 'omni/**/relationships.yaml'
-  # Also trigger on direct push to main (for manual commits)
-  push:
-    branches:
-      - main
-      - master
+    types: [closed]
     paths:
       - 'omni/**/*.topic.yaml'
       - 'omni/**/*.view.yaml'
@@ -36,6 +27,8 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    # Only run if PR was actually merged (not just closed)
+    if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
     
     steps:
       - name: Checkout repository
@@ -202,7 +195,7 @@ jobs:
         continue-on-error: true
 
       - name: Terraform Apply
-        if: steps.changes.outputs.has_changes == 'true' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+        if: steps.changes.outputs.has_changes == 'true' && github.event.pull_request.merged == true
         working-directory: terraform
         run: |
           terraform apply -auto-approve tfplan || terraform apply -auto-approve
@@ -210,17 +203,12 @@ jobs:
           TF_LOG: INFO
 
       - name: Commit and push changes
-        if: steps.changes.outputs.has_changes == 'true' && (github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true))
+        if: steps.changes.outputs.has_changes == 'true' && github.event.pull_request.merged == true
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          # Determine the branch to commit to
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            BRANCH="${{ github.event.pull_request.base.ref }}"
-            git checkout $BRANCH
-          else
-            BRANCH="${GITHUB_REF#refs/heads/}"
-          fi
+          BRANCH="${{ github.event.pull_request.base.ref }}"
+          git checkout $BRANCH
           git add terraform/*.tf
           git commit -m "chore: auto-generate semantic views from Omni topics [skip ci]" || exit 0
           git push origin $BRANCH
