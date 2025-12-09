@@ -1,19 +1,13 @@
 name: Generate Semantic Views
 
 on:
-  # Trigger when a PR is opened or updated (to show what would change)
+  # Trigger when a PR is opened, updated, or merged
   pull_request:
-    types: [opened, synchronize, reopened]
+    types: [opened, synchronize, reopened, closed]
     paths:
       - 'omni/**/*.topic.yaml'
       - 'omni/**/*.view.yaml'
       - 'omni/**/relationships.yaml'
-  # Trigger when a PR is merged to main
-  pull_request:
-    types: [closed]
-    branches:
-      - main
-      - master
   # Also trigger on direct push to main (for manual commits)
   push:
     branches:
@@ -38,6 +32,7 @@ env:
 jobs:
   generate-semantic-views:
     runs-on: ubuntu-latest
+    environment: production  # Use environment secrets for better security
     permissions:
       contents: write
       pull-requests: write
@@ -68,7 +63,8 @@ jobs:
 
       - name: Configure Snowflake credentials
         run: |
-          # Create terraform.tfvars from GitHub secrets
+          # Create terraform.tfvars from GitHub environment secrets
+          # These come from the 'production' environment configured in the job
           cat > terraform/terraform.tfvars << EOF
           snowflake_account_name = "${{ secrets.SNOWFLAKE_ACCOUNT_NAME }}"
           snowflake_organization_name = "${{ secrets.SNOWFLAKE_ORGANIZATION_NAME }}"
