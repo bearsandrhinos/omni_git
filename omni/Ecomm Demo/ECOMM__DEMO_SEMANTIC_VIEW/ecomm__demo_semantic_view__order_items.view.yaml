@@ -1,4 +1,6 @@
 # Reference this view as ecomm__demo_semantic_view__order_items
+# View is defined in the semantic view DEMO_SEMANTIC_VIEW in the data warehouse
 schema: ECOMM
 folder: ECOMM/DEMO_SEMANTIC_VIEW
 table_name: ORDER_ITEMS
+custom_compound_primary_key_sql: [ '"USER_ID"', '"INVENTORY_ITEM_ID"' ]
