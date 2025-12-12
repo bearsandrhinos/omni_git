@@ -115,6 +115,9 @@ measures:
     sql: ${ecomm__order_items.sale_price}
     format: CURRENCY_2
     aggregate_type: sum
+    filters:
+      status:
+        is: Complete
     #required_access_grants: [ revenue ]
 
   margin_average:
