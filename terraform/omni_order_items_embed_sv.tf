@@ -357,7 +357,7 @@ resource "snowflake_semantic_view" "omni_order_items_embed_sv" {
   metrics {
     semantic_expression {
       qualified_expression_name = "ECOMM_ORDER_ITEMS.total_revenue"
-      sql_expression            = "SUM(CASE WHEN ECOMM_ORDER_ITEMS.STATUS = 'Complete' THEN ECOMM_ORDER_ITEMS.SALE_PRICE ELSE NULL END)"
+      sql_expression            = "SUM(ECOMM_ORDER_ITEMS.SALE_PRICE)"
     }
   }
 
