@@ -6,6 +6,7 @@ table_name: USERS
 
 dimensions:
   id:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"ID"'
     format: ID
     primary_key: true
@@ -20,12 +21,15 @@ dimensions:
     sql: '"EMAIL"'
 
   age:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"AGE"'
 
   city:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"CITY"'
 
   state:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"STATE"'
 
   country:
@@ -44,10 +48,21 @@ dimensions:
     sql: '"GENDER"'
 
   created_at:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
     sql: '"CREATED_AT"'
 
   traffic_source:
     sql: '"TRAFFIC_SOURCE"'
+
+  domain_from_email:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: SUBSTRING("EMAIL", COALESCE(CASE WHEN POSITION('@', SUBSTRING("EMAIL", 1,
+      LENGTH("EMAIL"))) > 0 THEN POSITION('@', SUBSTRING("EMAIL", 1,
+      LENGTH("EMAIL"))) + (1 - 1) ELSE NULL END, 0) + 1, LENGTH("EMAIL"))
+
+  full_name:
+    # Dimension is defined in the semantic view OMNI__ORDER_ITEMS_CURATED in the data warehouse
+    sql: INITCAP(CONCAT("FIRST_NAME", ' ', "LAST_NAME"))
 
 measures:
   count:
