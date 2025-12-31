@@ -10,66 +10,17 @@ folder: DEMO/transactions
 table_name: INVENTORY_ITEMS
 
 dimensions:
+  cost:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"COST"'
+    description: The cost of each inventory item.
+
   id:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: '"ID"'
     format: ID
     description: Unique identifier for each inventory item.
     primary_key: true
-
-  product_id:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"PRODUCT_ID"'
-    format: ID
-    description: Unique identifier for a product in the inventory.
-
-  created_at:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"CREATED_AT"'
-    description: Date and time when the inventory item was created.
-
-  sold_at:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"SOLD_AT"'
-    description: Date and time when the inventory item was sold.
-
-  cost:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"COST"'
-    description: The cost of each inventory item.
-
-  product_category:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"PRODUCT_CATEGORY"'
-    description: The category of the product, such as clothing type or accessory
-      classification, used to group similar items together for reporting and
-      analysis purposes.
-
-  product_name:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"PRODUCT_NAME"'
-    description: The name of the product in the inventory.
-
-  product_brand:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"PRODUCT_BRAND"'
-    description: The brand name of the product.
-
-  product_retail_price:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"PRODUCT_RETAIL_PRICE"'
-    description: The retail price at which each product is sold to customers.
-
-  product_department:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"PRODUCT_DEPARTMENT"'
-    description: The department within the store where the product is typically
-      located, such as Men's or Women's section.
-
-  product_sku:
-    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
-    sql: '"PRODUCT_SKU"'
-    description: Unique identifier for a product in the inventory.
 
   product_distribution_center_id:
     # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
@@ -78,10 +29,59 @@ dimensions:
     description: The unique identifier for the distribution center where the
       inventory item is stored.
 
-measures:
-  count:
-    aggregate_type: count
+  product_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+    description: Unique identifier for a product in the inventory.
 
+  product_retail_price:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The retail price at which each product is sold to customers.
+
+  created_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Date and time when the inventory item was created.
+
+  product_brand:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+    description: The brand name of the product.
+
+  product_category:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+    description: The category of the product, such as clothing type or accessory
+      classification, used to group similar items together for reporting and
+      analysis purposes.
+
+  product_department:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+    description: The department within the store where the product is typically
+      located, such as Men's or Women's section.
+
+  product_name:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_NAME"'
+    description: The name of the product in the inventory.
+
+  product_sku:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"PRODUCT_SKU"'
+    description: Unique identifier for a product in the inventory.
+
+  sold_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"SOLD_AT"'
+    description: Date and time when the inventory item was sold.
+
+measures:
   total_cost:
     # Measure is defined in the semantic view TRANSACTIONS in the data warehouse
     sql: SUM("COST")
+
+  count:
+    aggregate_type: count
