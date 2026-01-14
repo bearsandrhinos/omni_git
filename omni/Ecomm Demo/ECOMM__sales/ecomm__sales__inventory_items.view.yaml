@@ -1,0 +1,97 @@
+# Reference this view as ecomm__sales__inventory_items
+# View is defined in the semantic view SALES in the data warehouse
+schema: ECOMM
+folder: ECOMM/sales
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  product_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+
+  created_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CREATED_AT"'
+
+  sold_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"SOLD_AT"'
+
+  cost:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"COST"'
+
+  product_category:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+
+  product_name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_NAME"'
+
+  product_brand:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+
+  product_retail_price:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+
+  product_department:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+
+  product_sku:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_SKU"'
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count
+
+  average_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: AVG("COST")
+    description: The average cost of the inventory item, representing the average
+      price paid for the item over a certain period of time, often used for
+      inventory valuation and cost of goods sold calculations.
+    synonyms:
+      [
+        average_expenditure,
+        average_price,
+        average_spend,
+        cost_average,
+        mean_cost,
+        mean_expenditure,
+        standard_cost,
+        typical_cost
+      ]
+
+  total_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM("COST")
+    description: The total cost of the inventory item, representing the total amount
+      spent to acquire or produce the item, including all associated expenses
+      such as purchase price, shipping, and handling.
+    synonyms:
+      [
+        aggregate_cost,
+        grand_total,
+        overall_cost,
+        total_amount,
+        total_expense,
+        total_price,
+        total_spend
+      ]

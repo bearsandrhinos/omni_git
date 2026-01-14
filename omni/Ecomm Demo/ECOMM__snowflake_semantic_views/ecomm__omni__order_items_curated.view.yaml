@@ -1,0 +1,50 @@
+# Reference this view as ecomm__omni__order_items_curated
+schema: ECOMM
+folder: ECOMM/snowflake_semantic_views
+semantic_view_name: OMNI__ORDER_ITEMS_CURATED
+
+dimensions:
+  created_at:
+    sql: '"CREATED_AT"'
+
+  id:
+    sql: '"ID"'
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+
+  order_id:
+    sql: '"ORDER_ID"'
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+
+  status:
+    sql: '"STATUS"'
+
+  user_id:
+    sql: '"USER_ID"'
+
+  age:
+    sql: '"AGE"'
+
+  city:
+    sql: '"CITY"'
+
+  domain_from_email:
+    sql: '"DOMAIN_FROM_EMAIL"'
+
+  full_name:
+    sql: '"FULL_NAME"'
+
+  state:
+    sql: '"STATE"'
+
+measures:
+  count:
+    sql: '"COUNT"'
+    aggregate_type: semantic_view_agg
+
+  total_sale_price:
+    sql: '"TOTAL_SALE_PRICE"'
+    aggregate_type: semantic_view_agg
