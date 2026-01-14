@@ -1,0 +1,631 @@
+# Reference this view as ecomm__demo_semantic_view
+schema: ECOMM
+folder: ECOMM/snowflake_semantic_views
+semantic_view_name: DEMO_SEMANTIC_VIEW
+
+dimensions:
+  cost:
+    sql: '"COST"'
+    description: The cost of each product, representing the amount incurred by the
+      company to produce or acquire the product.
+    synonyms:
+      [
+        price,
+        expense,
+        expenditure,
+        amount,
+        charge,
+        fee,
+        rate,
+        value,
+        outlay,
+        payment
+      ]
+
+  id:
+    sql: '"ID"'
+    description: Unique identifier for a user in the system.
+    synonyms:
+      [
+        user_id,
+        identifier,
+        unique_id,
+        user_key,
+        record_id,
+        entity_id,
+        object_id
+      ]
+
+  product_distribution_center_id:
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    description: The unique identifier for the distribution center where the
+      inventory item is stored.
+    synonyms:
+      [
+        distribution_center_id,
+        warehouse_id,
+        product_warehouse_number,
+        logistics_center_id,
+        product_storage_location_id,
+        fulfillment_center_id
+      ]
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    description: Unique identifier for a product in the inventory.
+    synonyms: [ product_code, item_id, product_number, sku_id, product_key, item_key ]
+
+  product_retail_price:
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The retail price at which each product is sold to customers.
+    synonyms:
+      [
+        list_price,
+        retail_cost,
+        product_price,
+        sale_price,
+        msrp,
+        sticker_price,
+        shelf_price,
+        unit_price
+      ]
+
+  created_at:
+    sql: '"CREATED_AT"'
+    description: Date and time when the user account was created.
+    synonyms:
+      [
+        created_date,
+        creation_time,
+        registration_date,
+        signup_date,
+        timestamp,
+        date_created,
+        joined_at,
+        account_created,
+        user_since
+      ]
+
+  product_brand:
+    sql: '"PRODUCT_BRAND"'
+    description: The brand name of the product.
+    synonyms:
+      [
+        manufacturer,
+        maker,
+        label,
+        trademark,
+        brand_name,
+        product_maker,
+        product_manufacturer
+      ]
+
+  product_category:
+    sql: '"PRODUCT_CATEGORY"'
+    description: The category of the product, such as clothing type or accessory
+      classification, that the inventory item belongs to.
+    synonyms:
+      [
+        product_type,
+        item_category,
+        product_group,
+        category_name,
+        product_classification,
+        item_type,
+        product_segment
+      ]
+
+  product_department:
+    sql: '"PRODUCT_DEPARTMENT"'
+    description: The department within the store where the product is typically
+      located, such as Men's or Women's section.
+    synonyms:
+      [
+        product_category,
+        department_name,
+        product_section,
+        product_group,
+        product_classification,
+        product_type,
+        product_family,
+        product_line
+      ]
+
+  product_name:
+    sql: '"PRODUCT_NAME"'
+    description: This column stores the names of the various products stocked in the
+      inventory, providing a descriptive title for each item.
+    synonyms:
+      [
+        item_name,
+        product_title,
+        product_description,
+        item_description,
+        product_label
+      ]
+
+  product_sku:
+    sql: '"PRODUCT_SKU"'
+    description: Unique identifier for each product in the inventory.
+    synonyms:
+      [
+        stock_keeping_unit,
+        product_code,
+        item_number,
+        product_identifier,
+        sku_number,
+        product_stock_code
+      ]
+
+  sold_at:
+    sql: '"SOLD_AT"'
+    description: Date and time when the inventory item was sold.
+    synonyms:
+      [
+        sale_date,
+        sold_on,
+        date_sold,
+        transaction_date,
+        purchase_date,
+        sale_timestamp
+      ]
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+    description: Unique identifier for the inventory item being ordered.
+    synonyms:
+      [
+        product_id,
+        item_number,
+        stock_id,
+        item_code,
+        product_code,
+        sku,
+        stock_number,
+        item_identifier
+      ]
+
+  margin:
+    sql: '"MARGIN"'
+    description: The margin earned on each order item, representing the difference
+      between the selling price and the cost of the item, expressed as a
+      monetary value.
+    synonyms: [ profit, markup, gross_profit, net_profit, earnings, gain, surplus ]
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+    description: The price at which the item was sold, representing the amount the
+      customer paid for the item.
+    synonyms:
+      [
+        selling_price,
+        list_price,
+        unit_price,
+        price_paid,
+        purchase_price,
+        cost,
+        amount,
+        selling_cost,
+        unit_cost
+      ]
+
+  time_to_ship:
+    sql: '"TIME_TO_SHIP"'
+    description: The time it takes to ship an order item, measured in days.
+    synonyms:
+      [
+        shipping_time,
+        delivery_lead_time,
+        shipment_duration,
+        time_to_delivery,
+        lead_time_to_ship,
+        shipping_duration,
+        order_to_ship_time
+      ]
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+    description: The date and time when the order item was delivered to the customer.
+    synonyms:
+      [
+        delivered_on,
+        delivery_date,
+        delivery_time,
+        received_at,
+        arrival_time,
+        arrival_date,
+        completed_delivery,
+        delivery_completion_time
+      ]
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+    description: Indicates whether the order item has been delivered to the customer.
+    synonyms:
+      [
+        delivered_status,
+        delivery_status,
+        is_shipped_to_customer,
+        delivery_confirmation,
+        order_delivered
+      ]
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+    description: Indicates whether the order item was returned by the customer.
+    synonyms:
+      [
+        is_return,
+        returned_status,
+        return_flag,
+        has_return,
+        return_indicator,
+        is_refunded,
+        return_status_flag
+      ]
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+    description: Indicates whether the order item has been shipped to the customer.
+    synonyms:
+      [
+        shipped_status,
+        shipping_status,
+        has_shipped,
+        shipped_ind,
+        shipped_flag,
+        shipped_yes_no
+      ]
+
+  months_since_signup:
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    description: The number of months that have passed since the customer signed up
+      for the service or made their first purchase.
+    synonyms:
+      [
+        months_since_registration,
+        months_since_signup_date,
+        tenure_in_months,
+        months_as_customer,
+        subscription_tenure
+      ]
+
+  order_id:
+    sql: '"ORDER_ID"'
+    description: Unique identifier for the order that the item belongs to.
+    synonyms:
+      [
+        order_number,
+        purchase_id,
+        transaction_id,
+        order_reference,
+        sales_order_id,
+        purchase_order_id
+      ]
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+    description: The date and time when the order item was returned.
+    synonyms:
+      [
+        return_date,
+        date_returned,
+        returned_on,
+        return_timestamp,
+        date_of_return
+      ]
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+    description: The date and time when the order item was shipped.
+    synonyms:
+      [
+        dispatched_at,
+        shipped_date,
+        shipping_date,
+        sent_at,
+        delivery_initiated_at,
+        shipped_on
+      ]
+
+  status:
+    sql: '"STATUS"'
+    description: The current status of the order item, indicating whether it has
+      been completed, shipped, or cancelled.
+    synonyms:
+      [
+        state,
+        condition,
+        situation,
+        position,
+        standing,
+        category,
+        classification,
+        designation
+      ]
+
+  user_id:
+    sql: '"USER_ID"'
+    description: Unique identifier of the user who placed the order.
+    synonyms:
+      [
+        customer_id,
+        account_id,
+        user_account,
+        account_number,
+        client_id,
+        member_id
+      ]
+
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    description: The unique identifier for the distribution center where the product
+      is stored and shipped from.
+    synonyms:
+      [
+        warehouse_id,
+        logistics_center_id,
+        fulfillment_center_id,
+        shipping_hub_id,
+        supply_chain_id,
+        inventory_location_id,
+        storage_facility_id
+      ]
+
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+    description: The retail price of each product, representing the amount that
+      customers pay for a product at the point of sale.
+    synonyms:
+      [
+        list_price,
+        sale_price,
+        sticker_price,
+        market_price,
+        msrp,
+        selling_price,
+        unit_price,
+        price_point
+      ]
+
+  brand:
+    sql: '"BRAND"'
+    description: The BRAND column represents the manufacturer or brand name of the
+      product, categorizing it as either MG, MW, or 2XU.
+    synonyms: [ maker, manufacturer, label, trademark, company, producer, nameplate ]
+
+  category:
+    sql: '"CATEGORY"'
+    description: The CATEGORY column represents the product category, which groups
+      similar products together, such as accessories, plus-size items, and
+      swimwear, to help with product classification, reporting, and analysis.
+    synonyms:
+      [
+        type,
+        classification,
+        group,
+        kind,
+        genre,
+        product_type,
+        class,
+        product_category,
+        product_group
+      ]
+
+  department:
+    sql: '"DEPARTMENT"'
+    description: The department within the store where the product is located,
+      indicating whether the product is intended for women or men.
+    synonyms: [ division, section, category, group, sector, branch, unit ]
+
+  name:
+    sql: '"NAME"'
+    description: "Product Name: This column stores the names of various products,
+      which appear to be different types of caps, including their color,
+      material, and style."
+    synonyms: [ title, product_name, item_name, product_title, label, designation ]
+
+  sku:
+    sql: '"SKU"'
+    description: Unique identifier for each product in the catalog, used to
+      distinguish and track individual items across the system.
+    synonyms:
+      [
+        stock_keeping_unit,
+        product_code,
+        item_number,
+        product_id,
+        inventory_code,
+        product_identifier
+      ]
+
+  latitude:
+    sql: '"LATITUDE"'
+    description: Latitude of the user's location, representing the angular distance
+      of a place north or south of the Earth's equator, measured in decimal
+      degrees.
+    synonyms:
+      [
+        lat,
+        geographic_latitude,
+        latitude_coordinate,
+        lat_decimal,
+        latitude_value
+      ]
+
+  longitude:
+    sql: '"LONGITUDE"'
+    description: Longitude of the user's location, representing the angular distance
+      of a point on the Earth's surface, measured in decimal degrees east or
+      west of the prime meridian.
+    synonyms:
+      [
+        east_west_coordinate,
+        easting,
+        geographic_longitude,
+        longitudinal_coordinate,
+        x_coordinate
+      ]
+
+  age:
+    sql: '"AGE"'
+    description: The age of the user in years.
+    synonyms:
+      [
+        years_old,
+        years_of_age,
+        age_in_years,
+        birth_age,
+        years_since_birth,
+        age_value
+      ]
+
+  city:
+    sql: '"CITY"'
+    description: The city where the user is located.
+    synonyms:
+      [
+        town,
+        municipality,
+        metropolis,
+        urban_area,
+        locality,
+        settlement,
+        burg,
+        municipality_name
+      ]
+
+  country:
+    sql: '"COUNTRY"'
+    description: The country of origin or residence of the user.
+    synonyms:
+      [
+        nation,
+        land,
+        territory,
+        state,
+        region,
+        homeland,
+        nationality,
+        geographical_area,
+        sovereign_state
+      ]
+
+  email:
+    sql: '"EMAIL"'
+    description: The email address associated with each user's account.
+    synonyms:
+      [
+        email_address,
+        email_id,
+        user_email,
+        contact_email,
+        mail_id,
+        electronic_mail
+      ]
+
+  first_name:
+    sql: '"FIRST_NAME"'
+    description: The first name of the user.
+    synonyms:
+      [
+        given_name,
+        first_name,
+        forename,
+        personal_name,
+        christian_name,
+        baptismal_name
+      ]
+
+  gender:
+    sql: '"GENDER"'
+    description: The GENDER column represents the biological or self-identified sex
+      of a user, categorized as either Male or Female.
+    synonyms: [ sex, male_female, demographic, biological_sex, sex_category ]
+
+  last_name:
+    sql: '"LAST_NAME"'
+    description: The last name of the user.
+    synonyms:
+      [
+        surname,
+        family_name,
+        last_name_field,
+        full_last_name,
+        person_last_name,
+        user_last_name,
+        customer_last_name,
+        individual_last_name
+      ]
+
+  state:
+    sql: '"STATE"'
+    description: This column represents the local authority or borough where a user
+      is located, as identified by a specific geographic area within the UK.
+    synonyms:
+      [
+        province,
+        region,
+        territory,
+        county,
+        parish,
+        prefecture,
+        district,
+        area,
+        jurisdiction,
+        locale
+      ]
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+    description: The source through which a user arrived at the website or platform,
+      such as organic search, paid search, or email marketing campaigns.
+    synonyms:
+      [
+        traffic_channel,
+        referral_source,
+        source_of_traffic,
+        website_referrer,
+        origin_of_visit,
+        visitor_source,
+        lead_source,
+        marketing_channel
+      ]
+
+  zip:
+    sql: '"ZIP"'
+    description: Postal Code of the user's location.
+    synonyms:
+      [
+        postal_code,
+        postcode,
+        zip_code,
+        zip_number,
+        postal_number,
+        mailing_code
+      ]
+
+measures:
+  total_cost:
+    sql: '"TOTAL_COST"'
+    aggregate_type: semantic_view_agg
+
+  first_purchase_date:
+    sql: '"FIRST_PURCHASE_DATE"'
+    aggregate_type: semantic_view_agg
+
+  order_count:
+    sql: '"ORDER_COUNT"'
+    aggregate_type: semantic_view_agg
+
+  time_to_ship_average:
+    sql: '"TIME_TO_SHIP_AVERAGE"'
+    aggregate_type: semantic_view_agg
+
+  total_revenue:
+    sql: '"TOTAL_REVENUE"'
+    aggregate_type: semantic_view_agg
+
+  average_age:
+    sql: '"AVERAGE_AGE"'
+    aggregate_type: semantic_view_agg
