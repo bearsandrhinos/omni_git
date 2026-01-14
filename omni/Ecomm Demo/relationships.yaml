@@ -4,28 +4,6 @@
   on_sql: ${ecomm__users.id} = ${user_facts.ecomm__users_id}
   relationship_type: one_to_one
 
-# Relationship is defined in the data warehouse
-- join_from_view: ecomm__omni__order_items_curated__ecomm__order_items
-  join_to_view: ecomm__omni__order_items_curated__ecomm__users
-  join_type: always_left
-  on_sql: ${ecomm__omni__order_items_curated__ecomm__order_items.user_id} =
-    ${ecomm__omni__order_items_curated__ecomm__users.id}
-  relationship_type: assumed_many_to_one
-
-# Relationship is defined in the data warehouse
-- join_from_view: ecomm__sales__order_items
-  join_to_view: ecomm__sales__users
-  join_type: always_left
-  on_sql: ${ecomm__sales__order_items.user_id} = ${ecomm__sales__users.id}
-  relationship_type: assumed_many_to_one
-
-# Relationship is defined in the data warehouse
-- join_from_view: demo__transactions__order_items
-  join_to_view: demo__transactions__users
-  join_type: always_left
-  on_sql: ${demo__transactions__order_items.user_id} = ${demo__transactions__users.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: ecomm__products
   join_to_view: demo__product_images
   join_type: always_left
