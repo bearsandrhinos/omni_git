@@ -4,72 +4,6 @@ folder: ECOMM/snowflake_semantic_views
 semantic_view_name: DEMO_SEMANTIC_VIEW
 
 dimensions:
-  cost:
-    sql: '"COST"'
-    description: The cost of each product, representing the amount incurred by the
-      company to produce or acquire the product.
-    synonyms:
-      [
-        price,
-        expense,
-        expenditure,
-        amount,
-        charge,
-        fee,
-        rate,
-        value,
-        outlay,
-        payment
-      ]
-
-  id:
-    sql: '"ID"'
-    description: Unique identifier for a user in the system.
-    synonyms:
-      [
-        user_id,
-        identifier,
-        unique_id,
-        user_key,
-        record_id,
-        entity_id,
-        object_id
-      ]
-
-  product_distribution_center_id:
-    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
-    description: The unique identifier for the distribution center where the
-      inventory item is stored.
-    synonyms:
-      [
-        distribution_center_id,
-        warehouse_id,
-        product_warehouse_number,
-        logistics_center_id,
-        product_storage_location_id,
-        fulfillment_center_id
-      ]
-
-  product_id:
-    sql: '"PRODUCT_ID"'
-    description: Unique identifier for a product in the inventory.
-    synonyms: [ product_code, item_id, product_number, sku_id, product_key, item_key ]
-
-  product_retail_price:
-    sql: '"PRODUCT_RETAIL_PRICE"'
-    description: The retail price at which each product is sold to customers.
-    synonyms:
-      [
-        list_price,
-        retail_cost,
-        product_price,
-        sale_price,
-        msrp,
-        sticker_price,
-        shelf_price,
-        unit_price
-      ]
-
   created_at:
     sql: '"CREATED_AT"'
     description: Date and time when the user account was created.
@@ -170,57 +104,70 @@ dimensions:
         sale_timestamp
       ]
 
-  inventory_item_id:
-    sql: '"INVENTORY_ITEM_ID"'
-    description: Unique identifier for the inventory item being ordered.
+  cost:
+    sql: '"COST"'
+    description: The cost of each product, representing the amount incurred by the
+      company to produce or acquire the product.
     synonyms:
       [
-        product_id,
-        item_number,
-        stock_id,
-        item_code,
-        product_code,
-        sku,
-        stock_number,
-        item_identifier
-      ]
-
-  margin:
-    sql: '"MARGIN"'
-    description: The margin earned on each order item, representing the difference
-      between the selling price and the cost of the item, expressed as a
-      monetary value.
-    synonyms: [ profit, markup, gross_profit, net_profit, earnings, gain, surplus ]
-
-  sale_price:
-    sql: '"SALE_PRICE"'
-    description: The price at which the item was sold, representing the amount the
-      customer paid for the item.
-    synonyms:
-      [
-        selling_price,
-        list_price,
-        unit_price,
-        price_paid,
-        purchase_price,
-        cost,
+        price,
+        expense,
+        expenditure,
         amount,
-        selling_cost,
-        unit_cost
+        charge,
+        fee,
+        rate,
+        value,
+        outlay,
+        payment
       ]
 
-  time_to_ship:
-    sql: '"TIME_TO_SHIP"'
-    description: The time it takes to ship an order item, measured in days.
+  id:
+    sql: '"ID"'
+    description: Unique identifier for a user in the system.
     synonyms:
       [
-        shipping_time,
-        delivery_lead_time,
-        shipment_duration,
-        time_to_delivery,
-        lead_time_to_ship,
-        shipping_duration,
-        order_to_ship_time
+        user_id,
+        identifier,
+        unique_id,
+        user_key,
+        record_id,
+        entity_id,
+        object_id
+      ]
+
+  product_distribution_center_id:
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    description: The unique identifier for the distribution center where the
+      inventory item is stored.
+    synonyms:
+      [
+        distribution_center_id,
+        warehouse_id,
+        product_warehouse_number,
+        logistics_center_id,
+        product_storage_location_id,
+        fulfillment_center_id
+      ]
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    description: Unique identifier for a product in the inventory.
+    synonyms: [ product_code, item_id, product_number, sku_id, product_key, item_key ]
+
+  product_retail_price:
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The retail price at which each product is sold to customers.
+    synonyms:
+      [
+        list_price,
+        retail_cost,
+        product_price,
+        sale_price,
+        msrp,
+        sticker_price,
+        shelf_price,
+        unit_price
       ]
 
   delivered_at:
@@ -357,35 +304,57 @@ dimensions:
         member_id
       ]
 
-  distribution_center_id:
-    sql: '"DISTRIBUTION_CENTER_ID"'
-    description: The unique identifier for the distribution center where the product
-      is stored and shipped from.
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+    description: Unique identifier for the inventory item being ordered.
     synonyms:
       [
-        warehouse_id,
-        logistics_center_id,
-        fulfillment_center_id,
-        shipping_hub_id,
-        supply_chain_id,
-        inventory_location_id,
-        storage_facility_id
+        product_id,
+        item_number,
+        stock_id,
+        item_code,
+        product_code,
+        sku,
+        stock_number,
+        item_identifier
       ]
 
-  retail_price:
-    sql: '"RETAIL_PRICE"'
-    description: The retail price of each product, representing the amount that
-      customers pay for a product at the point of sale.
+  margin:
+    sql: '"MARGIN"'
+    description: The margin earned on each order item, representing the difference
+      between the selling price and the cost of the item, expressed as a
+      monetary value.
+    synonyms: [ profit, markup, gross_profit, net_profit, earnings, gain, surplus ]
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+    description: The price at which the item was sold, representing the amount the
+      customer paid for the item.
     synonyms:
       [
-        list_price,
-        sale_price,
-        sticker_price,
-        market_price,
-        msrp,
         selling_price,
+        list_price,
         unit_price,
-        price_point
+        price_paid,
+        purchase_price,
+        cost,
+        amount,
+        selling_cost,
+        unit_cost
+      ]
+
+  time_to_ship:
+    sql: '"TIME_TO_SHIP"'
+    description: The time it takes to ship an order item, measured in days.
+    synonyms:
+      [
+        shipping_time,
+        delivery_lead_time,
+        shipment_duration,
+        time_to_delivery,
+        lead_time_to_ship,
+        shipping_duration,
+        order_to_ship_time
       ]
 
   brand:
@@ -439,32 +408,35 @@ dimensions:
         product_identifier
       ]
 
-  latitude:
-    sql: '"LATITUDE"'
-    description: Latitude of the user's location, representing the angular distance
-      of a place north or south of the Earth's equator, measured in decimal
-      degrees.
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    description: The unique identifier for the distribution center where the product
+      is stored and shipped from.
     synonyms:
       [
-        lat,
-        geographic_latitude,
-        latitude_coordinate,
-        lat_decimal,
-        latitude_value
+        warehouse_id,
+        logistics_center_id,
+        fulfillment_center_id,
+        shipping_hub_id,
+        supply_chain_id,
+        inventory_location_id,
+        storage_facility_id
       ]
 
-  longitude:
-    sql: '"LONGITUDE"'
-    description: Longitude of the user's location, representing the angular distance
-      of a point on the Earth's surface, measured in decimal degrees east or
-      west of the prime meridian.
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+    description: The retail price of each product, representing the amount that
+      customers pay for a product at the point of sale.
     synonyms:
       [
-        east_west_coordinate,
-        easting,
-        geographic_longitude,
-        longitudinal_coordinate,
-        x_coordinate
+        list_price,
+        sale_price,
+        sticker_price,
+        market_price,
+        msrp,
+        selling_price,
+        unit_price,
+        price_point
       ]
 
   age:
@@ -603,6 +575,34 @@ dimensions:
         zip_number,
         postal_number,
         mailing_code
+      ]
+
+  latitude:
+    sql: '"LATITUDE"'
+    description: Latitude of the user's location, representing the angular distance
+      of a place north or south of the Earth's equator, measured in decimal
+      degrees.
+    synonyms:
+      [
+        lat,
+        geographic_latitude,
+        latitude_coordinate,
+        lat_decimal,
+        latitude_value
+      ]
+
+  longitude:
+    sql: '"LONGITUDE"'
+    description: Longitude of the user's location, representing the angular distance
+      of a point on the Earth's surface, measured in decimal degrees east or
+      west of the prime meridian.
+    synonyms:
+      [
+        east_west_coordinate,
+        easting,
+        geographic_longitude,
+        longitudinal_coordinate,
+        x_coordinate
       ]
 
 measures:
