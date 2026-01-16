@@ -4,6 +4,21 @@ folder: ECOMM/snowflake_semantic_views
 semantic_view_name: SALES
 
 dimensions:
+  cost:
+    sql: '"COST"'
+
+  id:
+    sql: '"ID"'
+
+  product_distribution_center_id:
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+
+  product_retail_price:
+    sql: '"PRODUCT_RETAIL_PRICE"'
+
   created_at:
     sql: '"CREATED_AT"'
 
@@ -24,58 +39,6 @@ dimensions:
 
   sold_at:
     sql: '"SOLD_AT"'
-
-  cost:
-    sql: '"COST"'
-
-  id:
-    sql: '"ID"'
-
-  product_distribution_center_id:
-    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
-
-  product_id:
-    sql: '"PRODUCT_ID"'
-
-  product_retail_price:
-    sql: '"PRODUCT_RETAIL_PRICE"'
-
-  delivered_at:
-    sql: '"DELIVERED_AT"'
-
-  is_delivered:
-    sql: '"IS_DELIVERED"'
-
-  is_returned:
-    sql: '"IS_RETURNED"'
-
-  is_shipped:
-    sql: '"IS_SHIPPED"'
-
-  returned_at:
-    sql: '"RETURNED_AT"'
-
-  shipped_at:
-    sql: '"SHIPPED_AT"'
-
-  status:
-    sql: '"STATUS"'
-    description: The current status of the order item, such as "Shipped", "Pending",
-      "Cancelled", or "Delivered", indicating the progress of the item through
-      the order fulfillment process.
-    synonyms:
-      [
-        category,
-        classification,
-        condition,
-        designation,
-        label,
-        position,
-        situation,
-        standing,
-        state,
-        tag
-      ]
 
   inventory_item_id:
     sql: '"INVENTORY_ITEM_ID"'
@@ -136,6 +99,49 @@ dimensions:
   user_id:
     sql: '"USER_ID"'
 
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+
+  status:
+    sql: '"STATUS"'
+    description: The current status of the order item, such as "Shipped", "Pending",
+      "Cancelled", or "Delivered", indicating the progress of the item through
+      the order fulfillment process.
+    synonyms:
+      [
+        category,
+        classification,
+        condition,
+        designation,
+        label,
+        position,
+        situation,
+        standing,
+        state,
+        tag
+      ]
+
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+
   brand:
     sql: '"BRAND"'
 
@@ -151,11 +157,14 @@ dimensions:
   sku:
     sql: '"SKU"'
 
-  distribution_center_id:
-    sql: '"DISTRIBUTION_CENTER_ID"'
+  age:
+    sql: '"AGE"'
 
-  retail_price:
-    sql: '"RETAIL_PRICE"'
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
 
   city:
     sql: '"CITY"'
@@ -183,15 +192,6 @@ dimensions:
 
   zip:
     sql: '"ZIP"'
-
-  age:
-    sql: '"AGE"'
-
-  latitude:
-    sql: '"LATITUDE"'
-
-  longitude:
-    sql: '"LONGITUDE"'
 
 measures:
   average_cost:
