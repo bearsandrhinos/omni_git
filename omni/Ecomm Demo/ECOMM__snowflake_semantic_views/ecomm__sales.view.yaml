@@ -260,7 +260,3 @@ measures:
         total_sales,
         total_turnover
       ]
-
-  calculation:
-    sql: ${ecomm__sales.total_revenue} * ${ecomm__sales.average_sale_price}
-    label: Calculation
