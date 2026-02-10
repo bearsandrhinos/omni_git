@@ -260,3 +260,7 @@ measures:
         total_sales,
         total_turnover
       ]
+
+  user_id_count_distinct:
+    sql: ${ecomm__sales.user_id}
+    aggregate_type: count_distinct
