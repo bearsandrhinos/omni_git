@@ -233,6 +233,7 @@ measures:
 
   max_sales:
     sql: '"MAX_SALES"'
+    format: currency_2
     description: The maximum number of sales for an order item.
     aggregate_type: semantic_view_agg
     synonyms:
