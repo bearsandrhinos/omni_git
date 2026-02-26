@@ -4,6 +4,27 @@ folder: DEMO/snowflake_semantic_views
 semantic_view_name: TRANSACTIONS
 
 dimensions:
+  cost:
+    sql: '"COST"'
+    description: The cost of each inventory item.
+
+  id:
+    sql: '"ID"'
+    description: Unique identifier for each user in the system.
+
+  product_distribution_center_id:
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    description: The unique identifier for the distribution center where the
+      inventory item is stored.
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    description: Unique identifier for a product in the inventory.
+
+  product_retail_price:
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The retail price at which each product is sold to customers.
+
   created_at:
     sql: '"CREATED_AT"'
     description: Date and time when the user account was created.
@@ -34,57 +55,6 @@ dimensions:
   sold_at:
     sql: '"SOLD_AT"'
     description: Date and time when the inventory item was sold.
-
-  cost:
-    sql: '"COST"'
-    description: The cost of each inventory item.
-
-  id:
-    sql: '"ID"'
-    description: Unique identifier for each user in the system.
-
-  product_distribution_center_id:
-    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
-    description: The unique identifier for the distribution center where the
-      inventory item is stored.
-
-  product_id:
-    sql: '"PRODUCT_ID"'
-    description: Unique identifier for a product in the inventory.
-
-  product_retail_price:
-    sql: '"PRODUCT_RETAIL_PRICE"'
-    description: The retail price at which each product is sold to customers.
-
-  delivered_at:
-    sql: '"DELIVERED_AT"'
-    description: The date and time when the order item was delivered to the customer.
-
-  is_delivered:
-    sql: '"IS_DELIVERED"'
-    description: Indicates whether the order item has been delivered to the customer.
-
-  is_returned:
-    sql: '"IS_RETURNED"'
-    description: Indicates whether the order item was returned by the customer.
-
-  is_shipped:
-    sql: '"IS_SHIPPED"'
-    description: Indicates whether the order item has been shipped to the customer.
-
-  returned_at:
-    sql: '"RETURNED_AT"'
-    description: The date and time when the order item was returned, if applicable.
-
-  shipped_at:
-    sql: '"SHIPPED_AT"'
-    description: The date and time when the order item was shipped.
-
-  status:
-    sql: '"STATUS"'
-    description: The status of the order item, indicating whether it was
-      successfully completed, cancelled by the customer or vendor, or returned
-      by the customer.
 
   inventory_item_id:
     sql: '"INVENTORY_ITEM_ID"'
@@ -118,6 +88,51 @@ dimensions:
   user_id:
     sql: '"USER_ID"'
     description: The unique identifier of the user who placed the order.
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+    description: The date and time when the order item was delivered to the customer.
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+    description: Indicates whether the order item has been delivered to the customer.
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+    description: Indicates whether the order item was returned by the customer.
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+    description: Indicates whether the order item has been shipped to the customer.
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+    description: The date and time when the order item was returned, if applicable.
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+    description: The date and time when the order item was shipped.
+
+  status:
+    sql: '"STATUS"'
+    description: The status of the order item, indicating whether it was
+      successfully completed, cancelled by the customer or vendor, or returned
+      by the customer.
+
+  age:
+    sql: '"AGE"'
+    description: The age of the user in years.
+
+  latitude:
+    sql: '"LATITUDE"'
+    description: The latitude coordinate of the user's location, representing the
+      angular distance north or south of the equator, measured in decimal
+      degrees.
+
+  longitude:
+    sql: '"LONGITUDE"'
+    description: Longitude coordinate of the user's location, representing the
+      distance east or west of the prime meridian, measured in decimal degrees.
 
   city:
     sql: '"CITY"'
@@ -162,21 +177,6 @@ dimensions:
   zip:
     sql: '"ZIP"'
     description: Postal Code of the user's location.
-
-  age:
-    sql: '"AGE"'
-    description: The age of the user in years.
-
-  latitude:
-    sql: '"LATITUDE"'
-    description: The latitude coordinate of the user's location, representing the
-      angular distance north or south of the equator, measured in decimal
-      degrees.
-
-  longitude:
-    sql: '"LONGITUDE"'
-    description: Longitude coordinate of the user's location, representing the
-      distance east or west of the prime meridian, measured in decimal degrees.
 
 measures:
   total_cost:
