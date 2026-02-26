@@ -1,6 +1,6 @@
-# Reference this view as demo__stg_saas__account_history
+# Reference this view as demo__int_saas__account_history
 schema: DEMO
-table_name: STG_SAAS__ACCOUNT_HISTORY
+table_name: INT_SAAS__ACCOUNT_HISTORY
 
 dimensions:
   id:
@@ -34,6 +34,10 @@ dimensions:
     sql: '"OWNER_ID"'
     format: ID
 
+  csm_id:
+    sql: '"CSM_ID"'
+    format: ID
+
   created_date:
     sql: '"CREATED_DATE"'
 
@@ -45,10 +49,6 @@ dimensions:
 
   churn_reason:
     sql: '"CHURN_REASON"'
-
-  csm_id:
-    sql: '"CSM_ID"'
-    format: ID
 
 measures:
   count:

@@ -261,6 +261,10 @@ measures:
         total_turnover
       ]
 
+  profit:
+    sql: '"PROFIT"'
+    aggregate_type: semantic_view_agg
+
   user_id_count_distinct:
     sql: ${ecomm__sales.user_id}
     aggregate_type: count_distinct

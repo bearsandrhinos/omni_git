@@ -1,19 +1,15 @@
-# Reference this view as demo__account
+# Reference this view as demo__int_saas__account
 schema: DEMO
-table_name: ACCOUNT
+table_name: INT_SAAS__ACCOUNT
 
 dimensions:
   id:
     sql: '"ID"'
     format: ID
-    hidden: true
     primary_key: true
 
   name:
     sql: '"NAME"'
-    links:
-      - url: "{{omni_attributes.url}}/search?q=${name}"
-        label: Google search
 
   type:
     sql: '"TYPE"'
