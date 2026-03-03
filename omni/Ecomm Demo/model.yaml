@@ -1,4 +1,4 @@
-included_schemas: [ ECOMM, DEMO, SE_TEAM_UPLOAD_DATA__public ]
+included_schemas: [ SAAS, ECOMM, DEMO, SE_TEAM_UPLOAD_DATA__public ]
 
 ignored_views: [ product_images_staging, "*_js", ecomm.int_*, ecomm.stg_* ]
 

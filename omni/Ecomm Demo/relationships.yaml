@@ -1,3 +1,305 @@
+- join_from_view: saas__account_history
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__account_history.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__contacts
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__contacts.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__account_history
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__account_history.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__contacts
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__contacts.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__jira_issues
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__jira_issues.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__jira_issues
+  join_to_view: saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${saas__int_saas__jira_issues.zendesk_ticket_id} =
+    ${saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__opportunities
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__opportunities.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__opportunities
+  join_to_view: saas__contacts
+  join_type: always_left
+  on_sql: ${saas__int_saas__opportunities.contact_id} = ${saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__opportunity_history
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__opportunity_history.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__opportunity_history
+  join_to_view: saas__contacts
+  join_type: always_left
+  on_sql: ${saas__int_saas__opportunity_history.contact_id} = ${saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__opportunity_line_items
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__int_saas__opportunity_line_items.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__sessions
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__sessions.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__sessions
+  join_to_view: saas__user
+  join_type: always_left
+  on_sql: ${saas__int_saas__sessions.user_id} = ${saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__sessions
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__int_saas__sessions.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__usage_events
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__usage_events.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__usage_events
+  join_to_view: saas__user
+  join_type: always_left
+  on_sql: ${saas__int_saas__usage_events.user_id} = ${saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__usage_events
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__int_saas__usage_events.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__zendesk_tickets
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__int_saas__zendesk_tickets.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__int_saas__zendesk_tickets
+  join_to_view: saas__jira_issues
+  join_type: always_left
+  on_sql: ${saas__int_saas__zendesk_tickets.jira_issue_id} = ${saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__jira_issues
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__jira_issues.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__jira_issues
+  join_to_view: saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${saas__jira_issues.zendesk_ticket_id} = ${saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__opportunities
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__opportunities.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__opportunities
+  join_to_view: saas__contacts
+  join_type: always_left
+  on_sql: ${saas__opportunities.contact_id} = ${saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__opportunity_history
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__opportunity_history.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__opportunity_history
+  join_to_view: saas__contacts
+  join_type: always_left
+  on_sql: ${saas__opportunity_history.contact_id} = ${saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__opportunity_line_items
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__opportunity_line_items.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__contacts
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__stg_saas__contacts.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__jira_issues
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__stg_saas__jira_issues.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__jira_issues
+  join_to_view: saas__zendesk_tickets
+  join_type: always_left
+  on_sql: ${saas__stg_saas__jira_issues.zendesk_ticket_id} =
+    ${saas__zendesk_tickets.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__opportunities
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__stg_saas__opportunities.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__opportunities
+  join_to_view: saas__contacts
+  join_type: always_left
+  on_sql: ${saas__stg_saas__opportunities.contact_id} = ${saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__opportunity_history
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__stg_saas__opportunity_history.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__opportunity_history
+  join_to_view: saas__contacts
+  join_type: always_left
+  on_sql: ${saas__stg_saas__opportunity_history.contact_id} = ${saas__contacts.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__opportunity_line_items
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__stg_saas__opportunity_line_items.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__sessions
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__stg_saas__sessions.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__sessions
+  join_to_view: saas__user
+  join_type: always_left
+  on_sql: ${saas__stg_saas__sessions.user_id} = ${saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__sessions
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__stg_saas__sessions.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__usage_events
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__stg_saas__usage_events.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__usage_events
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__stg_saas__usage_events.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__usage_events
+  join_to_view: saas__user
+  join_type: always_left
+  on_sql: ${saas__stg_saas__usage_events.user_id} = ${saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__zendesk_tickets
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__stg_saas__zendesk_tickets.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__stg_saas__zendesk_tickets
+  join_to_view: saas__jira_issues
+  join_type: always_left
+  on_sql: ${saas__stg_saas__zendesk_tickets.jira_issue_id} = ${saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__usage_events
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__usage_events.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__usage_events
+  join_to_view: saas__user
+  join_type: always_left
+  on_sql: ${saas__usage_events.user_id} = ${saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__usage_events
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__usage_events.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__user_sessions
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__user_sessions.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__user_sessions
+  join_to_view: saas__user
+  join_type: always_left
+  on_sql: ${saas__user_sessions.user_id} = ${saas__user.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__user_sessions
+  join_to_view: saas__product
+  join_type: always_left
+  on_sql: ${saas__user_sessions.product_id} = ${saas__product.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__zendesk_tickets
+  join_to_view: saas__account
+  join_type: always_left
+  on_sql: ${saas__zendesk_tickets.account_id} = ${saas__account.id}
+  relationship_type: assumed_many_to_one
+
+- join_from_view: saas__zendesk_tickets
+  join_to_view: saas__jira_issues
+  join_type: always_left
+  on_sql: ${saas__zendesk_tickets.jira_issue_id} = ${saas__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
 - join_from_view: demo__contacts
   join_to_view: demo__account
   join_type: always_left
