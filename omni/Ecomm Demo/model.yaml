@@ -9,3 +9,5 @@ access_grants:
   sales_field:
     user_attribute: revenue
     allowed_values: [ total_sale_price ]
+
+ai_chat_topics: []
