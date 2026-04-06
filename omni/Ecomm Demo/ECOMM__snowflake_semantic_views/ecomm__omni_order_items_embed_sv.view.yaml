@@ -1,0 +1,193 @@
+# Reference this view as ecomm__omni_order_items_embed_sv
+schema: ECOMM
+folder: ECOMM/snowflake_semantic_views
+semantic_view_name: omni_order_items_embed_sv
+
+dimensions:
+  id:
+    sql: '"ID"'
+
+  image:
+    sql: '"IMAGE"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+  name:
+    sql: '"NAME"'
+
+  product_retail_price:
+    sql: '"PRODUCT_RETAIL_PRICE"'
+
+  cost:
+    sql: '"COST"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  days_in_inventory:
+    sql: '"DAYS_IN_INVENTORY"'
+
+  product_brand:
+    sql: '"PRODUCT_BRAND"'
+
+  product_category:
+    sql: '"PRODUCT_CATEGORY"'
+
+  product_department:
+    sql: '"PRODUCT_DEPARTMENT"'
+
+  product_distribution_center_id:
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+
+  product_name:
+    sql: '"PRODUCT_NAME"'
+
+  product_sku:
+    sql: '"PRODUCT_SKU"'
+
+  sold_at:
+    sql: '"SOLD_AT"'
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+
+  order_id:
+    sql: '"ORDER_ID"'
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+
+  status:
+    sql: '"STATUS"'
+
+  status_ordering:
+    sql: '"STATUS_ORDERING"'
+    description: This actually will order the fields, trust me
+
+  time_to_ship:
+    sql: '"TIME_TO_SHIP"'
+    description: Time between order created and order shipped
+
+  user_id:
+    sql: '"USER_ID"'
+
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+
+  brand:
+    sql: '"BRAND"'
+
+  category:
+    sql: '"CATEGORY"'
+
+  department:
+    sql: '"DEPARTMENT"'
+
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+
+  name_embed:
+    sql: '"NAME_EMBED"'
+
+  sku:
+    sql: '"SKU"'
+
+  country:
+    sql: '"COUNTRY"'
+
+  age:
+    sql: '"AGE"'
+
+  city:
+    sql: '"CITY"'
+
+  domain_from_email:
+    sql: '"DOMAIN_FROM_EMAIL"'
+
+  email:
+    sql: '"EMAIL"'
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  full_name:
+    sql: '"FULL_NAME"'
+
+  gender:
+    sql: '"GENDER"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  state:
+    sql: '"STATE"'
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+
+  zip:
+    sql: '"ZIP"'
+
+measures:
+  count:
+    sql: '"COUNT"'
+    aggregate_type: semantic_view_agg
+
+  cost_sum:
+    sql: '"COST_SUM"'
+    aggregate_type: semantic_view_agg
+
+  days_in_inventory_average:
+    sql: '"DAYS_IN_INVENTORY_AVERAGE"'
+    aggregate_type: semantic_view_agg
+
+  inventory_volume:
+    sql: '"INVENTORY_VOLUME"'
+    aggregate_type: semantic_view_agg
+
+  product_retail_price_average:
+    sql: '"PRODUCT_RETAIL_PRICE_AVERAGE"'
+    aggregate_type: semantic_view_agg
+
+  test_measure:
+    sql: '"TEST_MEASURE"'
+    aggregate_type: semantic_view_agg
+
+  created_at_min:
+    sql: '"CREATED_AT_MIN"'
+    aggregate_type: semantic_view_agg
+
+  time_to_ship_average:
+    sql: '"TIME_TO_SHIP_AVERAGE"'
+    aggregate_type: semantic_view_agg
+
+  total_revenue:
+    sql: '"TOTAL_REVENUE"'
+    description: this is complted orders
+    aggregate_type: semantic_view_agg
+
+  total_sale_price:
+    sql: '"TOTAL_SALE_PRICE"'
+    description: this is all about revenue
+    aggregate_type: semantic_view_agg
+
+  age_average:
+    sql: '"AGE_AVERAGE"'
+    description: The average age of a customer
+    aggregate_type: semantic_view_agg

@@ -1,0 +1,63 @@
+# Reference this view as ecomm__omni_users_sv
+schema: ECOMM
+folder: ECOMM/snowflake_semantic_views
+semantic_view_name: omni_users_sv
+
+dimensions:
+  country:
+    sql: '"COUNTRY"'
+
+  age:
+    sql: '"AGE"'
+
+  city:
+    sql: '"CITY"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  domain_from_email:
+    sql: '"DOMAIN_FROM_EMAIL"'
+
+  email:
+    sql: '"EMAIL"'
+
+  first_name:
+    sql: '"FIRST_NAME"'
+
+  full_name:
+    sql: '"FULL_NAME"'
+
+  gender:
+    sql: '"GENDER"'
+
+  id:
+    sql: '"ID"'
+
+  last_name:
+    sql: '"LAST_NAME"'
+
+  latitude:
+    sql: '"LATITUDE"'
+
+  longitude:
+    sql: '"LONGITUDE"'
+
+  state:
+    sql: '"STATE"'
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+
+  zip:
+    sql: '"ZIP"'
+
+measures:
+  age_average:
+    sql: '"AGE_AVERAGE"'
+    description: The average age of a customer
+    aggregate_type: semantic_view_agg
+
+  count:
+    sql: '"COUNT"'
+    aggregate_type: semantic_view_agg

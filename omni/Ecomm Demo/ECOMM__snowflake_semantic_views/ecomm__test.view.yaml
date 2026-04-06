@@ -1,0 +1,70 @@
+# Reference this view as ecomm__test
+schema: ECOMM
+folder: ECOMM/snowflake_semantic_views
+semantic_view_name: TEST
+
+dimensions:
+  margin:
+    sql: '"MARGIN"'
+    description: The profit margin associated with each order item.
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+    description: The sale price of an order item.
+
+  created_at:
+    sql: '"CREATED_AT"'
+    description: The timestamp indicating when the order item record was created.
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+    description: The timestamp at which an order item was delivered.
+
+  id:
+    sql: '"ID"'
+    description: Unique identifier for each order item record.
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+    description: The unique identifier for an inventory item associated with an order line.
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+    description: Indicates whether an order item has been delivered.
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+    description: Indicates whether an order item has been returned.
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+    description: Indicates whether an order item has been shipped.
+
+  months_since_signup:
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    description: The number of months elapsed since the customer signed up.
+
+  order_id:
+    sql: '"ORDER_ID"'
+    description: The unique identifier associated with an order.
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+    description: The date and time at which an order item was returned.
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+    description: The timestamp indicating when an order item was shipped.
+
+  status:
+    sql: '"STATUS"'
+    description: The current fulfillment status of an order item.
+
+  time_to_ship:
+    sql: '"TIME_TO_SHIP"'
+    description: The number of days taken to ship an order item from the time the
+      order was placed.
+
+  user_id:
+    sql: '"USER_ID"'
+    description: The unique identifier associated with a user who placed an order.

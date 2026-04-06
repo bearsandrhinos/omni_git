@@ -6,131 +6,168 @@ semantic_view_name: SALES
 dimensions:
   created_at:
     sql: '"CREATED_AT"'
+    description: Timestamp when the customer account was created. Foundation for
+      customer lifetime value and cohort analysis.
+    synonyms: [ account created, customer since, registration date, signup date ]
 
   product_brand:
     sql: '"PRODUCT_BRAND"'
+    description: The brand or manufacturer name of the product (e.g., Nike, Apple,
+      Levi's). Key dimension for brand performance analysis.
+    synonyms: [ brand name, label, make, manufacturer ]
 
   product_category:
     sql: '"PRODUCT_CATEGORY"'
+    description: The product category classification (e.g., Jeans, Sweaters,
+      Accessories). Used for category-level sales and inventory analysis.
+    synonyms: [ category, item category, merchandise category, product type ]
 
   product_department:
     sql: '"PRODUCT_DEPARTMENT"'
+    description: The high-level department the product belongs to (e.g., Men, Women,
+      Kids). Primary dimension for departmental performance reporting.
+    synonyms: [ business unit, department, division, section ]
 
   product_name:
     sql: '"PRODUCT_NAME"'
+    description: The full descriptive name of the product including brand, style,
+      and key attributes.
+    synonyms: [ item name, product description, product title, sku name ]
 
   product_sku:
     sql: '"PRODUCT_SKU"'
+    description: The unique Stock Keeping Unit identifier for inventory tracking and
+      management.
+    synonyms: [ item number, product code, sku, stock code, upc ]
 
   sold_at:
     sql: '"SOLD_AT"'
+    description: Timestamp when this specific inventory item was sold, enabling
+      inventory velocity and turnover calculations.
+    synonyms: [ inventory sold date, sale date, sold date ]
 
   cost:
     sql: '"COST"'
+    description: The standard cost for this product SKU, used as the baseline for
+      margin calculations and inventory valuation.
+    synonyms: [ base cost, product cost, wholesale price ]
 
   id:
     sql: '"ID"'
 
   product_distribution_center_id:
     sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    description: Identifier for the distribution center or warehouse where this
+      inventory item is stored and shipped from.
+    synonyms: [ dc id, fulfillment center, warehouse id ]
 
   product_id:
     sql: '"PRODUCT_ID"'
 
   product_retail_price:
     sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The manufacturer suggested retail price (MSRP) for the product,
+      representing the recommended selling price before any discounts.
+    synonyms: [ list price, msrp, sticker price ]
 
   delivered_at:
     sql: '"DELIVERED_AT"'
+    description: Timestamp when the order was delivered to the customer, used for
+      delivery time analysis.
+    synonyms: [ arrival date, delivery date, received date ]
 
   is_delivered:
     sql: '"IS_DELIVERED"'
+    description: Boolean flag indicating whether the order has been successfully
+      delivered to the customer.
+    synonyms: [ delivered, delivery confirmed, received by customer ]
 
   is_returned:
     sql: '"IS_RETURNED"'
+    description: Boolean flag indicating whether the customer returned this item.
+      Critical for return rate analysis and quality insights.
+    synonyms: [ refunded, returned, sent back ]
 
   is_shipped:
     sql: '"IS_SHIPPED"'
+    description: Boolean flag indicating whether the order has been shipped from the
+      fulfillment center.
+    synonyms: [ dispatched, in transit, shipped ]
 
   returned_at:
     sql: '"RETURNED_AT"'
+    description: Timestamp when the item was returned, if applicable. Used for
+      return timing and seasonal return pattern analysis.
+    synonyms: [ refund date, return date ]
 
   shipped_at:
     sql: '"SHIPPED_AT"'
+    description: Timestamp when the order was shipped from the warehouse, used for
+      fulfillment speed analysis.
+    synonyms: [ dispatch date, ship date, shipment date ]
 
   status:
     sql: '"STATUS"'
-    description: The current status of the order item, such as "Shipped", "Pending",
-      "Cancelled", or "Delivered", indicating the progress of the item through
-      the order fulfillment process.
-    synonyms:
-      [
-        category,
-        classification,
-        condition,
-        designation,
-        label,
-        position,
-        situation,
-        standing,
-        state,
-        tag
-      ]
+    description: "Current status of the order: Processing, Shipped, Complete,
+      Cancelled, or Returned. Essential for order funnel and fulfillment
+      analysis."
+    synonyms: [ fulfillment status, order state, order status, transaction status ]
 
   inventory_item_id:
     sql: '"INVENTORY_ITEM_ID"'
 
   margin:
     sql: '"MARGIN"'
-    description: The difference between the selling price and the cost of an item,
-      representing the profit made on the sale of each item.
-    synonyms: [ earnings, gain, gross_profit, markup, net_profit, profit, surplus ]
+    description: The profit earned on this specific item, calculated as sale price
+      minus cost. Positive values indicate profitable sales, negative values
+      indicate losses.
+    synonyms: [ earnings, gross profit, item profit, markup, net profit, profit margin ]
 
   months_since_signup:
     sql: '"MONTHS_SINCE_SIGNUP"'
-    description: The number of months that have elapsed since the customer signed up
-      for the service.
+    description: Number of months between customer account creation and this order,
+      useful for analyzing customer lifetime value and purchase patterns by
+      tenure.
     synonyms:
       [
-        months_as_customer,
-        months_since_account_creation,
-        months_since_registration,
-        subscription_length_in_months,
-        tenure_in_months
+        account age,
+        customer tenure,
+        loyalty duration,
+        membership length,
+        months as customer
       ]
 
   order_id:
     sql: '"ORDER_ID"'
+    description: Unique identifier for the order transaction. Multiple items can
+      share the same order_id if purchased together.
+    synonyms: [ order number, purchase id, transaction id ]
 
   sale_price:
     sql: '"SALE_PRICE"'
-    description: The price at which the item was sold, represeenting the amount the
-      customer paid for the item.
+    description: The actual price the customer paid for this item, which may differ
+      from retail price due to discounts, promotions, or dynamic pricing.
     synonyms:
       [
-        amount,
-        cost,
-        list_price,
-        price_paid,
-        purchase_price,
-        selling_cost,
-        selling_price,
-        transaction_amount,
-        unit_price
+        amount paid,
+        item revenue,
+        price paid,
+        purchase price,
+        selling price,
+        transaction amount
       ]
 
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
-    description: The time it takes to ship the order item, measured in days.
+    description: Number of days between order placement and shipment, a key
+      operational metric for fulfillment efficiency and customer satisfaction.
     synonyms:
       [
-        delivery_lead_time,
-        lead_time_to_ship,
-        shipment_duration,
-        shipping_duration,
-        shipping_time,
-        time_to_delivery,
-        time_to_dispatch
+        days to ship,
+        fulfillment time,
+        lead time,
+        processing days,
+        shipping time
       ]
 
   user_id:
@@ -138,127 +175,285 @@ dimensions:
 
   brand:
     sql: '"BRAND"'
+    description: Brand name from the product master data. Use for brand-level
+      analytics and competitive analysis.
+    synonyms: [ label, make, manufacturer, product brand ]
 
   category:
     sql: '"CATEGORY"'
+    description: Product category from master data for hierarchical category reporting.
+    synonyms: [ item type, merchandise type, product category ]
 
   department:
     sql: '"DEPARTMENT"'
+    description: Department classification from product master for high-level
+      business reporting.
+    synonyms: [ business segment, division, product department ]
 
   name:
     sql: '"NAME"'
+    description: Product name from master data catalog.
+    synonyms: [ item name, product name, title ]
 
   sku:
     sql: '"SKU"'
+    description: SKU from product master for product-level detail analysis.
+    synonyms: [ item code, product code, product sku ]
 
   distribution_center_id:
     sql: '"DISTRIBUTION_CENTER_ID"'
 
   retail_price:
     sql: '"RETAIL_PRICE"'
+    description: The standard retail price for this product before any discounts or
+      promotions are applied.
+    synonyms: [ full price, list price, msrp, recommended price ]
 
   city:
     sql: '"CITY"'
+    description: City where the customer is located. Key geographic dimension for
+      regional sales analysis and market planning.
+    synonyms: [ customer city, location, market, metro area ]
 
   country:
     sql: '"COUNTRY"'
+    description: Country where the customer is located for international market
+      segmentation.
+    synonyms: [ customer country, market country, nation ]
 
   email:
     sql: '"EMAIL"'
+    description: Customer email address for identification and communication analysis.
+    synonyms: [ contact email, customer email, email address ]
 
   first_name:
     sql: '"FIRST_NAME"'
+    description: Customer first name for personalization and identity.
+    synonyms: [ customer first name, given name ]
 
   gender:
     sql: '"GENDER"'
+    description: Customer gender for demographic segmentation and targeted marketing
+      analysis.
+    synonyms: [ customer gender, demographic gender, sex ]
 
   last_name:
     sql: '"LAST_NAME"'
+    description: Customer last name for identification.
+    synonyms: [ customer last name, family name, surname ]
 
   state:
     sql: '"STATE"'
+    description: State or province where the customer is located. Essential for
+      regional performance, tax analysis, and territory management.
+    synonyms: [ customer state, province, region, territory ]
 
   traffic_source:
     sql: '"TRAFFIC_SOURCE"'
+    description: The marketing channel that acquired this customer (e.g., Organic,
+      Facebook, Google, Email). Critical for marketing ROI and attribution
+      analysis.
+    synonyms:
+      [
+        acquisition channel,
+        how they found us,
+        marketing channel,
+        referral source,
+        utm source
+      ]
 
   zip:
     sql: '"ZIP"'
+    description: Customer postal/zip code for micro-geographic analysis and delivery
+      planning.
+    synonyms: [ postal code, postcode, zip code ]
 
   age:
     sql: '"AGE"'
+    description: The age of the customer in years, useful for demographic
+      segmentation and targeted marketing analysis.
+    synonyms: [ customer age, user age, years old ]
 
   latitude:
     sql: '"LATITUDE"'
+    description: Geographic latitude coordinate of the customer location for mapping
+      and regional analysis.
+    synonyms: [ geo latitude, lat ]
 
   longitude:
     sql: '"LONGITUDE"'
+    description: Geographic longitude coordinate of the customer location for
+      mapping and regional analysis.
+    synonyms: [ geo longitude, lng, long ]
 
 measures:
   average_cost:
     sql: '"AVERAGE_COST"'
-    description: The average cost of the inventory item, representing the average
-      price paid for the item over a certain period of time, often used for
-      inventory valuation and cost of goods sold calculations.
+    description: Average cost per item sold, useful for cost trend analysis and
+      margin planning.
     aggregate_type: semantic_view_agg
-    synonyms:
-      [
-        average_expenditure,
-        average_price,
-        average_spend,
-        cost_average,
-        mean_cost,
-        mean_expenditure,
-        standard_cost,
-        typical_cost
-      ]
+    synonyms: [ avg cost, mean cost, unit cost average ]
 
   total_cost:
     sql: '"TOTAL_COST"'
-    description: The total cost of the product, including all expenses, overheads,
-      and profit margins, representing the final amount that the company pays or
-      charges for the product.
+    description: Total product costs from the product master, useful for cost
+      variance analysis.
     aggregate_type: semantic_view_agg
-    synonyms:
-      [
-        overall_cost,
-        total_expenditure,
-        total_expense,
-        total_outlay,
-        total_spend
-      ]
+    synonyms: [ merchandise cost, product costs ]
 
   average_sale_price:
     sql: '"AVERAGE_SALE_PRICE"'
+    description: Average selling price per item, useful for pricing strategy
+      analysis and basket composition insights.
     aggregate_type: semantic_view_agg
+    synonyms: [ aov, average order value, average transaction, avg price, mean price ]
 
   max_sales:
     sql: '"MAX_SALES"'
     format: currency_2
-    description: The maximum number of sales for an order item. in dollars
+    description: The highest individual sale price in the dataset, useful for
+      identifying premium purchases and outliers.
     aggregate_type: semantic_view_agg
-    synonyms:
-      [
-        highest_revenue,
-        highest_sales,
-        max_revenue,
-        maximum_revenue,
-        peak_sales,
-        sales_ceiling,
-        sales_maximum,
-        top_sales
-      ]
+    synonyms: [ highest sale, largest order, max transaction, peak sale ]
 
   total_revenue:
     sql: '"TOTAL_REVENUE"'
-    description: The total revenue generated by each order item, representing the
-      product of the item's unit price and quantity sold.
+    description: Total revenue from all sales calculated as the sum of sale prices.
+      The primary top-line metric for business performance.
     aggregate_type: semantic_view_agg
-    synonyms: [ Total income, total receipts ]
+    synonyms:
+      [
+        gmv,
+        gross merchandise value,
+        gross revenue,
+        sales volume,
+        total income,
+        total sales
+      ]
 
   profit:
     sql: '"PROFIT"'
+    description: Gross profit calculated as total revenue minus cost of goods sold.
+      Key profitability metric for financial performance.
     aggregate_type: semantic_view_agg
+    synonyms: [ contribution margin, gross profit, net revenue, total margin ]
 
   user_id_count_distinct:
     sql: ${ecomm__sales.user_id}
     aggregate_type: count_distinct
+
+  avg_margin:
+    sql: '"AVG_MARGIN"'
+    description: Average profit margin per item sold, useful for product-level
+      profitability analysis.
+    aggregate_type: semantic_view_agg
+    synonyms: [ average profit per item, mean margin ]
+
+  avg_time_to_ship:
+    sql: '"AVG_TIME_TO_SHIP"'
+    description: Average number of days to ship orders, a critical operational KPI
+      for customer satisfaction.
+    aggregate_type: semantic_view_agg
+    synonyms: [ average shipping time, avg processing days, mean fulfillment time ]
+
+  items_per_order:
+    sql: '"ITEMS_PER_ORDER"'
+    description: Average number of items per order, a key metric for basket analysis
+      and cross-sell effectiveness.
+    aggregate_type: semantic_view_agg
+    synonyms: [ basket size, items per basket, order size, units per transaction ]
+
+  max_time_to_ship:
+    sql: '"MAX_TIME_TO_SHIP"'
+    description: Maximum shipping time observed, useful for identifying fulfillment
+      bottlenecks.
+    aggregate_type: semantic_view_agg
+    synonyms: [ longest ship time, max fulfillment delay ]
+
+  min_sale_price:
+    sql: '"MIN_SALE_PRICE"'
+    description: The lowest sale price, useful for identifying deep discounts or
+      promotional pricing.
+    aggregate_type: semantic_view_agg
+    synonyms: [ floor price, lowest sale, minimum price ]
+
+  orders_per_customer:
+    sql: '"ORDERS_PER_CUSTOMER"'
+    description: Average number of orders per customer, indicating purchase
+      frequency and loyalty.
+    aggregate_type: semantic_view_agg
+    synonyms: [ order frequency, purchase frequency, transactions per customer ]
+
+  return_count:
+    sql: '"RETURN_COUNT"'
+    description: Total number of items returned by customers.
+    aggregate_type: semantic_view_agg
+    synonyms: [ refund count, returned items, returns ]
+
+  return_rate:
+    sql: '"RETURN_RATE"'
+    description: Percentage of items returned, a key quality and customer
+      satisfaction metric. Industry average is typically 15-30%.
+    aggregate_type: semantic_view_agg
+    synonyms: [ refund rate, return percentage, return ratio ]
+
+  revenue_per_customer:
+    sql: '"REVENUE_PER_CUSTOMER"'
+    description: Average revenue per unique customer, a proxy for customer value and
+      spending patterns.
+    aggregate_type: semantic_view_agg
+    synonyms: [ arpu, average revenue per user, customer value, spend per customer ]
+
+  total_customers:
+    sql: '"TOTAL_CUSTOMERS"'
+    description: Total number of unique customers who made purchases. Foundation
+      metric for customer analytics.
+    aggregate_type: semantic_view_agg
+    synonyms: [ active customers, customer count, unique buyers, unique customers ]
+
+  total_items_sold:
+    sql: '"TOTAL_ITEMS_SOLD"'
+    description: Total number of individual items sold across all orders.
+    aggregate_type: semantic_view_agg
+    synonyms: [ item count, quantity sold, units sold, volume ]
+
+  total_margin:
+    sql: '"TOTAL_MARGIN"'
+    description: Sum of individual item margins, providing an alternative profit
+      calculation from pre-computed margin values.
+    aggregate_type: semantic_view_agg
+    synonyms: [ aggregate profit, sum of margins, total item profit ]
+
+  total_orders:
+    sql: '"TOTAL_ORDERS"'
+    description: Total number of unique orders/transactions. Key volume metric for
+      business activity.
+    aggregate_type: semantic_view_agg
+    synonyms: [ number of orders, order count, purchase count, transaction count ]
+
+  unique_brands_sold:
+    sql: '"UNIQUE_BRANDS_SOLD"'
+    description: Number of unique brands represented in sales, useful for brand
+      portfolio analysis.
+    aggregate_type: semantic_view_agg
+    synonyms: [ brand count, brand variety ]
+
+  unique_products_sold:
+    sql: '"UNIQUE_PRODUCTS_SOLD"'
+    description: Number of unique products/SKUs sold, indicating catalog breadth and
+      product diversity.
+    aggregate_type: semantic_view_agg
+    synonyms: [ product count, product variety, sku count ]
+
+  avg_customer_age:
+    sql: '"AVG_CUSTOMER_AGE"'
+    description: Average age of customers for demographic profiling and targeting.
+    aggregate_type: semantic_view_agg
+    synonyms: [ average age, demographic age, mean customer age ]
+
+  gross_margin_pct:
+    sql: '"GROSS_MARGIN_PCT"'
+    description: Gross margin as a percentage of revenue, indicating profitability
+      efficiency. Industry benchmark is typically 40-60% for retail.
+    aggregate_type: semantic_view_agg
+    synonyms: [ gpm, gross margin rate, margin percentage, profit margin ]

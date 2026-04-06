@@ -1,0 +1,67 @@
+# Reference this view as ecomm__omni_order_items_curated_sv
+schema: ECOMM
+folder: ECOMM/snowflake_semantic_views
+semantic_view_name: omni_order_items_curated_sv
+
+dimensions:
+  cost:
+    sql: '"COST"'
+
+  id:
+    sql: '"ID"'
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+
+  created_at:
+    sql: '"CREATED_AT"'
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+
+  order_id:
+    sql: '"ORDER_ID"'
+
+  status:
+    sql: '"STATUS"'
+
+  user_id:
+    sql: '"USER_ID"'
+
+  age:
+    sql: '"AGE"'
+
+  city:
+    sql: '"CITY"'
+
+  domain_from_email:
+    sql: '"DOMAIN_FROM_EMAIL"'
+
+  full_name:
+    sql: '"FULL_NAME"'
+
+  state:
+    sql: '"STATE"'
+
+measures:
+  cost_sum:
+    sql: '"COST_SUM"'
+    aggregate_type: semantic_view_agg
+
+  count:
+    sql: '"COUNT"'
+    aggregate_type: semantic_view_agg
+
+  created_at_min:
+    sql: '"CREATED_AT_MIN"'
+    aggregate_type: semantic_view_agg
+
+  total_sale_price:
+    sql: '"TOTAL_SALE_PRICE"'
+    description: this is all about revenue
+    aggregate_type: semantic_view_agg
+
+  age_average:
+    sql: '"AGE_AVERAGE"'
+    description: The average age of a customer
+    aggregate_type: semantic_view_agg
