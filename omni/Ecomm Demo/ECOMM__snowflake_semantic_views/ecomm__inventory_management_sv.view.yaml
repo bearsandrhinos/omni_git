@@ -1,0 +1,307 @@
+# Reference this view as ecomm__inventory_management_sv
+schema: ECOMM
+folder: ECOMM/snowflake_semantic_views
+semantic_view_name: INVENTORY_MANAGEMENT_SV
+
+dimensions:
+  latitude:
+    sql: '"LATITUDE"'
+    description: Geographical latitude of the user's location
+    view_label: Users
+
+  longitude:
+    sql: '"LONGITUDE"'
+    description: Geographical longitude of the user's location
+    view_label: Users
+
+  id:
+    sql: '"ID"'
+    description: Unique identifier for each user
+    view_label: Users
+
+  name:
+    sql: '"NAME"'
+    description: Name of the product
+    view_label: Products
+
+  cost:
+    sql: '"COST"'
+    description: Cost of the product
+    view_label: Products
+
+  product_retail_price:
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: Retail price of the product
+    view_label: Inventory Items
+
+  created_at:
+    sql: '"CREATED_AT"'
+    description: Timestamp when the user account was created
+    view_label: Users
+
+  product_brand:
+    sql: '"PRODUCT_BRAND"'
+    description: Brand of the product
+    view_label: Inventory Items
+
+  product_category:
+    sql: '"PRODUCT_CATEGORY"'
+    description: Category of the product
+    view_label: Inventory Items
+
+  product_department:
+    sql: '"PRODUCT_DEPARTMENT"'
+    description: Department the product belongs to
+    view_label: Inventory Items
+
+  product_distribution_center_id:
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    description: Identifier of the distribution center for the product
+    view_label: Inventory Items
+
+  product_id:
+    sql: '"PRODUCT_ID"'
+    description: Identifier of the associated product
+    view_label: Inventory Items
+
+  product_name:
+    sql: '"PRODUCT_NAME"'
+    description: Name of the product
+    view_label: Inventory Items
+
+  product_sku:
+    sql: '"PRODUCT_SKU"'
+    description: Stock Keeping Unit of the product
+    view_label: Inventory Items
+
+  sold_at:
+    sql: '"SOLD_AT"'
+    description: Timestamp when the item was sold
+    view_label: Inventory Items
+
+  margin:
+    sql: '"MARGIN"'
+    description: Profit margin for the order
+    view_label: Order Items
+
+  sale_price:
+    sql: '"SALE_PRICE"'
+    description: Price at which the item was sold
+    view_label: Order Items
+
+  time_to_ship:
+    sql: '"TIME_TO_SHIP"'
+    description: Time taken to ship the order
+    view_label: Order Items
+
+  delivered_at:
+    sql: '"DELIVERED_AT"'
+    description: Timestamp when the order was delivered
+    view_label: Order Items
+
+  inventory_item_id:
+    sql: '"INVENTORY_ITEM_ID"'
+    description: Identifier of the inventory item in the order
+    view_label: Order Items
+
+  months_since_signup:
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    description: Number of months since the user signed up at time of order
+    view_label: Order Items
+
+  order_id:
+    sql: '"ORDER_ID"'
+    description: Identifier for the order
+    view_label: Order Items
+
+  returned_at:
+    sql: '"RETURNED_AT"'
+    description: Timestamp when the order was returned (if applicable)
+    view_label: Order Items
+
+  shipped_at:
+    sql: '"SHIPPED_AT"'
+    description: Timestamp when the order was shipped
+    view_label: Order Items
+
+  status:
+    sql: '"STATUS"'
+    description: Current status of the order
+    view_label: Order Items
+
+  status_ordering:
+    sql: '"STATUS_ORDERING"'
+    description: Numeric sort key for order statuses
+    view_label: Order Items
+
+  user_id:
+    sql: '"USER_ID"'
+    description: Identifier of the user who placed the order
+    view_label: Order Items
+
+  retail_price:
+    sql: '"RETAIL_PRICE"'
+    description: Retail price of the product
+    view_label: Products
+
+  brand:
+    sql: '"BRAND"'
+    description: Brand of the product
+    view_label: Products
+
+  category:
+    sql: '"CATEGORY"'
+    description: Category of the product
+    view_label: Products
+
+  department:
+    sql: '"DEPARTMENT"'
+    description: Department the product belongs to
+    view_label: Products
+
+  distribution_center_id:
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    description: Identifier of the distribution center for the product
+    view_label: Products
+
+  sku:
+    sql: '"SKU"'
+    description: Stock Keeping Unit of the product
+    view_label: Products
+
+  age:
+    sql: '"AGE"'
+    description: Age of the user
+    view_label: Users
+
+  city:
+    sql: '"CITY"'
+    description: City where the user is located
+    view_label: Users
+
+  country:
+    sql: '"COUNTRY"'
+    description: Country where the user is located
+    view_label: Users
+
+  email:
+    sql: '"EMAIL"'
+    description: Email address of the user
+    view_label: Users
+
+  first_name:
+    sql: '"FIRST_NAME"'
+    description: First name of the user
+    view_label: Users
+
+  full_name:
+    sql: '"FULL_NAME"'
+    description: Full name of the user
+    view_label: Users
+
+  gender:
+    sql: '"GENDER"'
+    description: Gender of the user
+    view_label: Users
+
+  last_name:
+    sql: '"LAST_NAME"'
+    description: Last name of the user
+    view_label: Users
+
+  state:
+    sql: '"STATE"'
+    description: State where the user is located
+    view_label: Users
+
+  traffic_source:
+    sql: '"TRAFFIC_SOURCE"'
+    description: Source of traffic that led to user signup
+    view_label: Users
+
+  zip:
+    sql: '"ZIP"'
+    description: ZIP code of the user's location
+    view_label: Users
+
+measures:
+  count:
+    sql: '"COUNT"'
+    description: Total number of users
+    aggregate_type: semantic_view_agg
+    view_label: Users
+
+  cost_sum:
+    sql: '"COST_SUM"'
+    description: Total cost of all inventory items
+    aggregate_type: semantic_view_agg
+    view_label: Inventory Items
+    synonyms: [ Total Cost, Inventory Value ]
+
+  inventory_volume:
+    sql: '"INVENTORY_VOLUME"'
+    description: Total number of inventory items
+    aggregate_type: semantic_view_agg
+    view_label: Inventory Items
+    synonyms: [ Stock Count, Items in Stock ]
+
+  created_at_min:
+    sql: '"CREATED_AT_MIN"'
+    description: Earliest order creation date
+    aggregate_type: semantic_view_agg
+    view_label: Order Items
+
+  margin_average:
+    sql: '"MARGIN_AVERAGE"'
+    description: Average profit margin per order
+    aggregate_type: semantic_view_agg
+    view_label: Order Items
+
+  margin_sum:
+    sql: '"MARGIN_SUM"'
+    description: Total profit margin across all orders
+    aggregate_type: semantic_view_agg
+    view_label: Order Items
+
+  sale_price_sum:
+    sql: '"SALE_PRICE_SUM"'
+    description: Sum of sale prices
+    aggregate_type: semantic_view_agg
+    view_label: Order Items
+
+  time_to_ship_average:
+    sql: '"TIME_TO_SHIP_AVERAGE"'
+    description: Average time to ship an order
+    aggregate_type: semantic_view_agg
+    view_label: Order Items
+
+  total_sale_price:
+    sql: '"TOTAL_SALE_PRICE"'
+    description: Total sale price across all order items
+    aggregate_type: semantic_view_agg
+    view_label: Order Items
+    synonyms: [ Total Revenue, Total Sales ]
+
+ai_context: |
+  Use these instructions for question categorization: You are an expert data analyst with extensive experience analyzing inventory and supply chain data to find useful insights and trends.
+
+  This topic focuses on inventory management and stock analysis. The main concepts are inventory items (individual units of products in stock), their location in distribution centers, their cost, and their movement through the supply chain from arrival to sale.
+
+  Only respond with accurate answers based on the data that you're aware of.
+
+  Don't pivot unless there is more than one dimension included in the query.
+
+  Typical questions will be focused on inventory levels, stock movement, inventory costs, and distribution center performance:
+
+  - if asked about inventory levels or stock on hand, use inventory_items.inventory_volume
+  - if asked about inventory value or total cost, use inventory_items.cost_sum
+  - if asked about product names or which products, use inventory_items.product_name
+  - if asked about where inventory is located or distribution centers, use distribution_centers.name
+  - if asked about sold inventory, filter on inventory_items.sold_at is not null
+  - if asked about unsold or available inventory, filter on inventory_items.sold_at is null
+  - if asked about when inventory arrived, use inventory_items.created_at
+  - if asked about when inventory was sold, use inventory_items.sold_at
+  - if asked about product categories or types, use products.category
+  - if asked about product brands, use products.brand
+  - if asked about product departments, use products.department
+  - always make dimensions (semantic type - value) the first columns in the table, and measures (anything else) after

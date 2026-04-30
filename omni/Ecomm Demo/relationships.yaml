@@ -131,6 +131,13 @@
   on_sql: ${demo__jira_issues.zendesk_ticket_id} = ${demo__zendesk_tickets.id}
   relationship_type: assumed_many_to_one
 
+- join_from_view: demo__zendesk_tickets
+  join_to_view: demo__jira_issues
+  join_to_view_as: demo__jira_issues_2
+  join_type: always_left
+  on_sql: ${demo__zendesk_tickets.jira_issue_id} = ${demo__jira_issues.id}
+  relationship_type: assumed_many_to_one
+
 - join_from_view: demo__opportunities
   join_to_view: demo__account
   join_type: always_left
@@ -312,12 +319,6 @@
   on_sql: ${demo__zendesk_tickets.account_id} = ${demo__account.id}
   relationship_type: assumed_many_to_one
 
-- join_from_view: demo__zendesk_tickets
-  join_to_view: demo__jira_issues
-  join_type: always_left
-  on_sql: ${demo__zendesk_tickets.jira_issue_id} = ${demo__jira_issues.id}
-  relationship_type: assumed_many_to_one
-
 - join_from_view: ecomm__users
   join_to_view: user_facts
   join_type: always_left
@@ -376,12 +377,6 @@
   join_to_view: ecomm__inventory_items
   join_type: always_left
   on_sql: ${ecomm__order_items.inventory_item_id} = ${ecomm__inventory_items.id}
-  relationship_type: assumed_many_to_one
-
-- join_from_view: ecomm__order_items_agg
-  join_to_view: ecomm__users
-  join_type: always_left
-  on_sql: ${ecomm__order_items_agg.user_id} = ${ecomm__users.id}
   relationship_type: assumed_many_to_one
 
 - join_from_view: ecomm__products

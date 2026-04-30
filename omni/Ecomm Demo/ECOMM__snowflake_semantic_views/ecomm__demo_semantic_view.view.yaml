@@ -8,6 +8,7 @@ dimensions:
     sql: '"COST"'
     description: The cost of each product, representing the amount incurred by the
       company to produce or acquire the product.
+    view_label: Products
     synonyms:
       [
         price,
@@ -25,6 +26,7 @@ dimensions:
   id:
     sql: '"ID"'
     description: Unique identifier for a user in the system.
+    view_label: Users
     synonyms:
       [
         user_id,
@@ -40,6 +42,7 @@ dimensions:
     sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
     description: The unique identifier for the distribution center where the
       inventory item is stored.
+    view_label: Inventory Items
     synonyms:
       [
         distribution_center_id,
@@ -53,11 +56,13 @@ dimensions:
   product_id:
     sql: '"PRODUCT_ID"'
     description: Unique identifier for a product in the inventory.
+    view_label: Inventory Items
     synonyms: [ product_code, item_id, product_number, sku_id, product_key, item_key ]
 
   product_retail_price:
     sql: '"PRODUCT_RETAIL_PRICE"'
     description: The retail price at which each product is sold to customers.
+    view_label: Inventory Items
     synonyms:
       [
         list_price,
@@ -73,6 +78,7 @@ dimensions:
   created_at:
     sql: '"CREATED_AT"'
     description: Date and time when the user account was created.
+    view_label: Users
     synonyms:
       [
         created_date,
@@ -89,6 +95,7 @@ dimensions:
   product_brand:
     sql: '"PRODUCT_BRAND"'
     description: The brand name of the product.
+    view_label: Inventory Items
     synonyms:
       [
         manufacturer,
@@ -104,6 +111,7 @@ dimensions:
     sql: '"PRODUCT_CATEGORY"'
     description: The category of the product, such as clothing type or accessory
       classification, that the inventory item belongs to.
+    view_label: Inventory Items
     synonyms:
       [
         product_type,
@@ -119,6 +127,7 @@ dimensions:
     sql: '"PRODUCT_DEPARTMENT"'
     description: The department within the store where the product is typically
       located, such as Men's or Women's section.
+    view_label: Inventory Items
     synonyms:
       [
         product_category,
@@ -135,6 +144,7 @@ dimensions:
     sql: '"PRODUCT_NAME"'
     description: This column stores the names of the various products stocked in the
       inventory, providing a descriptive title for each item.
+    view_label: Inventory Items
     synonyms:
       [
         item_name,
@@ -147,6 +157,7 @@ dimensions:
   product_sku:
     sql: '"PRODUCT_SKU"'
     description: Unique identifier for each product in the inventory.
+    view_label: Inventory Items
     synonyms:
       [
         stock_keeping_unit,
@@ -160,6 +171,7 @@ dimensions:
   sold_at:
     sql: '"SOLD_AT"'
     description: Date and time when the inventory item was sold.
+    view_label: Inventory Items
     synonyms:
       [
         sale_date,
@@ -173,6 +185,7 @@ dimensions:
   inventory_item_id:
     sql: '"INVENTORY_ITEM_ID"'
     description: Unique identifier for the inventory item being ordered.
+    view_label: Order Items
     synonyms:
       [
         product_id,
@@ -190,12 +203,14 @@ dimensions:
     description: The margin earned on each order item, representing the difference
       between the selling price and the cost of the item, expressed as a
       monetary value.
+    view_label: Order Items
     synonyms: [ profit, markup, gross_profit, net_profit, earnings, gain, surplus ]
 
   sale_price:
     sql: '"SALE_PRICE"'
     description: The price at which the item was sold, representing the amount the
       customer paid for the item.
+    view_label: Order Items
     synonyms:
       [
         selling_price,
@@ -212,6 +227,7 @@ dimensions:
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
     description: The time it takes to ship an order item, measured in days.
+    view_label: Order Items
     synonyms:
       [
         shipping_time,
@@ -226,6 +242,7 @@ dimensions:
   delivered_at:
     sql: '"DELIVERED_AT"'
     description: The date and time when the order item was delivered to the customer.
+    view_label: Order Items
     synonyms:
       [
         delivered_on,
@@ -241,6 +258,7 @@ dimensions:
   is_delivered:
     sql: '"IS_DELIVERED"'
     description: Indicates whether the order item has been delivered to the customer.
+    view_label: Order Items
     synonyms:
       [
         delivered_status,
@@ -253,6 +271,7 @@ dimensions:
   is_returned:
     sql: '"IS_RETURNED"'
     description: Indicates whether the order item was returned by the customer.
+    view_label: Order Items
     synonyms:
       [
         is_return,
@@ -267,6 +286,7 @@ dimensions:
   is_shipped:
     sql: '"IS_SHIPPED"'
     description: Indicates whether the order item has been shipped to the customer.
+    view_label: Order Items
     synonyms:
       [
         shipped_status,
@@ -281,6 +301,7 @@ dimensions:
     sql: '"MONTHS_SINCE_SIGNUP"'
     description: The number of months that have passed since the customer signed up
       for the service or made their first purchase.
+    view_label: Order Items
     synonyms:
       [
         months_since_registration,
@@ -293,6 +314,7 @@ dimensions:
   order_id:
     sql: '"ORDER_ID"'
     description: Unique identifier for the order that the item belongs to.
+    view_label: Order Items
     synonyms:
       [
         order_number,
@@ -306,6 +328,7 @@ dimensions:
   returned_at:
     sql: '"RETURNED_AT"'
     description: The date and time when the order item was returned.
+    view_label: Order Items
     synonyms:
       [
         return_date,
@@ -318,6 +341,7 @@ dimensions:
   shipped_at:
     sql: '"SHIPPED_AT"'
     description: The date and time when the order item was shipped.
+    view_label: Order Items
     synonyms:
       [
         dispatched_at,
@@ -332,6 +356,7 @@ dimensions:
     sql: '"STATUS"'
     description: The current status of the order item, indicating whether it has
       been completed, shipped, or cancelled.
+    view_label: Order Items
     synonyms:
       [
         state,
@@ -347,6 +372,7 @@ dimensions:
   user_id:
     sql: '"USER_ID"'
     description: Unique identifier of the user who placed the order.
+    view_label: Order Items
     synonyms:
       [
         customer_id,
@@ -361,6 +387,7 @@ dimensions:
     sql: '"DISTRIBUTION_CENTER_ID"'
     description: The unique identifier for the distribution center where the product
       is stored and shipped from.
+    view_label: Products
     synonyms:
       [
         warehouse_id,
@@ -376,6 +403,7 @@ dimensions:
     sql: '"RETAIL_PRICE"'
     description: The retail price of each product, representing the amount that
       customers pay for a product at the point of sale.
+    view_label: Products
     synonyms:
       [
         list_price,
@@ -392,6 +420,7 @@ dimensions:
     sql: '"BRAND"'
     description: The BRAND column represents the manufacturer or brand name of the
       product, categorizing it as either MG, MW, or 2XU.
+    view_label: Products
     synonyms: [ maker, manufacturer, label, trademark, company, producer, nameplate ]
 
   category:
@@ -399,6 +428,7 @@ dimensions:
     description: The CATEGORY column represents the product category, which groups
       similar products together, such as accessories, plus-size items, and
       swimwear, to help with product classification, reporting, and analysis.
+    view_label: Products
     synonyms:
       [
         type,
@@ -416,6 +446,7 @@ dimensions:
     sql: '"DEPARTMENT"'
     description: The department within the store where the product is located,
       indicating whether the product is intended for women or men.
+    view_label: Products
     synonyms: [ division, section, category, group, sector, branch, unit ]
 
   name:
@@ -423,12 +454,14 @@ dimensions:
     description: "Product Name: This column stores the names of various products,
       which appear to be different types of caps, including their color,
       material, and style."
+    view_label: Products
     synonyms: [ title, product_name, item_name, product_title, label, designation ]
 
   sku:
     sql: '"SKU"'
     description: Unique identifier for each product in the catalog, used to
       distinguish and track individual items across the system.
+    view_label: Products
     synonyms:
       [
         stock_keeping_unit,
@@ -444,6 +477,7 @@ dimensions:
     description: Latitude of the user's location, representing the angular distance
       of a place north or south of the Earth's equator, measured in decimal
       degrees.
+    view_label: Users
     synonyms:
       [
         lat,
@@ -458,6 +492,7 @@ dimensions:
     description: Longitude of the user's location, representing the angular distance
       of a point on the Earth's surface, measured in decimal degrees east or
       west of the prime meridian.
+    view_label: Users
     synonyms:
       [
         east_west_coordinate,
@@ -470,6 +505,7 @@ dimensions:
   age:
     sql: '"AGE"'
     description: The age of the user in years.
+    view_label: Users
     synonyms:
       [
         years_old,
@@ -483,6 +519,7 @@ dimensions:
   city:
     sql: '"CITY"'
     description: The city where the user is located.
+    view_label: Users
     synonyms:
       [
         town,
@@ -498,6 +535,7 @@ dimensions:
   country:
     sql: '"COUNTRY"'
     description: The country of origin or residence of the user.
+    view_label: Users
     synonyms:
       [
         nation,
@@ -514,6 +552,7 @@ dimensions:
   email:
     sql: '"EMAIL"'
     description: The email address associated with each user's account.
+    view_label: Users
     synonyms:
       [
         email_address,
@@ -527,6 +566,7 @@ dimensions:
   first_name:
     sql: '"FIRST_NAME"'
     description: The first name of the user.
+    view_label: Users
     synonyms:
       [
         given_name,
@@ -541,11 +581,13 @@ dimensions:
     sql: '"GENDER"'
     description: The GENDER column represents the biological or self-identified sex
       of a user, categorized as either Male or Female.
+    view_label: Users
     synonyms: [ sex, male_female, demographic, biological_sex, sex_category ]
 
   last_name:
     sql: '"LAST_NAME"'
     description: The last name of the user.
+    view_label: Users
     synonyms:
       [
         surname,
@@ -562,6 +604,7 @@ dimensions:
     sql: '"STATE"'
     description: This column represents the local authority or borough where a user
       is located, as identified by a specific geographic area within the UK.
+    view_label: Users
     synonyms:
       [
         province,
@@ -580,6 +623,7 @@ dimensions:
     sql: '"TRAFFIC_SOURCE"'
     description: The source through which a user arrived at the website or platform,
       such as organic search, paid search, or email marketing campaigns.
+    view_label: Users
     synonyms:
       [
         traffic_channel,
@@ -595,6 +639,7 @@ dimensions:
   zip:
     sql: '"ZIP"'
     description: Postal Code of the user's location.
+    view_label: Users
     synonyms:
       [
         postal_code,
@@ -609,23 +654,29 @@ measures:
   total_cost:
     sql: '"TOTAL_COST"'
     aggregate_type: semantic_view_agg
+    view_label: Inventory Items
 
   first_purchase_date:
     sql: '"FIRST_PURCHASE_DATE"'
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   order_count:
     sql: '"ORDER_COUNT"'
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   time_to_ship_average:
     sql: '"TIME_TO_SHIP_AVERAGE"'
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   total_revenue:
     sql: '"TOTAL_REVENUE"'
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   average_age:
     sql: '"AVERAGE_AGE"'
     aggregate_type: semantic_view_agg
+    view_label: Users

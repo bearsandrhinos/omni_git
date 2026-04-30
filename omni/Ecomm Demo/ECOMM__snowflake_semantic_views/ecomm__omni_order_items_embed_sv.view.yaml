@@ -6,188 +6,245 @@ semantic_view_name: omni_order_items_embed_sv
 dimensions:
   id:
     sql: '"ID"'
+    view_label: Users
 
   image:
     sql: '"IMAGE"'
+    view_label: Product Images
 
   latitude:
     sql: '"LATITUDE"'
+    view_label: Users
 
   longitude:
     sql: '"LONGITUDE"'
+    view_label: Users
 
   name:
     sql: '"NAME"'
+    view_label: Products
 
   product_retail_price:
     sql: '"PRODUCT_RETAIL_PRICE"'
+    view_label: Inventory Items
 
   cost:
     sql: '"COST"'
+    view_label: Products
 
   created_at:
     sql: '"CREATED_AT"'
+    view_label: Users
 
   days_in_inventory:
     sql: '"DAYS_IN_INVENTORY"'
+    view_label: Inventory Items
 
   product_brand:
     sql: '"PRODUCT_BRAND"'
+    view_label: Inventory Items
 
   product_category:
     sql: '"PRODUCT_CATEGORY"'
+    view_label: Inventory Items
 
   product_department:
     sql: '"PRODUCT_DEPARTMENT"'
+    view_label: Inventory Items
 
   product_distribution_center_id:
     sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    view_label: Inventory Items
 
   product_id:
     sql: '"PRODUCT_ID"'
+    view_label: Inventory Items
 
   product_name:
     sql: '"PRODUCT_NAME"'
+    view_label: Inventory Items
 
   product_sku:
     sql: '"PRODUCT_SKU"'
+    view_label: Inventory Items
 
   sold_at:
     sql: '"SOLD_AT"'
+    view_label: Inventory Items
 
   sale_price:
     sql: '"SALE_PRICE"'
+    view_label: Order Items
 
   delivered_at:
     sql: '"DELIVERED_AT"'
+    view_label: Order Items
 
   inventory_item_id:
     sql: '"INVENTORY_ITEM_ID"'
+    view_label: Order Items
 
   order_id:
     sql: '"ORDER_ID"'
+    view_label: Order Items
 
   returned_at:
     sql: '"RETURNED_AT"'
+    view_label: Order Items
 
   shipped_at:
     sql: '"SHIPPED_AT"'
+    view_label: Order Items
 
   status:
     sql: '"STATUS"'
+    view_label: Order Items
 
   status_ordering:
     sql: '"STATUS_ORDERING"'
     description: This actually will order the fields, trust me
+    view_label: Order Items
 
   time_to_ship:
     sql: '"TIME_TO_SHIP"'
     description: Time between order created and order shipped
+    view_label: Order Items
 
   user_id:
     sql: '"USER_ID"'
+    view_label: Order Items
 
   retail_price:
     sql: '"RETAIL_PRICE"'
+    view_label: Products
 
   brand:
     sql: '"BRAND"'
+    view_label: Products
 
   category:
     sql: '"CATEGORY"'
+    view_label: Products
 
   department:
     sql: '"DEPARTMENT"'
+    view_label: Products
 
   distribution_center_id:
     sql: '"DISTRIBUTION_CENTER_ID"'
+    view_label: Products
 
   name_embed:
     sql: '"NAME_EMBED"'
+    view_label: Products
 
   sku:
     sql: '"SKU"'
+    view_label: Products
 
   country:
     sql: '"COUNTRY"'
+    view_label: Users
 
   age:
     sql: '"AGE"'
+    view_label: Users
 
   city:
     sql: '"CITY"'
+    view_label: Users
 
   domain_from_email:
     sql: '"DOMAIN_FROM_EMAIL"'
+    view_label: Users
 
   email:
     sql: '"EMAIL"'
+    view_label: Users
 
   first_name:
     sql: '"FIRST_NAME"'
+    view_label: Users
 
   full_name:
     sql: '"FULL_NAME"'
+    view_label: Users
 
   gender:
     sql: '"GENDER"'
+    view_label: Users
 
   last_name:
     sql: '"LAST_NAME"'
+    view_label: Users
 
   state:
     sql: '"STATE"'
+    view_label: Users
 
   traffic_source:
     sql: '"TRAFFIC_SOURCE"'
+    view_label: Users
 
   zip:
     sql: '"ZIP"'
+    view_label: Users
 
 measures:
   count:
     sql: '"COUNT"'
     aggregate_type: semantic_view_agg
+    view_label: Users
 
   cost_sum:
     sql: '"COST_SUM"'
     aggregate_type: semantic_view_agg
+    view_label: Inventory Items
 
   days_in_inventory_average:
     sql: '"DAYS_IN_INVENTORY_AVERAGE"'
     aggregate_type: semantic_view_agg
+    view_label: Inventory Items
 
   inventory_volume:
     sql: '"INVENTORY_VOLUME"'
     aggregate_type: semantic_view_agg
+    view_label: Inventory Items
 
   product_retail_price_average:
     sql: '"PRODUCT_RETAIL_PRICE_AVERAGE"'
     aggregate_type: semantic_view_agg
+    view_label: Inventory Items
 
   test_measure:
     sql: '"TEST_MEASURE"'
     aggregate_type: semantic_view_agg
+    view_label: Inventory Items
 
   created_at_min:
     sql: '"CREATED_AT_MIN"'
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   time_to_ship_average:
     sql: '"TIME_TO_SHIP_AVERAGE"'
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   total_revenue:
     sql: '"TOTAL_REVENUE"'
     description: this is complted orders
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   total_sale_price:
     sql: '"TOTAL_SALE_PRICE"'
     description: this is all about revenue
     aggregate_type: semantic_view_agg
+    view_label: Order Items
 
   age_average:
     sql: '"AGE_AVERAGE"'
     description: The average age of a customer
     aggregate_type: semantic_view_agg
+    view_label: Users

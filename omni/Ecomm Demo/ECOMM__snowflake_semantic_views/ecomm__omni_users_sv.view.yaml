@@ -6,58 +6,76 @@ semantic_view_name: omni_users_sv
 dimensions:
   country:
     sql: '"COUNTRY"'
+    view_label: Users
 
   age:
     sql: '"AGE"'
+    view_label: Users
 
   city:
     sql: '"CITY"'
+    view_label: Users
 
   created_at:
     sql: '"CREATED_AT"'
+    view_label: Users
 
   domain_from_email:
     sql: '"DOMAIN_FROM_EMAIL"'
+    view_label: Users
 
   email:
     sql: '"EMAIL"'
+    view_label: Users
 
   first_name:
     sql: '"FIRST_NAME"'
+    view_label: Users
 
   full_name:
     sql: '"FULL_NAME"'
+    view_label: Users
 
   gender:
     sql: '"GENDER"'
+    view_label: Users
 
   id:
     sql: '"ID"'
+    view_label: Users
 
   last_name:
     sql: '"LAST_NAME"'
+    view_label: Users
 
   latitude:
     sql: '"LATITUDE"'
+    view_label: Users
 
   longitude:
     sql: '"LONGITUDE"'
+    view_label: Users
 
   state:
     sql: '"STATE"'
+    view_label: Users
 
   traffic_source:
     sql: '"TRAFFIC_SOURCE"'
+    view_label: Users
 
   zip:
     sql: '"ZIP"'
+    view_label: Users
 
 measures:
   age_average:
     sql: '"AGE_AVERAGE"'
     description: The average age of a customer
     aggregate_type: semantic_view_agg
+    view_label: Users
 
   count:
     sql: '"COUNT"'
     aggregate_type: semantic_view_agg
+    view_label: Users
