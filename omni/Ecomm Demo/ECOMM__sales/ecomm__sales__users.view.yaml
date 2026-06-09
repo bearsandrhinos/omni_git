@@ -1,0 +1,118 @@
+# Reference this view as ecomm__sales__users
+# View is defined in the semantic view SALES in the data warehouse
+schema: ECOMM
+folder: ECOMM/sales
+table_name: USERS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  first_name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"FIRST_NAME"'
+    description: Customer first name for personalization and identity.
+    synonyms: [ customer first name, given name ]
+
+  last_name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"LAST_NAME"'
+    description: Customer last name for identification.
+    synonyms: [ customer last name, family name, surname ]
+
+  email:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"EMAIL"'
+    description: Customer email address for identification and communication analysis.
+    synonyms: [ contact email, customer email, email address ]
+
+  age:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"AGE"'
+    description: The age of the customer in years, useful for demographic
+      segmentation and targeted marketing analysis.
+    synonyms: [ customer age, user age, years old ]
+
+  city:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CITY"'
+    description: City where the customer is located. Key geographic dimension for
+      regional sales analysis and market planning.
+    synonyms: [ customer city, location, market, metro area ]
+
+  state:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"STATE"'
+    description: State or province where the customer is located. Essential for
+      regional performance, tax analysis, and territory management.
+    synonyms: [ customer state, province, region, territory ]
+
+  country:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"COUNTRY"'
+    description: Country where the customer is located for international market
+      segmentation.
+    synonyms: [ customer country, market country, nation ]
+
+  zip:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ZIP"'
+    description: Customer postal/zip code for micro-geographic analysis and delivery
+      planning.
+    synonyms: [ postal code, postcode, zip code ]
+
+  latitude:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"LATITUDE"'
+    description: Geographic latitude coordinate of the customer location for mapping
+      and regional analysis.
+    synonyms: [ geo latitude, lat ]
+
+  longitude:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"LONGITUDE"'
+    description: Geographic longitude coordinate of the customer location for
+      mapping and regional analysis.
+    synonyms: [ geo longitude, lng, long ]
+
+  gender:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"GENDER"'
+    description: Customer gender for demographic segmentation and targeted marketing
+      analysis.
+    synonyms: [ customer gender, demographic gender, sex ]
+
+  created_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Timestamp when the customer account was created. Foundation for
+      customer lifetime value and cohort analysis.
+    synonyms: [ account created, customer since, registration date, signup date ]
+
+  traffic_source:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"TRAFFIC_SOURCE"'
+    description: The marketing channel that acquired this customer (e.g., Organic,
+      Facebook, Google, Email). Critical for marketing ROI and attribution
+      analysis.
+    synonyms:
+      [
+        acquisition channel,
+        how they found us,
+        marketing channel,
+        referral source,
+        utm source
+      ]
+
+measures:
+  count:
+    aggregate_type: count
+
+  avg_customer_age:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: AVG("AGE")
+    description: Average age of customers for demographic profiling and targeting.
+    synonyms: [ average age, demographic age, mean customer age ]

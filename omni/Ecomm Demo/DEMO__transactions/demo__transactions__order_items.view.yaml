@@ -1,0 +1,116 @@
+# Reference this view as demo__transactions__order_items
+# View is defined in the semantic view TRANSACTIONS in the data warehouse
+description: This table stores information about individual items within custome
+  orders, including the order and user details, item specifics, pricing,
+  shipping and delivery status, and additional metrics such as margin and time
+  to ship.
+
+schema: ECOMM
+folder: DEMO/transactions
+table_name: ORDER_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"ID"'
+    format: ID
+    description: Unique identifier for each order item.
+    primary_key: true
+
+  order_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"ORDER_ID"'
+    format: ID
+    description: Unique identifier for the order that the item belongs to.
+
+  user_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"USER_ID"'
+    format: ID
+    description: The unique identifier of the user who placed the order.
+
+  inventory_item_id:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"INVENTORY_ITEM_ID"'
+    format: ID
+    description: Unique identifier for the inventory item being ordered.
+
+  sale_price:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"SALE_PRICE"'
+    description: The sale price of an item in an order, representing the amount the
+      customer paid for the item.
+
+  status:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"STATUS"'
+    description: The status of the order item, indicating whether it was
+      successfully completed, cancelled by the customer or vendor, or returned
+      by the customer.
+
+  created_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"CREATED_AT"'
+    description: The date and time when the order item was created.
+
+  returned_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"RETURNED_AT"'
+    description: The date and time when the order item was returned, if applicable.
+
+  shipped_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"SHIPPED_AT"'
+    description: The date and time when the order item was shipped.
+
+  delivered_at:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"DELIVERED_AT"'
+    description: The date and time when the order item was delivered to the customer.
+
+  is_returned:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"IS_RETURNED"'
+    description: Indicates whether the order item was returned by the customer.
+
+  is_delivered:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"IS_DELIVERED"'
+    description: Indicates whether the order item has been delivered to the customer.
+
+  is_shipped:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"IS_SHIPPED"'
+    description: Indicates whether the order item has been shipped to the customer.
+
+  margin:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"MARGIN"'
+    description: The profit margin earned on each order item, calculated as the
+      difference between the selling price and the cost of the item, expressed
+      as a percentage.
+
+  months_since_signup:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    description: The number of months that have passed since the customer signed up
+      for the service, with 0 indicating the month of signup.
+
+  time_to_ship:
+    # Dimension is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: '"TIME_TO_SHIP"'
+    description: The time it takes to ship an order item after it has been
+      processed, measured in business days.
+
+measures:
+  count:
+    aggregate_type: count
+
+  average_sales:
+    # Measure is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: AVG("SALE_PRICE")
+
+  total_revenue:
+    # Measure is defined in the semantic view TRANSACTIONS in the data warehouse
+    sql: SUM("SALE_PRICE")
+    description: This is the revenue of all the orders

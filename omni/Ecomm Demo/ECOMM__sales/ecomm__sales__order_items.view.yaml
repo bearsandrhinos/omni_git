@@ -1,0 +1,266 @@
+# Reference this view as ecomm__sales__order_items
+# View is defined in the semantic view SALES in the data warehouse
+schema: ECOMM
+folder: ECOMM/sales
+table_name: ORDER_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  order_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ORDER_ID"'
+    format: ID
+    description: Unique identifier for the order transaction. Multiple items can
+      share the same order_id if purchased together.
+    synonyms: [ order number, purchase id, transaction id ]
+
+  user_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"USER_ID"'
+    format: ID
+
+  inventory_item_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"INVENTORY_ITEM_ID"'
+    format: ID
+
+  sale_price:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"SALE_PRICE" * 0.5'
+    description: The actual price the customer paid for this item, which may differ
+      from retail price due to discounts, promotions, or dynamic pricing.
+    synonyms:
+      [
+        amount paid,
+        item revenue,
+        price paid,
+        purchase price,
+        selling price,
+        transaction amount
+      ]
+
+  status:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"STATUS"'
+    description: "Current status of the order: Processing, Shipped, Complete,
+      Cancelled, or Returned. Essential for order funnel and fulfillment
+      analysis."
+    synonyms: [ fulfillment status, order state, order status, transaction status ]
+
+  created_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Timestamp when the order was placed. Primary time dimension for
+      sales trends, seasonality, and cohort analysis.
+    synonyms: [ order date, order timestamp, purchase date, transaction date ]
+
+  returned_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"RETURNED_AT"'
+    description: Timestamp when the item was returned, if applicable. Used for
+      return timing and seasonal return pattern analysis.
+    synonyms: [ refund date, return date ]
+
+  shipped_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"SHIPPED_AT"'
+    description: Timestamp when the order was shipped from the warehouse, used for
+      fulfillment speed analysis.
+    synonyms: [ dispatch date, ship date, shipment date ]
+
+  delivered_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"DELIVERED_AT"'
+    description: Timestamp when the order was delivered to the customer, used for
+      delivery time analysis.
+    synonyms: [ arrival date, delivery date, received date ]
+
+  is_returned:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"IS_RETURNED"'
+    description: Boolean flag indicating whether the customer returned this item.
+      Critical for return rate analysis and quality insights.
+    synonyms: [ refunded, returned, sent back ]
+
+  is_delivered:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"IS_DELIVERED"'
+    description: Boolean flag indicating whether the order has been successfully
+      delivered to the customer.
+    synonyms: [ delivered, delivery confirmed, received by customer ]
+
+  is_shipped:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"IS_SHIPPED"'
+    description: Boolean flag indicating whether the order has been shipped from the
+      fulfillment center.
+    synonyms: [ dispatched, in transit, shipped ]
+
+  margin:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"MARGIN"'
+    description: The profit earned on this specific item, calculated as sale price
+      minus cost. Positive values indicate profitable sales, negative values
+      indicate losses.
+    synonyms: [ earnings, gross profit, item profit, markup, net profit, profit margin ]
+
+  months_since_signup:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    description: Number of months between customer account creation and this order,
+      useful for analyzing customer lifetime value and purchase patterns by
+      tenure.
+    synonyms:
+      [
+        account age,
+        customer tenure,
+        loyalty duration,
+        membership length,
+        months as customer
+      ]
+
+  time_to_ship:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"TIME_TO_SHIP"'
+    description: Number of days between order placement and shipment, a key
+      operational metric for fulfillment efficiency and customer satisfaction.
+    synonyms:
+      [
+        days to ship,
+        fulfillment time,
+        lead time,
+        processing days,
+        shipping time
+      ]
+
+  completed_orders:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: "\"STATUS\" = 'Complete'"
+
+measures:
+  count:
+    aggregate_type: count
+
+  average_sale_price:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: AVG("SALE_PRICE")
+    description: Average selling price per item, useful for pricing strategy
+      analysis and basket composition insights.
+    synonyms: [ aov, average order value, average transaction, avg price, mean price ]
+
+  avg_margin:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: AVG("MARGIN")
+    description: Average profit margin per item sold, useful for product-level
+      profitability analysis.
+    synonyms: [ average profit per item, mean margin ]
+
+  avg_time_to_ship:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: AVG("TIME_TO_SHIP")
+    description: Average number of days to ship orders, a critical operational KPI
+      for customer satisfaction.
+    synonyms: [ average shipping time, avg processing days, mean fulfillment time ]
+
+  items_per_order:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: COUNT("ID") * 1.0 / NULLIF(COUNT(DISTINCT "ORDER_ID"), 0)
+    description: Average number of items per order, a key metric for basket analysis
+      and cross-sell effectiveness.
+    synonyms: [ basket size, items per basket, order size, units per transaction ]
+
+  max_sales:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: MAX("SALE_PRICE")
+    description: The highest individual sale price in the dataset, useful for
+      identifying premium purchases and outliers.
+    synonyms: [ highest sale, largest order, max transaction, peak sale ]
+
+  max_time_to_ship:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: MAX("TIME_TO_SHIP")
+    description: Maximum shipping time observed, useful for identifying fulfillment
+      bottlenecks.
+    synonyms: [ longest ship time, max fulfillment delay ]
+
+  min_sale_price:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: MIN("SALE_PRICE")
+    description: The lowest sale price, useful for identifying deep discounts or
+      promotional pricing.
+    synonyms: [ floor price, lowest sale, minimum price ]
+
+  orders_per_customer:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: COUNT(DISTINCT "ORDER_ID") * 1.0 / NULLIF(COUNT(DISTINCT "USER_ID"), 0)
+    description: Average number of orders per customer, indicating purchase
+      frequency and loyalty.
+    synonyms: [ order frequency, purchase frequency, transactions per customer ]
+
+  return_count:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM(CASE WHEN "IS_RETURNED" THEN 1 ELSE 0 END)
+    description: Total number of items returned by customers.
+    synonyms: [ refund count, returned items, returns ]
+
+  return_rate:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM(CASE WHEN "IS_RETURNED" THEN 1 ELSE 0 END) * 100.0 /
+      NULLIF(COUNT("ID"), 0)
+    description: Percentage of items returned, a key quality and customer
+      satisfaction metric. Industry average is typically 15-30%.
+    synonyms: [ refund rate, return percentage, return ratio ]
+
+  revenue_per_customer:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM("SALE_PRICE") / NULLIF(COUNT(DISTINCT "USER_ID"), 0)
+    description: Average revenue per unique customer, a proxy for customer value and
+      spending patterns.
+    synonyms: [ arpu, average revenue per user, customer value, spend per customer ]
+
+  total_customers:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: COUNT(DISTINCT "USER_ID")
+    description: Total number of unique customers who made purchases. Foundation
+      metric for customer analytics.
+    synonyms: [ active customers, customer count, unique buyers, unique customers ]
+
+  total_items_sold:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: COUNT("ID")
+    description: Total number of individual items sold across all orders.
+    synonyms: [ item count, quantity sold, units sold, volume ]
+
+  total_margin:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM("MARGIN")
+    description: Sum of individual item margins, providing an alternative profit
+      calculation from pre-computed margin values.
+    synonyms: [ aggregate profit, sum of margins, total item profit ]
+
+  total_orders:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: COUNT(DISTINCT "ORDER_ID")
+    description: Total number of unique orders/transactions. Key volume metric for
+      business activity.
+    synonyms: [ number of orders, order count, purchase count, transaction count ]
+
+  total_revenue:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM("SALE_PRICE")
+    description: Total revenue from all sales calculated as the sum of sale prices.
+      The primary top-line metric for business performance.
+    synonyms:
+      [
+        gmv,
+        gross merchandise value,
+        gross revenue,
+        sales volume,
+        total income,
+        total sales
+      ]

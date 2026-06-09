@@ -1,0 +1,88 @@
+# Reference this view as ecomm__omni_order_items_embed_sv__ecomm_inventory_items
+# View is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+schema: ECOMM
+folder: ECOMM/omni_order_items_embed_sv
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  product_id:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+
+  created_at:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"CREATED_AT"'
+
+  sold_at:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"SOLD_AT"'
+
+  cost:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"COST"'
+
+  product_category:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+
+  product_name:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_NAME"'
+
+  product_brand:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+
+  product_retail_price:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+
+  product_department:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+
+  product_sku:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_SKU"'
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+  days_in_inventory:
+    # Dimension is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: CASE WHEN "SOLD_AT" IS NULL THEN DATEDIFF(DAY, "CREATED_AT", CURRENT_DATE)
+      ELSE DATEDIFF(DAY, "CREATED_AT", "SOLD_AT") END
+
+measures:
+  count:
+    # Measure is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: COUNT(DISTINCT "ID")
+
+  cost_sum:
+    # Measure is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: SUM("COST")
+
+  days_in_inventory_average:
+    # Measure is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: AVG("DAYS_IN_INVENTORY")
+
+  inventory_volume:
+    # Measure is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: COUNT(DISTINCT "ID")
+
+  product_retail_price_average:
+    # Measure is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: AVG("PRODUCT_RETAIL_PRICE")
+
+  test_measure:
+    # Measure is defined in the semantic view omni_order_items_embed_sv in the data warehouse
+    sql: SUM((uniform(1, 2.01::number(10,2), RANDOM())))

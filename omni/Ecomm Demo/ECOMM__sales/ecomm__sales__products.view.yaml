@@ -1,0 +1,88 @@
+# Reference this view as ecomm__sales__products
+# View is defined in the semantic view SALES in the data warehouse
+schema: ECOMM
+folder: ECOMM/sales
+table_name: PRODUCTS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  cost:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"COST"'
+    description: The standard cost for this product SKU, used as the baseline for
+      margin calculations and inventory valuation.
+    synonyms: [ base cost, product cost, wholesale price ]
+
+  category:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CATEGORY"'
+    description: Product category from master data for hierarchical category reporting.
+    synonyms: [ item type, merchandise type, product category ]
+
+  name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"NAME"'
+    description: Product name from master data catalog.
+    synonyms: [ item name, product name, title ]
+
+  brand:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"BRAND"'
+    description: Brand name from the product master data. Use for brand-level
+      analytics and competitive analysis.
+    synonyms: [ label, make, manufacturer, product brand ]
+
+  retail_price:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"RETAIL_PRICE"'
+    description: The standard retail price for this product before any discounts or
+      promotions are applied.
+    synonyms: [ full price, list price, msrp, recommended price ]
+
+  department:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"DEPARTMENT"'
+    description: Department classification from product master for high-level
+      business reporting.
+    synonyms: [ business segment, division, product department ]
+
+  sku:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"SKU"'
+    description: SKU from product master for product-level detail analysis.
+    synonyms: [ item code, product code, product sku ]
+
+  distribution_center_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    format: ID
+
+measures:
+  count:
+    aggregate_type: count
+
+  total_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM("COST")
+    description: Total product costs from the product master, useful for cost
+      variance analysis.
+    synonyms: [ merchandise cost, product costs ]
+
+  unique_brands_sold:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: COUNT(DISTINCT "BRAND")
+    description: Number of unique brands represented in sales, useful for brand
+      portfolio analysis.
+    synonyms: [ brand count, brand variety ]
+
+  unique_products_sold:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: COUNT(DISTINCT "ID")
+    description: Number of unique products/SKUs sold, indicating catalog breadth and
+      product diversity.
+    synonyms: [ product count, product variety, sku count ]

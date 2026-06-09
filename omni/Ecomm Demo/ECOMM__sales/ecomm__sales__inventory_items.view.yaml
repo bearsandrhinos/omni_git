@@ -1,0 +1,114 @@
+# Reference this view as ecomm__sales__inventory_items
+# View is defined in the semantic view SALES in the data warehouse
+schema: ECOMM
+folder: ECOMM/sales
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"ID"'
+    format: ID
+    primary_key: true
+
+  product_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+
+  created_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Timestamp when the inventory item was added to the system, useful
+      for inventory aging and turnover analysis.
+    synonyms: [ inventory date, received date, stock date ]
+
+  sold_at:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"SOLD_AT"'
+    description: Timestamp when this specific inventory item was sold, enabling
+      inventory velocity and turnover calculations.
+    synonyms: [ inventory sold date, sale date, sold date ]
+
+  cost:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"COST"'
+    description: The wholesale cost paid to acquire this specific inventory item
+      from the supplier, used for calculating profit margins and cost of goods
+      sold (COGS).
+    synonyms: [ cogs, inventory cost, item cost, unit cost ]
+
+  product_category:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+    description: The product category classification (e.g., Jeans, Sweaters,
+      Accessories). Used for category-level sales and inventory analysis.
+    synonyms: [ category, item category, merchandise category, product type ]
+
+  product_name:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_NAME"'
+    description: The full descriptive name of the product including brand, style,
+      and key attributes.
+    synonyms: [ item name, product description, product title, sku name ]
+
+  product_brand:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+    description: The brand or manufacturer name of the product (e.g., Nike, Apple,
+      Levi's). Key dimension for brand performance analysis.
+    synonyms: [ brand name, label, make, manufacturer ]
+
+  product_retail_price:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The manufacturer suggested retail price (MSRP) for the product,
+      representing the recommended selling price before any discounts.
+    synonyms: [ list price, msrp, sticker price ]
+
+  product_department:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+    description: The high-level department the product belongs to (e.g., Men, Women,
+      Kids). Primary dimension for departmental performance reporting.
+    synonyms: [ business unit, department, division, section ]
+
+  product_sku:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_SKU"'
+    description: The unique Stock Keeping Unit identifier for inventory tracking and
+      management.
+    synonyms: [ item number, product code, sku, stock code, upc ]
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view SALES in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    format: ID
+    description: Identifier for the distribution center or warehouse where this
+      inventory item is stored and shipped from.
+    synonyms: [ dc id, fulfillment center, warehouse id ]
+
+measures:
+  count:
+    aggregate_type: count
+
+  average_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: AVG("COST")
+    description: Average cost per item sold, useful for cost trend analysis and
+      margin planning.
+    synonyms: [ avg cost, mean cost, unit cost average ]
+
+  total_cost:
+    # Measure is defined in the semantic view SALES in the data warehouse
+    sql: SUM("COST")
+    description: Total cost of goods sold (COGS), representing the direct costs of
+      inventory sold. Essential for profitability analysis.
+    synonyms:
+      [
+        cogs,
+        cost of goods sold,
+        direct costs,
+        total cost of sales,
+        total expense
+      ]

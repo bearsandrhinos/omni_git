@@ -1,0 +1,131 @@
+# Reference this view as ecomm__inventory_management_sv__order_items
+# View is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+description: Dimension table containing information about customer orders
+
+schema: ECOMM
+folder: ECOMM/inventory_management_sv
+table_name: ORDER_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    description: Unique identifier for each order line item
+    primary_key: true
+
+  order_id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"ORDER_ID"'
+    format: ID
+    description: Identifier for the order
+
+  user_id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"USER_ID"'
+    format: ID
+    description: Identifier of the user who placed the order
+
+  inventory_item_id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"INVENTORY_ITEM_ID"'
+    format: ID
+    description: Identifier of the inventory item in the order
+
+  sale_price:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"SALE_PRICE"'
+    description: Price at which the item was sold
+
+  status:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"STATUS"'
+    description: Current status of the order
+
+  created_at:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Timestamp when the order was created
+
+  returned_at:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"RETURNED_AT"'
+    description: Timestamp when the order was returned (if applicable)
+
+  shipped_at:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"SHIPPED_AT"'
+    description: Timestamp when the order was shipped
+
+  delivered_at:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"DELIVERED_AT"'
+    description: Timestamp when the order was delivered
+
+  is_returned:
+    sql: '"IS_RETURNED"'
+
+  is_delivered:
+    sql: '"IS_DELIVERED"'
+
+  is_shipped:
+    sql: '"IS_SHIPPED"'
+
+  margin:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"MARGIN"'
+    description: Profit margin for the order
+
+  months_since_signup:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"MONTHS_SINCE_SIGNUP"'
+    description: Number of months since the user signed up at time of order
+
+  time_to_ship:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"TIME_TO_SHIP"'
+    description: Time taken to ship the order
+
+  status_ordering:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: CASE WHEN "STATUS" = 'Complete' THEN 1 WHEN "STATUS" = 'Shipped' THEN 2
+      WHEN "STATUS" = 'Processing' THEN 3 WHEN "STATUS" = 'Cancelled' THEN 4
+      WHEN "STATUS" = 'Returned' THEN 5 ELSE 6 END
+    description: Numeric sort key for order statuses
+
+measures:
+  count:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(COUNT(*), 0)
+    description: Total number of order items
+
+  created_at_min:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: MIN("CREATED_AT")
+    description: Earliest order creation date
+
+  margin_average:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(AVG("MARGIN"), 0)
+    description: Average profit margin per order
+
+  margin_sum:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(SUM("MARGIN"), 0)
+    description: Total profit margin across all orders
+
+  sale_price_sum:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(SUM("SALE_PRICE"), 0)
+    description: Sum of sale prices
+
+  time_to_ship_average:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(AVG("TIME_TO_SHIP"), 0)
+    description: Average time to ship an order
+
+  total_sale_price:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(SUM("SALE_PRICE"), 0)
+    description: Total sale price across all order items
+    synonyms: [ Total Revenue, Total Sales ]

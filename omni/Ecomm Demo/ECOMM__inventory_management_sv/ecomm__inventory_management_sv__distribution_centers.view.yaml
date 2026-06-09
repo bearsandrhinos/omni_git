@@ -1,0 +1,36 @@
+# Reference this view as ecomm__inventory_management_sv__distribution_centers
+# View is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+description: Dimension table containing information about distribution centers
+
+schema: ECOMM
+folder: ECOMM/inventory_management_sv
+table_name: DISTRIBUTION_CENTERS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    description: Unique identifier for each distribution center
+    primary_key: true
+
+  name:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"NAME"'
+    description: Name of the distribution center
+
+  latitude:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"LATITUDE"'
+    description: Geographical latitude of the distribution center location
+
+  longitude:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"LONGITUDE"'
+    description: Geographical longitude of the distribution center location
+
+measures:
+  count:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(COUNT(*), 0)
+    description: Total number of distribution centers

@@ -1,0 +1,91 @@
+# Reference this view as ecomm__inventory_management_sv__users
+# View is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+description: Dimension table containing information about users
+
+schema: ECOMM
+folder: ECOMM/inventory_management_sv
+table_name: USERS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    description: Unique identifier for each user
+    primary_key: true
+
+  first_name:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"FIRST_NAME"'
+    description: First name of the user
+
+  last_name:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"LAST_NAME"'
+    description: Last name of the user
+
+  email:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"EMAIL"'
+    description: Email address of the user
+
+  age:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"AGE"'
+    description: Age of the user
+
+  city:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"CITY"'
+    description: City where the user is located
+
+  state:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"STATE"'
+    description: State where the user is located
+
+  country:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"COUNTRY"'
+    description: Country where the user is located
+
+  zip:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"ZIP"'
+    description: ZIP code of the user's location
+
+  latitude:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"LATITUDE"'
+    description: Geographical latitude of the user's location
+
+  longitude:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"LONGITUDE"'
+    description: Geographical longitude of the user's location
+
+  gender:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"GENDER"'
+    description: Gender of the user
+
+  created_at:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Timestamp when the user account was created
+
+  traffic_source:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: '"TRAFFIC_SOURCE"'
+    description: Source of traffic that led to user signup
+
+  full_name:
+    # Dimension is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: INITCAP(CONCAT("FIRST_NAME", ' ', "LAST_NAME"))
+    description: Full name of the user
+
+measures:
+  count:
+    # Measure is defined in the semantic view INVENTORY_MANAGEMENT_SV in the data warehouse
+    sql: COALESCE(COUNT(*), 0)
+    description: Total number of users
