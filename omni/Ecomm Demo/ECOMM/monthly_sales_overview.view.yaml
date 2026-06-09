@@ -6,6 +6,9 @@ dimensions:
   month:
     sql: '"MONTH"'
 
+  status:
+    sql: '"STATUS"'
+
   total_sale_price:
     sql: '"TOTAL_SALE_PRICE"'
 
