@@ -1,0 +1,81 @@
+# Reference this view as ecomm__relationships_test__inventory_items
+# View is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+description: The table contains records of individual inventory items available
+  for sale. Each record represents a single inventory item and includes details
+  about the associated product such as its category, brand, department, and
+  pricing, as well as fulfillment details like the distribution center it is
+  sourced from.
+
+schema: ECOMM
+folder: ECOMM/relationships_test
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"ID"'
+    format: ID
+    description: Unique identifier for each inventory item.
+    primary_key: true
+
+  product_id:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+    description: The unique identifier for a product in the inventory.
+
+  created_at:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"CREATED_AT"'
+    description: The date and time when the inventory item record was created.
+
+  sold_at:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"SOLD_AT"'
+    description: The date and time at which the inventory item was sold.
+
+  cost:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"COST"'
+    description: The cost of an inventory item.
+
+  product_category:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+    description: The category of the product in the inventory.
+
+  product_name:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_NAME"'
+    description: The name of the inventory product.
+
+  product_brand:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+    description: The brand name associated with the product in inventory.
+
+  product_retail_price:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: The retail price of a product.
+
+  product_department:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+    description: The department or category within which a product is classified.
+
+  product_sku:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_SKU"'
+    description: Unique identifier for each product stock keeping unit.
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view RELATIONSHIPS_TEST in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    format: ID
+    description: The identifier for the distribution center associated with a
+      product in inventory.
+
+measures:
+  count:
+    aggregate_type: count
