@@ -1,0 +1,62 @@
+# Reference this view as ecomm__order_items_sv__products
+# View is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+description: Dimension table containing information about products
+
+schema: ECOMM
+folder: ECOMM/order_items_sv
+table_name: PRODUCTS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    description: Unique identifier for each product
+    primary_key: true
+
+  cost:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"COST"'
+    description: Cost of the product
+
+  category:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"CATEGORY"'
+    description: Category of the product
+
+  name:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"NAME"'
+    description: Name of the product
+
+  brand:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"BRAND"'
+    description: Brand of the product
+
+  retail_price:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"RETAIL_PRICE"'
+    description: Retail price of the product
+
+  department:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"DEPARTMENT"'
+    description: Department the product belongs to
+
+  sku:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"SKU"'
+    description: Stock Keeping Unit of the product
+
+  distribution_center_id:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"DISTRIBUTION_CENTER_ID"'
+    format: ID
+    description: Identifier of the distribution center for the product
+
+measures:
+  count:
+    # Measure is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: COUNT(*)
+    description: Count of products

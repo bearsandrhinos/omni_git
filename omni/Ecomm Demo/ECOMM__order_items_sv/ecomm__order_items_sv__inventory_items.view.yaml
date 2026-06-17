@@ -1,0 +1,86 @@
+# Reference this view as ecomm__order_items_sv__inventory_items
+# View is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+description: Dimension table containing information about inventory items
+
+schema: ECOMM
+folder: ECOMM/order_items_sv
+table_name: INVENTORY_ITEMS
+
+dimensions:
+  id:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"ID"'
+    format: ID
+    description: Unique identifier for each inventory item
+    primary_key: true
+
+  product_id:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_ID"'
+    format: ID
+    description: Identifier of the associated product
+
+  created_at:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"CREATED_AT"'
+    description: Timestamp when the inventory item was created
+
+  sold_at:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"SOLD_AT"'
+    description: Timestamp when the item was sold
+
+  cost:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"COST"'
+    description: Cost of the inventory item
+
+  product_category:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_CATEGORY"'
+    description: Category of the product
+
+  product_name:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_NAME"'
+    description: Name of the product
+
+  product_brand:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_BRAND"'
+    description: Brand of the product
+
+  product_retail_price:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_RETAIL_PRICE"'
+    description: Retail price of the product
+
+  product_department:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_DEPARTMENT"'
+    description: Department the product belongs to
+
+  product_sku:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_SKU"'
+    description: Stock Keeping Unit of the product
+
+  product_distribution_center_id:
+    # Dimension is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: '"PRODUCT_DISTRIBUTION_CENTER_ID"'
+    format: ID
+    description: Identifier of the distribution center for the product
+
+measures:
+  count:
+    aggregate_type: count
+
+  cost_sum:
+    # Measure is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: COALESCE(SUM("COST"), 0)
+    description: Total cost of inventory items
+
+  inventory_volume:
+    # Measure is defined in the semantic view ORDER_ITEMS_SV in the data warehouse
+    sql: COUNT(*)
+    description: Count of inventory items
